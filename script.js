@@ -1,7 +1,7 @@
 function envoyerCommande() {
     const commande = document.getElementById("commande").value;
 
-    fetch("https://elementary-kit-occasions-convergence.trycloudflare.com/commande", {
+    fetch("https://implications-binary-services-loved.trycloudflare.com/commande", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
