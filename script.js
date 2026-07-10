@@ -1,7 +1,7 @@
 function envoyerCommande() {
     const commande = document.getElementById("commande").value;
 
-    fetch("http://127.0.0.1:5000/commande", {
+    fetch("https://elementary-kit-occasions-convergence.trycloudflare.com/commande", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
