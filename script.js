@@ -1,7 +1,7 @@
 function envoyerCommande() {
     const commande = document.getElementById("commande").value;
 
-    fetch("https://implications-binary-services-loved.trycloudflare.com/commande", {
+    fetch("https://api.gogekko.fr/commande", {        
         method: "POST",
         headers: {
             "Content-Type": "application/json"
