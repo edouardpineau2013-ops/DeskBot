@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Bungee+Spice&family=DM+Serif+Display:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Orbitron:wght@400..900&family=Oswald:wght@200..700&display=swap');
+
+body {
+    font-family: 'Open Sans', Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+    background-color: #000099;
+}
+
+h1 {
+    color: #bd0f0f;
+    font-size: 5rem;
+    margin-bottom: 10px;
+    text-shadow: 4px 4px 4px #000000;
+}
+
+h2 {
+    color: #bd0f0f;
+    font-size: 2rem;
+    margin-bottom: 40px;
+    margin-top: -10px;
+    text-shadow: 4px 4px 4px #000000;
+}
+
+#commande {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    border: 3px solid rgb(27, 206, 30);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 4px #000000;
+}
+
+#bouton-envoyer {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
+}
+
+#bouton-envoyer:hover {
+    background-color: #4eff1d;
+}
+
+#reponse {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 10px #a01414;
+    background-color: rgb(27, 206, 30);
+    border-radius: 10px;
+    width: fit-content;
+    padding: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.commande-prédéfinie {
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
+    margin: 10px;
+    padding: 10px;
+    font-size: 2rem;
+    width: 300px;
+    text-align: center;
+}
+
+.commande-prédéfinie:hover {
+    background-color: #4eff1d;
+}
+
+.commande-prédéfinie:active {
+    background-color: #0c84c5;
+}
+
+.commande-texte {
+    font-size: 1.5rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 10px #a01414;
+}
+
+.commandes-prédéfinies {
+    margin-top: 40px;
+    font-size: 1.2rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 2px #000000;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

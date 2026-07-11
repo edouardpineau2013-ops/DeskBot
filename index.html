@@ -5,12 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DeskBot</title>
     <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
-    <input id="commande">
+    <h1>DeskBot</h1>
+    <h2>crée par ElectronicCode</h2>
 
-    <button onclick="envoyerCommande()">Envoyer</button>
+    <input id="commande" type="text" placeholder="Entrez votre commande...">
 
-    <p id="reponse"></p>
+    <br>
+
+    <button onclick="envoyerCommande()" id="bouton-envoyer">Envoyer</button>
+
+    <p id="reponse">Réponse: ...</p>
+
+    <h2>Commandes prédéfinies</h2>
+
+    <div class="commandes-prédéfinies">
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('deskBot activé')">
+            <p class="commande-texte">Activer le DeskBot</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('deskBot désactivé')">
+            <p class="commande-texte">Désactiver le DeskBot</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('au revoir')">
+            <p class="commande-texte">Arrêter le programme</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('bonjour')">
+            <p class="commande-texte">Dire bonjour</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('merci')">
+            <p class="commande-texte">Dire merci</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('ça va')">
+            <p class="commande-texte">Dire comment ça va</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('qui es-tu')">
+            <p class="commande-texte">Dire qui es-tu</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('quelle heure est-il')">
+            <p class="commande-texte">Demander l'heure</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('quelle est la météo à Paris')">
+            <p class="commande-texte">Demander la météo à Paris</p>
+        </div>
+    </div>
 </body>
 </html>
