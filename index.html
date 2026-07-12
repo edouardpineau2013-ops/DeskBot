@@ -9,6 +9,39 @@
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
+    <div id="popup-musique" class="popup">
+        <div class="popup-contenu">
+
+            <span class="fermer" onclick="fermerMusique()">&times;</span>
+
+            <h2>Musique</h2>
+
+            <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('pause la musique')">Play / Pause</button>
+            <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('arrête la musique')">Stop</button>
+            <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('lance lofi relax')">Lofi relax</button>
+            <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('lance lofi pour coder')">Lofi pour coder</button>
+            <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('lance lofi pour travailler')">Lofi pour travailler</button>
+            <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('lance lofi pour dormir')">Lofi pour dormir</button>
+            <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('lance lofi pour se concentrer')">Lofi pour se concentrer</button>
+            <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('lance lofi gaming')">Lofi Gaming</button>
+
+        </div>
+    </div>
+
+    <div id="popup-meteo" class="popup">
+        <div class="popup-contenu">
+
+            <span class="fermer" onclick="fermerMeteo()">&times;</span>
+
+            <h2>Météo</h2>
+
+            <input id="ville" type="text" placeholder="Entrez votre ville...">
+
+            <button onclick="envoyerMeteo()" id="bouton-envoyer-meteo">Envoyer</button>
+
+        </div>
+    </div>
+
     <h1>DeskBot</h1>
     <h2>crée par ElectronicCode</h2>
 
@@ -33,22 +66,25 @@
             <p class="commande-texte">Arrêter le programme</p>
         </div>
         <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('bonjour')">
-            <p class="commande-texte">Dire bonjour</p>
+            <p class="commande-texte">Dire: bonjour</p>
         </div>
         <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('merci')">
-            <p class="commande-texte">Dire merci</p>
+            <p class="commande-texte">Dire: merci</p>
         </div>
         <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('ça va')">
-            <p class="commande-texte">Dire comment ça va</p>
+            <p class="commande-texte">Dire: comment ça va</p>
         </div>
         <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('qui es-tu')">
-            <p class="commande-texte">Dire qui es-tu</p>
+            <p class="commande-texte">Dire: qui es-tu</p>
         </div>
         <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('quelle heure est-il')">
             <p class="commande-texte">Demander l'heure</p>
         </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('quelle est la météo à Paris')">
-            <p class="commande-texte">Demander la météo à Paris</p>
+        <div class="commande-prédéfinie" onclick="ouvrirMeteo()">
+            <p class="commande-texte">Demander la météo</p>
+        </div>
+        <div class="commande-prédéfinie" onclick="ouvrirMusique()">
+            <p class="commande-texte">Controler la musique</p>
         </div>
     </div>
 </body>
