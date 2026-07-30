@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Bungee+Spice&family=DM+Serif+Display:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Orbitron:wght@400..900&family=Oswald:wght@200..700&display=swap');
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Open Sans', Arial, sans-serif;
     text-align: center;
@@ -456,4 +460,77 @@ h2 {
 
 #definir-volume:active {
     background-color: #0c84c5;
+}
+
+
+
+@media (max-width: 600px) {
+
+    body {
+        margin-top: 20px;
+        padding: 0 10px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    #commande {
+        width: 100%;
+    }
+
+    .commande-prédéfinie {
+        width: 100%;
+        font-size: 1.3rem;
+        padding: 12px;
+        margin: 8px 0;
+    }
+
+    .commandes-prédéfinies {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .popup-contenu {
+        width: 100%;
+        padding: 18px;
+    }
+
+    /* Les 3 modules empilés verticalement au lieu de cote a cote */
+    .modules {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chrono,
+    .minuteur,
+    .alarme {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .btn-chrono,
+    .btn-minuteur,
+    .btn-alarme {
+        width: 40px;
+    }
+
+    .fleche-minuteur {
+        width: 38px;
+    }
+
+    .minuteur-controle input {
+        width: 50px;
+    }
+
+    #input-volume {
+        width: 50px;
+    }
 }
