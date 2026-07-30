@@ -4,17 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DeskBot</title>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="img/favicon.png">
 </head>
 <body>
+
+    <div id="popup-login" class="popup">
+        <div class="popup-contenu">
+            <h2>Connexion</h2>
+            <input id="mot-de-passe" type="password" placeholder="Mot de passe">
+            <br><br>
+            <label id="se-souvenir">
+                <input type="checkbox" id="checkbox-se-souvenir">
+                Se souvenir de cet appareil
+            </label>
+            <br><br>
+            <button onclick="seConnecter()" id="se-connecter">Se connecter</button>
+            <p id="erreur-login" style="color:#ff4444;"></p>
+        </div>
+    </div>
+    
     <div id="popup-musique" class="popup">
         <div class="popup-contenu">
 
             <span class="fermer" onclick="fermerMusique()">&times;</span>
 
             <h2>Musique</h2>
+
+            <label id="volume-label">
+                Volume:
+                <br>
+                <input type="number" id="input-volume">
+            </label>
+            <br>
+            <button id="definir-volume" onclick="definirVolume()">Définir le volume</button>
 
             <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('pause la musique')">Play / Pause</button>
             <button class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('arrête la musique')">Stop</button>
@@ -39,11 +63,43 @@
 
             <button onclick="envoyerMeteo()" id="bouton-envoyer-meteo">Envoyer</button>
 
+            <input type="date" id="date">
+
+            <button onclick="envoyerCommandePrédéfinie('météo ici')" class="météo-ici">Météo ici</button>
+
+        </div>
+    </div>
+
+    <div id="popup-set-minuteur" class="popup">
+        <div class="popup-contenu">
+            <span class="fermer" onclick="fermerMinuteur()">&times;</span>
+
+            <h2>Minuteur</h2>
+
+            <div class="minuteur-input-ligne">
+                <span class="span-minuteur">Minutes</span>
+                <div class="minuteur-controle">
+                    <img src="img/arrow-up.svg" class="fleche-minuteur" onclick="ajusterMinuteur('minutes', 1)">
+                    <input id="minuteur-minutes" type="number" min="0" value="0">
+                    <img src="img/arrow-down.svg" class="fleche-minuteur" onclick="ajusterMinuteur('minutes', -1)">
+                </div>
+            </div>
+
+            <div class="minuteur-input-ligne">
+                <span class="span-minuteur">Secondes</span>
+                <div class="minuteur-controle">
+                    <img src="img/arrow-up.svg" class="fleche-minuteur" onclick="ajusterMinuteur('secondes', 1)">
+                    <input id="minuteur-secondes" type="number" min="0" max="59" value="0">
+                    <img src="img/arrow-down.svg" class="fleche-minuteur" onclick="ajusterMinuteur('secondes', -1)">
+                </div>
+            </div>
+
+            <button onclick="demarrerMinuteurDepuisPopup()" id="demarrer-minuteur">Démarrer</button>
         </div>
     </div>
 
     <h1>DeskBot</h1>
-    <h2>crée par ElectronicCode</h2>
+    <h2>crée par Edouard</h2>
 
     <input id="commande" type="text" placeholder="Entrez votre commande...">
 
@@ -53,6 +109,38 @@
 
     <p id="reponse">Réponse: ...</p>
 
+    <h2>Modules</h2>
+
+    <div class="modules">
+        <div class="chrono">
+            <div id="chrono">
+                <p id="chronometre-texte">Chronomètre: 0 sec</p>
+            </div>
+            <img src="img/go.svg" class="btn-chrono" id="go" onclick="GoChrono()">
+            <img src="img/pause.svg" class="btn-chrono" id="PausePlay" onclick="PausePlayChrono()">
+            <img src="img/stop.svg" class="btn-chrono" id="stop" onclick="StopChrono()">
+            <img src="img/repeat.svg" class="btn-chrono" id="repeat" onclick="RepeatChrono()">
+        </div>
+
+        <div class="minuteur">
+            <div id="minuteur">
+                <p id="minuteur-texte">Minuteur: 0 sec</p>
+            </div>
+            <img src="img/clock.svg" class="btn-minuteur" id="clock" onclick="SetMinuteur()">
+            <img src="img/pause.svg" class="btn-minuteur" id="PausePlayMinuteur" onclick="PausePlayMinuteur()">
+            <img src="img/repeat.svg" class="btn-minuteur" id="repeatMinuteur" onclick="RepeatMinuteur()">
+        </div>
+
+        <div class="alarme">
+            <div id="alarme">
+                <p id="alarme-texte">Alarme: -- h -- min</p>
+            </div>
+            <img src="img/gear.svg" class="btn-alarme" id="gear" onclick="SetAlarme()">
+            <img src="img/bell-active.svg" class="btn-alarme" id="ActiveSlashAlarme" onclick="ActiveSlashAlarme()">
+            <img src="img/music-note.svg" class="btn-alarme" id="sonnerieAlarme" onclick="sonnerieAlarme()">
+        </div>
+    </div>
+    
     <h2>Commandes prédéfinies</h2>
 
     <div class="commandes-prédéfinies">

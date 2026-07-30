@@ -18,7 +18,7 @@ h2 {
     color: #bd0f0f;
     font-size: 2rem;
     margin-bottom: 40px;
-    margin-top: -10px;
+    margin-top: 40px;
     text-shadow: 4px 4px 4px #000000;
 }
 
@@ -146,6 +146,7 @@ h2 {
     top:10px;
     font-size:28px;
     cursor:pointer;
+    color: #bd0f0f;
 }
 
 .popup-contenu::-webkit-scrollbar{
@@ -194,5 +195,265 @@ h2 {
 }
 
 #bouton-envoyer-meteo:active {
+    background-color: #0c84c5;
+}
+
+.météo-ici {
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+.météo-ici:hover {
+    background-color: #4eff1d;
+}
+
+.météo-ici:active {
+    background-color: #0c84c5;
+}
+
+#date {
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+.modules {
+    display: flex;
+}
+
+.chrono {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 10px #a01414;
+    background-color: rgb(27, 206, 30);
+    border-radius: 10px;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 4px #000000;
+}
+
+#chronometre-texte {
+    font-size: 1.5rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 10px #a01414;
+}
+
+.btn-chrono {
+    width: 50px;
+    padding-top: 10px;
+}
+
+.minuteur {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 10px #a01414;
+    background-color: rgb(27, 206, 30);
+    border-radius: 10px;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    text-align: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 4px #000000;
+}
+
+#minuteur-texte {
+    font-size: 1.5rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 10px #a01414;
+    margin: 0px;
+}
+
+.btn-minuteur {
+    width: 50px;
+    padding-top: 10px;
+}
+
+.alarme {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 10px #a01414;
+    background-color: rgb(27, 206, 30);
+    border-radius: 10px;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    text-align: center;
+    margin-left: 20px;
+    margin-right: auto;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 4px #000000;
+}
+
+#alarme-texte {
+    font-size: 1.5rem;
+    color: #bd0f0f;
+    text-shadow: 2px 2px 10px #a01414;
+    margin: 0px;
+}
+
+.btn-alarme {
+    width: 50px;
+    padding-top: 10px;
+}
+
+#mot-de-passe {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    border: 3px solid rgb(27, 206, 30);
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px #000000;
+}
+
+#checkbox-se-souvenir {
+    width: 20px;
+    height: 20px;
+    padding-top: 20px;
+    accent-color: #bd0f0f;
+}
+
+#se-souvenir {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
+}
+
+#se-connecter {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
+}
+
+.minuteur-input-ligne {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.minuteur-controle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.minuteur-controle input {
+    width: 60px;
+    text-align: center;
+    padding: 8px;
+    font-size: 1.2rem;
+    border: 3px solid rgb(27, 206, 30);
+    border-radius: 10px;
+}
+
+.fleche-minuteur {
+    width: 50px;
+    cursor: pointer;
+}
+
+.fleche-minuteur:hover {
+    opacity: 0.7;
+}
+
+#demarrer-minuteur {
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+}
+
+#demarrer-minuteur:hover {
+    background-color: #4eff1d;
+}
+
+.span-minuteur {
+    color: #bd0f0f;
+    font-size: 1.5rem;
+    text-shadow: 4px 4px 4px #000000;
+}
+
+#input-volume {
+    width: 60px;
+    text-align: center;
+    padding: 8px;
+    font-size: 1.2rem;
+    border: 3px solid rgb(27, 206, 30);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#volume-label {
+    color: #bd0f0f;
+    font-size: 2rem;
+    text-shadow: 4px 4px 4px #000000;
+}
+
+#definir-volume {
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
+    padding: 10px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+#definir-volume:hover {
+    background-color: #4eff1d;
+}
+
+#definir-volume:active {
     background-color: #0c84c5;
 }
