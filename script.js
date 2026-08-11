@@ -1,3 +1,5 @@
+console.log("SCRIPT CHARGÉ", Date.now());
+
 let TOKEN = localStorage.getItem("deskbot_token") || sessionStorage.getItem("deskbot_token");
 
 function afficherLogin() {
@@ -52,8 +54,11 @@ function envoyerCommande() {
 
         document.getElementById("reponse").textContent =
             "Réponse: " + data.reponse;
+        let reponse = data.reponse;
 
-        chargerChronometre();   // <-- ICI
+        afficherReponse(commande, reponse);
+
+        chargerChronometre();
     });
 }
 
@@ -74,9 +79,31 @@ function envoyerCommandePrédéfinie(commande) {
         document.getElementById("reponse").textContent =
             "Réponse: " + data.reponse;
 
+        let reponse = data.reponse;
+
+        afficherReponse(commande, reponse);
+
         chargerChronometre();
 
     });
+}
+
+function afficherReponse(commande, reponse) {
+    if (commande.includes("stats youtube") || commande.includes("youtube") || commande.includes("statistiques") || commande.includes("Statistiques YouTube")) {
+        document.getElementById("reponse-stats-yt").textContent = reponse;
+    }
+    else if (commande.includes("recherche") || commande.includes("google") || commande.includes("Recherche sur google")) {
+        document.getElementById("reponse-recherche").textContent = reponse;
+    }
+    else if (commande.includes("calculer") || commande.includes("trajet") || commande.includes("Calculer le trajet")) {
+        document.getElementById("reponse-trajet").textContent = reponse;
+    }
+    else if (commande.includes("demande") || commande.includes("IA") || commande.includes("Demande à l'IA")) {
+        document.getElementById("reponse-question-ia").textContent = reponse;
+    }
+    else if (commande.includes("convertis") || commande.includes("en") || commande.includes("Convertis")) {
+        document.getElementById("reponse-convertir").textContent = reponse;
+    }
 }
 
 function ouvrirMusique(){
@@ -118,6 +145,7 @@ function envoyerMeteo() {
     .then(r => r.json())
     .then(data => {
         document.getElementById("reponse").textContent = "Réponse: " + data.reponse;
+        document.getElementById("reponse-meteo").textContent = "Réponse: " + data.reponse;
     });
 }
 
@@ -344,9 +372,1194 @@ function RepeatMinuteur() {
     chargerMinuteur();
 }
 
-window.onclick = function(event) {
-    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur"];
+let alarmeActive = false;
+let dernierEtatAlarme = null;
 
+function chargerAlarme() {
+    fetch("https://api.gogekko.fr/alarme", {
+        headers: { "Authorization": "Bearer " + TOKEN }
+    })
+        .then(r => r.json())
+        .then(data => {
+            dernierEtatAlarme = data;
+            alarmeActive = data.existe && data.active;
+
+            let texte;
+            if (!data.existe || data.jours_restants === null) {
+                texte = "Alarme : --";
+            } else if (data.jours_restants > 0) {
+                texte = `Alarme : dans ${data.jours_restants}j ${data.heures_restantes}h${String(data.minutes_restantes).padStart(2,"0")}`;
+            } else {
+                texte = `Alarme : dans ${data.heures_restantes}h${String(data.minutes_restantes).padStart(2,"0")}`;
+            }
+
+            document.getElementById("alarme-texte").textContent = texte;
+
+            const cloche = document.getElementById("ActiveSlashAlarme");
+            cloche.src = alarmeActive ? "img/bell-active.svg" : "img/bell-slash.svg";
+        });
+}
+
+chargerAlarme();
+setInterval(chargerAlarme, 30000);
+
+function SetAlarme() {
+
+    if (dernierEtatAlarme && dernierEtatAlarme.existe) {
+        document.getElementById("alarme-heure").value = dernierEtatAlarme.heure;
+        document.getElementById("alarme-minute").value = dernierEtatAlarme.minute;
+        document.querySelectorAll(".jour-checkbox").forEach(cb => {
+            cb.checked = dernierEtatAlarme.jours.includes(parseInt(cb.value, 10));
+        });
+    } else {
+        document.getElementById("alarme-heure").value = 7;
+        document.getElementById("alarme-minute").value = 0;
+        document.querySelectorAll(".jour-checkbox").forEach(cb => cb.checked = false);
+    }
+
+    document.getElementById("popup-set-alarme").style.display = "flex";
+}
+
+function fermerReglageAlarme() {
+    document.getElementById("popup-set-alarme").style.display = "none";
+}
+
+function ajusterAlarme(unite, delta) {
+    const champ = document.getElementById(unite === "heure" ? "alarme-heure" : "alarme-minute");
+    let valeur = parseInt(champ.value, 10) || 0;
+    valeur += delta;
+
+    const max = unite === "heure" ? 23 : 59;
+    if (valeur < 0) valeur = max;
+    if (valeur > max) valeur = 0;
+
+    champ.value = valeur;
+}
+
+function enregistrerAlarme() {
+    const heure = parseInt(document.getElementById("alarme-heure").value, 10) || 0;
+    const minute = parseInt(document.getElementById("alarme-minute").value, 10) || 0;
+
+    const nomsJours = ["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"];
+    const joursCoches = Array.from(document.querySelectorAll(".jour-checkbox:checked"))
+        .map(cb => nomsJours[parseInt(cb.value, 10)]);
+
+    let texte = `programme une alarme à ${heure}h${String(minute).padStart(2,"0")}`;
+    if (joursCoches.length > 0) {
+        texte += " " + joursCoches.join(" ");
+    }
+
+    envoyerCommandePrédéfinie(texte);
+    fermerReglageAlarme();
+    setTimeout(chargerAlarme, 300);
+}
+
+function ActiveSlashAlarme() {
+    const commande = alarmeActive ? "eteins l'alarme" : "allume l'alarme";
+    envoyerCommandePrédéfinie(commande);
+    setTimeout(chargerAlarme, 300);
+}
+
+function supprimerAlarme() {
+    envoyerCommandePrédéfinie("supprime l'alarme");
+    setTimeout(chargerAlarme, 300);
+}
+
+function sonnerieAlarme() {
+    document.getElementById("popup-sonnerie-alarme").style.display = "flex";
+}
+
+function fermerSonnerieAlarme() {
+    document.getElementById("popup-sonnerie-alarme").style.display = "none";
+}
+
+function enregistrerSonnerie() {
+    const choix = document.querySelector('input[name="sonnerie"]:checked');
+    if (!choix) return;
+
+    const numero = choix.value.replace("alarme", "");
+    envoyerCommandePrédéfinie(`choisis la sonnerie alarme ${numero}`);
+    fermerSonnerieAlarme();
+}
+
+function ouvrirMails() {
+    document.getElementById("popup-mails").style.display = "flex";
+    chargerMails();
+}
+
+function fermerMails() {
+    document.getElementById("popup-mails").style.display = "none";
+}
+
+function chargerMails() {
+    fetch("https://api.gogekko.fr/mails", {
+        headers: {
+            "Authorization": "Bearer " + TOKEN
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        const texteNonLus =
+            data.non_lus === 0
+                ? "Vous n'avez aucun mail non lu."
+                : data.non_lus === 1
+                    ? "Vous avez 1 mail non lu."
+                    : `Vous avez ${data.non_lus} mails non lus.`;
+
+        document.getElementById("mails-non-lus").textContent = texteNonLus;
+
+        const conteneur = document.getElementById("mail");
+        conteneur.innerHTML = "";
+
+        if (data.mails.length === 0) {
+            conteneur.innerHTML = "<p class='indication'>Aucun mail non lu.</p>";
+            return;
+        }
+
+        data.mails.forEach(mail => {
+            conteneur.innerHTML += `
+                <div class="mail-item">
+                    <p><strong>Expéditeur :</strong> ${mail.expediteur}</p>
+                    <p><strong>Objet :</strong> ${mail.objet}</p>
+                </div>
+            `;
+        });
+
+    })
+    .catch(() => {
+        document.getElementById("mails-non-lus").textContent =
+            "Impossible de récupérer les mails.";
+
+        document.getElementById("mail").innerHTML = "";
+    });
+}
+
+function ouvrirImportCours() {
+    document.getElementById("popup-import-cours").style.display = "flex";
+}
+
+function fermerImportCours() {
+    document.getElementById("popup-import-cours").style.display = "none";
+}
+
+function envoyerImportCours() {
+    const matiere = document.getElementById("import-matiere").value;
+    const chapitre = document.getElementById("import-chapitre").value;
+    const fichier = document.getElementById("import-fichier").files[0];
+
+    if (!matiere || !chapitre || !fichier) {
+        document.getElementById("import-cours-statut").textContent = "Remplis tous les champs.";
+        return;
+    }
+
+    const donnees = new FormData();
+    donnees.append("matiere", matiere);
+    donnees.append("chapitre", chapitre);
+    donnees.append("fichier", fichier);
+    document.getElementById("import-cours-statut").textContent = `Chargement...`;
+
+    fetch("https://api.gogekko.fr/cours/importer", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + TOKEN },
+        body: donnees
+    })
+        .then(r => r.json())
+        .then(data => {
+            if (data.succes) {
+                document.getElementById("import-cours-statut").textContent =
+                    `Importé (${data.caracteres_extraits} caractères extraits).`;
+            } else {
+                document.getElementById("import-cours-statut").textContent = "Erreur : " + data.erreur;
+            }
+        });
+}
+
+function ouvrirStatsYoutube() {
+    document.getElementById("popup-stats-yt").style.display = "flex";
+}
+
+function fermerStatsYoutube() {
+    document.getElementById("popup-stats-yt").style.display = "none";
+}
+
+function envoyerStatsYoutube() {
+    const chaine = document.getElementById("stats-yt-chaine").value;
+    envoyerCommandePrédéfinie(`Statistiques YouTube de ${chaine}`);
+}
+
+function ouvrirRecherche() {
+    document.getElementById("popup-recherche").style.display = "flex";
+}
+
+function fermerRecherche() {
+    document.getElementById("popup-recherche").style.display = "none";
+}
+
+function envoyerRecherche() {
+    const texte = document.getElementById("recherche-texte").value;
+    envoyerCommandePrédéfinie(`Recherche sur google "${texte}"`);
+}
+
+function ouvrirTrajet() {
+    document.getElementById("popup-trajet").style.display = "flex";
+}
+
+function fermerTrajet() {
+    document.getElementById("popup-trajet").style.display = "none";
+}
+
+function envoyerTrajet() {
+    const depart = document.getElementById("trajet-depart").value;
+    const destination = document.getElementById("trajet-destination").value;
+    const moyen = document.getElementById("trajet-moyen").value;
+    envoyerCommandePrédéfinie(`Calculer le trajet de ${depart} à ${destination} en ${moyen}`);
+}
+
+function ouvrirPronote() {
+    document.getElementById("popup-pronote").style.display = "flex";
+}
+
+function fermerPronote() {
+    document.getElementById("popup-pronote").style.display = "none";
+}
+
+let dernierProfilRevision = null;
+
+function ouvrirRevisionAccueil() {
+    document.getElementById("popup-revision-accueil").style.display = "flex";
+    chargerProfilRevision();
+}
+
+function fermerRevisionAccueil() {
+    document.getElementById("popup-revision-accueil").style.display = "none";
+}
+
+function chargerProfilRevision() {
+    fetch("https://api.gogekko.fr/revision/profil", {
+        headers: { "Authorization": "Bearer " + TOKEN }
+    })
+        .then(r => r.json())
+        .then(data => {
+            dernierProfilRevision = data;
+
+            document.getElementById("revision-points-total").textContent =
+                data.points;
+
+            document.getElementById("revision-serie-total").textContent =
+                data.serie || 0;
+
+            document.getElementById("bouton-ouvrir-boite").disabled =
+                data.points < 20;
+        });
+}
+
+function ouvrirStatistiquesRevision() {
+    document.getElementById("popup-statistiques-revision").style.display = "flex";
+
+    fetch("https://api.gogekko.fr/revision/profil", {
+        headers: { "Authorization": "Bearer " + TOKEN }
+    })
+        .then(r => r.json())
+        .then(data => {
+            const conteneurStats = document.getElementById("revision-stats-matieres");
+            conteneurStats.innerHTML = "";
+
+            for (const matiere in data.stats_matieres) {
+                const s = data.stats_matieres[matiere];
+                const pourcentage = s.tentatives > 0 ? Math.round(100 * s.correctes / s.tentatives) : 0;
+                conteneurStats.innerHTML += `<p>${matiere} : ${pourcentage}%</p>`;
+            }
+
+            const conteneurCollection = document.getElementById("revision-collection");
+            conteneurCollection.innerHTML = "";
+
+            data.collection.forEach(entree => {
+                const image = entree.obtenu
+                    ? `img/profs/${entree.slug}.png`
+                    : `img/profs/silhouette-inconnue.png`;
+
+                conteneurCollection.innerHTML += `
+                    <div class="carte-collection rarete-${entree.rarete}">
+                        <img src="${image}" class="image-collection">
+                        <p>${entree.obtenu ? entree.nom : "???"}</p>
+                    </div>
+                `;
+            });
+        });
+}
+
+function fermerStatistiquesRevision() {
+    document.getElementById("popup-statistiques-revision").style.display = "none";
+}
+
+function ouvrirBoiteMystere() {
+    document.getElementById("popup-ouverture-boite").style.display = "flex";
+
+    const animation = document.getElementById("animation-ouverture-boite");
+    const resultatTexte = document.getElementById("resultat-ouverture-boite");
+    const boutonFermer = document.getElementById("bouton-fermer-resultat");
+    const iconeProfObtenu = document.getElementById("icone-prof-obtenu");
+
+    animation.style.display = "block";
+
+    resultatTexte.textContent = "";
+    iconeProfObtenu.innerHTML = "";
+    iconeProfObtenu.className = "";
+
+    boutonFermer.style.display = "none";
+
+    animation.currentTime = 0;
+    animation.play();
+
+    fetch("https://api.gogekko.fr/revision/boite", {
+        method: "POST",
+        headers: {
+            "Authorization": "Bearer " + TOKEN
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        const afficherResultat = () => {
+
+            animation.style.display = "none";
+
+            if (!data.succes) {
+
+                resultatTexte.textContent =
+                    "Pas assez de points pour ouvrir une boîte.";
+
+                iconeProfObtenu.className = "sans-skin";
+                iconeProfObtenu.textContent = "🥲";
+
+            } else if (data.type === "skin") {
+
+                resultatTexte.textContent =
+                    `Nouveau skin obtenu : ${data.prof} (${data.rarete}) !`;
+
+                iconeProfObtenu.className =
+                    `rarete-${data.rarete}`;
+
+                iconeProfObtenu.innerHTML =
+                    `<img src="img/profs/${data.slug}.png" class="image-collection">`;
+
+            } else if (data.type === "doublon") {
+
+                resultatTexte.textContent =
+                    `Tu avais déjà ${data.prof} : +${data.points_gagnes} points bonus.`;
+
+                iconeProfObtenu.className =
+                    `rarete-${data.rarete}`;
+
+                iconeProfObtenu.innerHTML =
+                    `<img src="img/profs/${data.slug}.png" class="image-collection">`;
+
+            } else {
+
+                resultatTexte.textContent =
+                    `Pas de skin cette fois : +${data.points_gagnes} points.`;
+
+                iconeProfObtenu.className = "sans-skin";
+                iconeProfObtenu.textContent = "🥲";
+            }
+
+            boutonFermer.style.display = "inline-block";
+
+            chargerProfilRevision();
+        };
+
+        if (animation.ended) {
+            afficherResultat();
+        } else {
+            animation.onended = afficherResultat;
+        }
+    });
+}
+
+function fermerOuvertureBoite() {
+    document.getElementById("popup-ouverture-boite").style.display = "none";
+}
+
+function demarrerRevisionDepuisPopup() {
+
+    const matiere = document.getElementById("revision-matiere").value;
+    const chapitre = document.getElementById("revision-chapitre").value;
+
+    if (!matiere || !chapitre) return;
+
+    fetch("https://api.gogekko.fr/revision/demarrer", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + TOKEN
+        },
+
+        body: JSON.stringify({
+            matiere: matiere,
+            chapitre: chapitre
+        })
+
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        if (!data.succes) {
+            alert(data.erreur);
+            return;
+        }
+
+        revisionIndex = 0;
+        revisionTotal = data.nb_questions;
+        premierEssai = true;
+        revisionScore = 0;
+
+        fermerRevisionAccueil();
+
+        ouvrirRevision();
+
+        afficherQuestion(data.question, data.stats);
+
+    });
+
+}
+
+let revisionIndex = 0;
+let revisionTotal = 0;
+let premierEssai = true;
+let revisionScore = 0;
+
+function ouvrirRevision(){
+
+    document.getElementById("popup-revision").style.display="flex";
+
+}
+
+function fermerRevision(){
+
+    document.getElementById("popup-revision").style.display="none";
+
+}
+
+function afficherQuestion(question, stats) {
+
+    premierEssai = revisionIndex+1 < 6;
+
+    document.getElementById("revision-question").textContent=question;
+
+    document.getElementById("revision-reponse").value="";
+
+    const barre = document.getElementById("revision-progression-barre");
+
+    const nbQuestionsIncorrectes = stats.nb_incorrectes;
+    const revisionNumero = document.getElementById("revision-numero");
+    
+    if (revisionIndex+1 < 6) {
+        document.getElementById("revision-numero").textContent =
+            `Question: ${revisionIndex+1} / ${revisionTotal}`;
+            barre.style.backgroundColor = "#00ff00";
+            revisionNumero.style.color = "#00ff00";
+    } else {
+        document.getElementById("revision-numero").textContent =
+            `Rattrapage: ${revisionIndex-4} / ${nbQuestionsIncorrectes}`;
+            barre.style.backgroundColor = "#ff0000";
+            revisionNumero.style.color = "#ff0000";
+    }
+
+    let pourcentage;
+
+    if (revisionIndex < 5) {
+        pourcentage = ((revisionIndex + 1) / revisionTotal) * 100;
+    } else {
+        const indexRattrapage = revisionIndex - revisionTotal + 1;
+        pourcentage = (indexRattrapage / nbQuestionsIncorrectes) * 100;
+    }
+
+    barre.style.transition = "width .45s ease";
+    barre.style.width = pourcentage + "%";
+
+    revisionScore = stats.nb_correctes + (stats.nb_incorrectes - nbQuestionsIncorrectes);
+
+}
+
+document
+    .getElementById("revision-valider")
+    .addEventListener("click", validerReponseRevision);
+
+function validerReponseRevision() {
+    const bouton=document.getElementById("revision-valider");
+
+    bouton.disabled=true;
+
+    const reponse = document.getElementById("revision-reponse").value.trim();
+
+    if (!reponse) {
+        bouton.disabled = false;
+        return;
+    }
+
+    fetch("https://api.gogekko.fr/revision/repondre", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + TOKEN
+        },
+
+        body: JSON.stringify({
+            reponse: reponse
+        })
+
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        afficherFeedback(data);
+
+    });
+
+}
+
+function afficherFeedback(data){
+
+    const panneau = document.getElementById("revision-resultat");
+
+    const icone = document.getElementById("revision-resultat-icone");
+
+    const titre = document.getElementById("revision-resultat-titre");
+
+    const explication = document.getElementById("revision-resultat-explication");
+
+
+    panneau.classList.remove("correct");
+    panneau.classList.remove("incorrect");
+    const barre = document.getElementById("revision-progression-barre");
+
+
+    if(data.correcte){
+        panneau.classList.add("correct");
+        icone.textContent="✅";
+        titre.textContent="Bonne réponse !";
+        if (premierEssai) {
+            afficherGainOrbes(1);
+        }
+    }
+    else{
+        premierEssai = false;
+
+        panneau.classList.add("incorrect");
+        icone.textContent="❌";
+        titre.textContent="Ce n'est pas ça";
+    }
+
+
+    explication.textContent=data.explication;
+
+
+    panneau.classList.add("visible");
+
+
+    // On prépare le bouton
+    document.getElementById("revision-continuer").style.display="block";
+
+
+    if(data.termine){
+
+        document.getElementById("revision-continuer").textContent="Voir le résultat";
+
+    }
+    else{
+
+        document.getElementById("revision-continuer").textContent="Continuer";
+
+    }
+
+
+    // On garde la réponse pour après le clic
+    window.feedbackRevision = data;
+
+}
+
+function afficherGainOrbes(nb){
+
+    const gain=document.getElementById("gain-orbes");
+
+    gain.textContent="+"+nb;
+
+    gain.classList.remove("cache");
+
+    setTimeout(()=>{
+
+        gain.classList.add("cache");
+
+    },800);
+
+}
+
+function afficherFinRevision(stats) {
+
+
+    document.getElementById("revision-note-image").src =
+        `img/notes/${stats.note_sur_5}_sur_5.png`;
+
+    const commentaires = [
+        "Il va falloir relire le cours 📚",
+        "Encore un petit effort !",
+        "Pas mal !",
+        "Très bon travail !",
+        "Excellent !",
+        "Parfait, tu maîtrises ce chapitre !"
+    ];
+
+    document.getElementById("revision-commentaire").textContent =
+        commentaires[stats.note_sur_5];
+    
+    document.getElementById("revision-score").textContent = `+${revisionScore}`;
+
+    document.getElementById("popup-fin-revision").style.display = "flex";
+
+    const bouton=document.getElementById("revision-valider");
+
+    bouton.disabled=false;
+}
+
+function fermerFinRevision() {
+    document.getElementById("popup-fin-revision").style.display = "none";
+    chargerProfilRevision();
+}
+
+function questionSuivanteRevision(){
+
+    const data = window.feedbackRevision;
+
+    const panneau = document.getElementById("revision-resultat");
+
+    panneau.classList.remove("visible");
+
+
+    setTimeout(()=>{
+
+
+        if(data.termine){
+
+            fermerRevision();
+
+            afficherFinRevision(data.stats);
+
+            return;
+
+        }
+
+
+        revisionIndex++;
+
+        afficherQuestion(data.question, data.stats);
+
+        document.getElementById("revision-valider").disabled = false;
+
+
+    },300);
+
+}
+
+
+// =========================================================
+// TO-DO LIST
+// =========================================================
+
+function ouvrirTodo() {
+    document.getElementById("popup-todo").style.display = "flex";
+
+    chargerTodo();
+
+    setTimeout(() => {
+        document.getElementById("todo-input").focus();
+    }, 100);
+}
+
+
+function fermerTodo() {
+    document.getElementById("popup-todo").style.display = "none";
+}
+
+
+/* ---------------------------------------------------------
+   Charger les tâches
+   --------------------------------------------------------- */
+
+function chargerTodo() {
+
+    fetch("https://api.gogekko.fr/taches", {
+        headers: {
+            "Authorization": "Bearer " + TOKEN
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        afficherTodo(data.taches);
+
+    })
+    .catch(error => {
+
+        console.error("Erreur chargement To-Do :", error);
+
+        document.getElementById("todo-liste").innerHTML =
+            `<p class="todo-vide">
+                Impossible de récupérer les tâches.
+            </p>`;
+    });
+}
+
+
+/* ---------------------------------------------------------
+   Afficher les tâches
+   --------------------------------------------------------- */
+
+function afficherTodo(taches) {
+
+    const liste = document.getElementById("todo-liste");
+
+    liste.innerHTML = "";
+
+    if (!taches || taches.length === 0) {
+
+        liste.innerHTML = `
+            <p class="todo-vide">
+                🎉 Aucune tâche ! Ta liste est vide.
+            </p>
+        `;
+
+        return;
+    }
+
+    taches.forEach(tache => {
+
+        const element = document.createElement("div");
+
+        element.className =
+            "todo-tache" +
+            (tache.terminee ? " terminee" : "");
+
+        element.innerHTML = `
+
+            <input
+                type="checkbox"
+                class="todo-checkbox"
+                ${tache.terminee ? "checked" : ""}
+                onchange="changerEtatTache(${tache.id}, this.checked)"
+            >
+
+            <span class="todo-texte">
+                ${echapperHTML(tache.texte)}
+            </span>
+
+            <button
+                class="todo-supprimer"
+                onclick="supprimerTacheDepuisSite(${tache.id})"
+                title="Supprimer"
+            >
+                🗑️
+            </button>
+
+        `;
+
+        liste.appendChild(element);
+    });
+}
+
+
+/* ---------------------------------------------------------
+   Ajouter une tâche
+   --------------------------------------------------------- */
+
+function ajouterTacheDepuisSite() {
+
+    const input = document.getElementById("todo-input");
+
+    const texte = input.value.trim();
+
+    if (!texte) {
+        afficherMessageTodo("Écris une tâche avant de l'ajouter.");
+        return;
+    }
+
+    envoyerCommandePrédéfinie(`ajoute "${texte}"`);
+    setTimeout(chargerTodo, 300);
+}
+
+
+/* ---------------------------------------------------------
+   Terminer / réactiver une tâche
+   --------------------------------------------------------- */
+
+function changerEtatTache(id, terminee) {
+
+    const commande = terminee
+        ? `termine la tâche ${id}`
+        : `annule la tâche ${id}`;
+
+    envoyerCommandePrédéfinie(commande)
+    setTimeout(chargerTodo, 300)
+}
+
+
+/* ---------------------------------------------------------
+   Supprimer une tâche
+   --------------------------------------------------------- */
+
+function supprimerTacheDepuisSite(id) {
+    envoyerCommandePrédéfinie(`supprime la tâche ${id}`)
+    setTimeout(chargerTodo, 300);
+}
+
+
+/* ---------------------------------------------------------
+   Supprimer les tâches terminées
+   --------------------------------------------------------- */
+
+function supprimerTachesTerminees() {
+    envoyerCommandePrédéfinie("supprime les tâches terminées")
+    setTimeout(chargerTodo, 300)
+}
+
+
+/* ---------------------------------------------------------
+   Vider toute la To-Do
+   --------------------------------------------------------- */
+
+function viderTodoDepuisSite() {
+    envoyerCommandePrédéfinie("vide la liste de tâches");
+    setTimeout(chargerTodo, 300);
+}
+
+
+/* ---------------------------------------------------------
+   Message
+   --------------------------------------------------------- */
+
+function afficherMessageTodo(message) {
+
+    const element = document.getElementById("todo-message");
+
+    element.textContent = message;
+
+    clearTimeout(window.todoMessageTimeout);
+
+    window.todoMessageTimeout = setTimeout(() => {
+        element.textContent = "";
+    }, 2500);
+}
+
+
+/* ---------------------------------------------------------
+   Sécurité HTML
+   --------------------------------------------------------- */
+
+function echapperHTML(texte) {
+
+    const div = document.createElement("div");
+
+    div.textContent = texte;
+
+    return div.innerHTML;
+}
+
+
+/* ---------------------------------------------------------
+   Entrée clavier
+   --------------------------------------------------------- */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const input = document.getElementById("todo-input");
+
+    if (!input) return;
+
+    input.addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+            ajouterTacheDepuisSite();
+        }
+
+    });
+
+});
+
+function ouvrirQuestionIA() {
+    document.getElementById("popup-question-ia").style.display = "flex";
+}
+
+function fermerQuestionIA() {
+    document.getElementById("popup-question-ia").style.display = "none";
+}
+
+function questionIA() {
+    const question = document.getElementById("question-ia-input").value;
+    envoyerCommandePrédéfinie(`Demande à l'IA ${question}`)
+}
+
+function ouvrirRepeter(){
+    document.getElementById("popup-repeter").style.display = "flex";
+}
+
+function fermerRepeter(){
+    document.getElementById("popup-repeter").style.display = "none";
+}
+
+function repeter() {
+    const repeter = document.getElementById("repeter-input").value;
+    envoyerCommandePrédéfinie(`Répète ${repeter}`)
+}
+
+// =========================================================
+// CALCULATRICE
+// =========================================================
+
+let calculatriceExpression = "";
+
+function ouvrirCalculatrice() {
+    document.getElementById("popup-calculatrice").style.display = "flex";
+
+    calculatriceExpression = "";
+    afficherCalculatrice();
+}
+
+function fermerCalculatrice() {
+    document.getElementById("popup-calculatrice").style.display = "none";
+}
+
+function afficherCalculatrice() {
+
+    const affichage = document.getElementById("calculatrice-affichage");
+
+    if (!calculatriceExpression) {
+        affichage.textContent = "0";
+        return;
+    }
+
+    affichage.textContent = calculatriceExpression
+        .replace(/\*/g, "×")
+        .replace(/\//g, "÷")
+        .replace(/\./g, ",");
+}
+
+function calculatriceEntrer(valeur) {
+
+    if (calculatriceExpression === "Erreur") {
+        calculatriceExpression = "";
+    }
+
+    calculatriceExpression += valeur;
+
+    afficherCalculatrice();
+}
+
+function calculatriceEffacer() {
+
+    calculatriceExpression = "";
+
+    afficherCalculatrice();
+}
+
+function calculatriceSupprimer() {
+
+    calculatriceExpression = calculatriceExpression.slice(0, -1);
+
+    afficherCalculatrice();
+}
+
+function calculatricePourcentage() {
+
+    if (!calculatriceExpression) return;
+
+    calculatriceExpression += "%";
+
+    afficherCalculatrice();
+}
+
+function calculatriceCalculer() {
+
+    if (!calculatriceExpression) return;
+
+    try {
+
+        let expression = calculatriceExpression;
+
+        // Remplace les pourcentages par /100
+        expression = expression.replace(
+            /(\d+(?:\.\d+)?)%/g,
+            "($1/100)"
+        );
+
+        // Vérification des caractères autorisés
+        if (!/^[0-9+\-*/().%\s]+$/.test(expression)) {
+            throw new Error("Expression invalide");
+        }
+
+        // Calcul
+        const resultat = Function(
+            '"use strict"; return (' + expression + ')'
+        )();
+
+        if (!Number.isFinite(resultat)) {
+            throw new Error("Calcul impossible");
+        }
+
+        calculatriceExpression = String(
+            Math.round((resultat + Number.EPSILON) * 100000000) / 100000000
+        );
+
+        afficherCalculatrice();
+
+    } catch (erreur) {
+
+        calculatriceExpression = "Erreur";
+
+        afficherCalculatrice();
+
+        setTimeout(() => {
+            calculatriceExpression = "";
+            afficherCalculatrice();
+        }, 1000);
+    }
+}
+
+const unitésConversion = {
+    longueur: {
+        mm: "millimètre",
+        cm: "centimètre",
+        m: "mètre",
+        km: "kilomètre",
+        in: "pouce",
+        ft: "pied",
+        yd: "yard",
+        mile: "mile"
+    },
+    masse: {
+        mg: "milligramme",
+        g: "gramme",
+        kg: "kilogramme",
+        t: "tonne",
+        oz: "once",
+        lb: "livre"
+    },
+    volume: {
+        ml: "millilitre",
+        cl: "centilitre",
+        dl: "décilitre",
+        l: "litre",
+        m3: "mètre cube",
+        gal: "gallon"
+    },
+    surface: {
+        mm2: "millimètre carré",
+        cm2: "centimètre carré",
+        m2: "mètre carré",
+        km2: "kilomètre carré",
+        hectare: "hectare",
+        acre: "acre"
+    },
+    vitesse: {
+        "m/s": "mètre par seconde",
+        "km/h": "kilomètre par heure",
+        mph: "mile par heure",
+        noeud: "nœud"
+    },
+    temps: {
+        ms: "milliseconde",
+        s: "seconde",
+        min: "minute",
+        h: "heure",
+        jour: "jour",
+        semaine: "semaine"
+    },
+    monnaie: {
+        EUR: "euro",
+        USD: "dollar",
+        GBP: "livre sterling",
+        JPY: "yen",
+        CHF: "franc suisse",
+        CAD: "dollar canadien",
+        AUD: "dollar australien",
+        CNY: "yuan",
+        DKK: "couronne danoise",
+        SEK: "couronne suédoise",
+        NOK: "couronne norvégienne",
+        PLN: "zloty",
+        CZK: "couronne tchèque",
+        HUF: "forint",
+        TRY: "livre turque",
+        BRL: "real brésilien",
+        RUB: "rouble"
+    }
+};
+
+function ouvrirConvertir() {
+    document.getElementById("popup-convertir").style.display = "flex";
+    changerCategorieConversion();
+}
+
+function fermerConvertir() {
+    document.getElementById("popup-convertir").style.display = "none";
+}
+
+function changerCategorieConversion() {
+    const catégorie = document.getElementById("unité-convertir").value;
+    const départ = document.getElementById("select-mesures-unitées");
+    const arrivée = document.getElementById("select-mesures-unitées-fin");
+
+    départ.innerHTML = "";
+    arrivée.innerHTML = "";
+
+    Object.entries(unitésConversion[catégorie]).forEach(([value, nom]) => {
+        départ.innerHTML += `<option value="${value}">${nom}</option>`;
+        arrivée.innerHTML += `<option value="${value}">${nom}</option>`;
+    });
+
+    if (arrivée.options.length > 1) {
+        arrivée.selectedIndex = 1;
+    }
+}
+
+function convertir() {
+    const valeur = document.getElementById("chiffre-de-depart").value;
+    const unitéDépart = document.getElementById("select-mesures-unitées").value;
+    const unitéArrivée = document.getElementById("select-mesures-unitées-fin").value;
+
+    if (!valeur) {
+        return;
+    }
+
+    envoyerCommandePrédéfinie(
+        `Convertis ${valeur} ${unitéDépart} en ${unitéArrivée}`
+    );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+window.onclick = function(event) {
+    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir"];
     for (const id of popups) {
         const popup = document.getElementById(id);
         if (event.target === popup) {
