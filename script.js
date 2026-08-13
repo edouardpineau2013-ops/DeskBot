@@ -101,9 +101,80 @@ function afficherReponse(commande, reponse) {
     else if (commande.includes("demande") || commande.includes("IA") || commande.includes("Demande à l'IA")) {
         document.getElementById("reponse-question-ia").textContent = reponse;
     }
-    else if (commande.includes("convertis") || commande.includes("en") || commande.includes("Convertis")) {
+    else if (commande.includes("convertis") || commande.includes("Convertis")) {
         document.getElementById("reponse-convertir").textContent = reponse;
     }
+    else if (commande.includes("traduis") || commande.includes("Traduis")) {
+        document.getElementById("reponse-traduction").textContent = reponse;
+    }
+    else if (commande.includes("hasard") || commande.includes("aléatoire") || commande.includes("pile") || commande.includes("face") || commande.includes("nombre") || commande.includes("choix")) {
+        document.getElementById("reponse-hasard").textContent = reponse;
+    }
+}
+
+function rechercherCommandes() {
+
+    const input = document.getElementById("recherche-commandes");
+
+    if (!input) {
+        return;
+    }
+
+    const recherche = input.value
+        .toLowerCase()
+        .trim();
+
+    const classes = document.querySelectorAll(".classe-commandes");
+
+    classes.forEach(classe => {
+
+        const commandes = classe.querySelectorAll(".commande-prédéfinie");
+
+        let commandeTrouvee = false;
+
+        commandes.forEach(commande => {
+
+            const texteElement = commande.querySelector(".commande-texte");
+
+            if (!texteElement) {
+                return;
+            }
+
+            const texte = texteElement.textContent
+                .toLowerCase()
+                .trim();
+
+            if (recherche === "" || texte.includes(recherche)) {
+
+                commande.classList.remove("commande-cachee");
+
+                commandeTrouvee = true;
+
+            } else {
+
+                commande.classList.add("commande-cachee");
+
+            }
+
+        });
+
+
+        /*
+         * Si aucune commande de la classe
+         * ne correspond, on cache la classe.
+         */
+
+        if (commandeTrouvee) {
+
+            classe.classList.remove("classe-cachee");
+
+        } else {
+
+            classe.classList.add("classe-cachee");
+
+        }
+
+    });
 }
 
 function ouvrirMusique(){
@@ -412,7 +483,7 @@ function SetAlarme() {
             cb.checked = dernierEtatAlarme.jours.includes(parseInt(cb.value, 10));
         });
     } else {
-        document.getElementById("alarme-heure").value = 7;
+        document.getElementById("alarme-heure").value = 0;
         document.getElementById("alarme-minute").value = 0;
         document.querySelectorAll(".jour-checkbox").forEach(cb => cb.checked = false);
     }
@@ -1539,6 +1610,557 @@ function convertir() {
     );
 }
 
+function ouvrirTraduction() {
+    document.getElementById("popup-traduction").style.display = "flex";
+}
+
+function fermerTraduction() {
+    document.getElementById("popup-traduction").style.display = "none";
+}
+
+function traduire() {
+    const mot_traduction = document.getElementById("traduction-mot-input").value;
+    const langue_traduction = document.getElementById("traduction-langue-input").value;
+
+    envoyerCommandePrédéfinie(`Traduis ${mot_traduction} en ${langue_traduction}`)
+}
+
+function ouvrirNotification() {
+    document.getElementById("popup-notification").style.display = "flex";
+}
+
+function fermerNotification() {
+    document.getElementById("popup-notification").style.display = "none";
+}
+
+function programmerNotification() {
+    const maintenant = new Date();
+
+    const mois = [
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre"
+    ];
+
+    const champJour = document.getElementById("notification-jour");
+    const champMois = document.getElementById("notification-mois");
+    const champHeure = document.getElementById("notification-heure");
+    const champMinutes = document.getElementById("notification-minutes");
+    const champContenu = document.getElementById("notification-contenu");
+
+    const jour = champJour.value || maintenant.getDate();
+
+    const moisChoisi = champMois.value || mois[maintenant.getMonth()];
+
+    const heure = champHeure.value !== ""
+        ? champHeure.value
+        : maintenant.getHours();
+
+    const minutes = champMinutes.value !== ""
+        ? champMinutes.value
+        : maintenant.getMinutes();
+
+    const contenu = champContenu.value.trim();
+
+    if (!contenu) {
+        return;
+    }
+
+    const commande =
+        `Programme une notification le ${jour} ${moisChoisi} à ${heure} heures ${minutes} ${contenu}`;
+
+    envoyerCommandePrédéfinie(commande);
+
+    fermerNotification();
+}
+
+// =========================================================
+// AGENDA
+// =========================================================
+
+let dateAgenda = new Date();
+
+
+// ---------------------------------------------------------
+// OUVRIR / FERMER
+// ---------------------------------------------------------
+
+function ouvrirAgenda() {
+
+    document.getElementById("popup-agenda").style.display = "flex";
+
+    fermerFormulairesAgenda();
+
+    document.getElementById("agenda-reponse").textContent = "";
+
+    chargerEvenementsAgenda();
+}
+
+function fermerAgenda() {
+    document.getElementById("popup-agenda").style.display = "none";
+}
+
+
+// ---------------------------------------------------------
+// CALENDRIER
+// ---------------------------------------------------------
+
+function afficherCalendrierAgenda() {
+
+    const calendrier = document.getElementById("agenda-calendrier");
+    const titre = document.getElementById("agenda-mois-annee");
+
+    const mois = [
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre"
+    ];
+
+    const annee = dateAgenda.getFullYear();
+    const moisActuel = dateAgenda.getMonth();
+
+    titre.textContent = `${mois[moisActuel]} ${annee}`;
+
+    calendrier.innerHTML = "";
+
+    const premierJour = new Date(annee, moisActuel, 1);
+
+    let jourDebut = premierJour.getDay();
+
+    if (jourDebut === 0) {
+        jourDebut = 6;
+    } else {
+        jourDebut--;
+    }
+
+    const nombreJours = new Date(annee, moisActuel + 1, 0).getDate();
+
+    for (let i = 0; i < jourDebut; i++) {
+        const caseVide = document.createElement("div");
+        caseVide.className = "agenda-case agenda-case-vide";
+        calendrier.appendChild(caseVide);
+    }
+
+    const maintenant = new Date();
+
+    for (let jour = 1; jour <= nombreJours; jour++) {
+
+        const caseJour = document.createElement("div");
+        caseJour.className = "agenda-case";
+
+        const dateJour =
+            `${annee}-${String(moisActuel + 1).padStart(2, "0")}-${String(jour).padStart(2, "0")}`;
+
+        if (
+            jour === maintenant.getDate() &&
+            moisActuel === maintenant.getMonth() &&
+            annee === maintenant.getFullYear()
+        ) {
+            caseJour.classList.add("agenda-aujourd-hui");
+        }
+
+        const numeroJour = document.createElement("div");
+        numeroJour.className = "agenda-jour";
+        numeroJour.textContent = jour;
+
+        caseJour.appendChild(numeroJour);
+
+        caseJour.dataset.date = dateJour;
+
+        caseJour.onclick = function() {
+            document.getElementById("agenda-ajout-date").value = dateJour;
+        };
+
+        // Vérifie s'il y a un événement ce jour-là
+        const evenementsDuJour = evenementsAgenda.filter(
+            evenement => evenement.date === dateJour
+        );
+
+        if (evenementsDuJour.length > 0) {
+
+            const point = document.createElement("div");
+
+            point.className = "agenda-evenement-point";
+
+            caseJour.appendChild(point);
+        }
+
+        calendrier.appendChild(caseJour);
+    }
+}
+
+
+// ---------------------------------------------------------
+// CHANGER DE MOIS
+// ---------------------------------------------------------
+
+function changerMoisAgenda(delta) {
+
+    dateAgenda.setMonth(
+        dateAgenda.getMonth() + delta
+    );
+
+    chargerEvenementsAgenda();
+}
+
+
+// ---------------------------------------------------------
+// FORMULAIRES
+// ---------------------------------------------------------
+
+function fermerFormulairesAgenda() {
+
+    document.getElementById("agenda-ajout").style.display = "none";
+    document.getElementById("agenda-suppression").style.display = "none";
+    document.getElementById("agenda-modification").style.display = "none";
+}
+
+function ouvrirAjoutEvenement() {
+
+    fermerFormulairesAgenda();
+
+    document.getElementById("agenda-ajout").style.display = "block";
+}
+
+function ouvrirSuppressionEvenement() {
+
+    fermerFormulairesAgenda();
+
+    document.getElementById("agenda-suppression").style.display = "block";
+}
+
+function ouvrirModificationEvenement() {
+
+    fermerFormulairesAgenda();
+
+    document.getElementById("agenda-modification").style.display = "block";
+}
+
+
+// ---------------------------------------------------------
+// CONVERSION DATE
+// ---------------------------------------------------------
+
+function dateEnTexteAgenda(date) {
+
+    const [annee, mois, jour] = date.split("-");
+
+    const moisNoms = [
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre"
+    ];
+
+    return `${parseInt(jour)} ${moisNoms[parseInt(mois) - 1]}`;
+}
+
+
+// ---------------------------------------------------------
+// CONVERSION HEURE
+// ---------------------------------------------------------
+
+function heureEnTexteAgenda(heure) {
+
+    const [heures, minutes] = heure.split(":");
+
+    return `${parseInt(heures)} heures ${parseInt(minutes)} minutes`;
+}
+
+
+// ---------------------------------------------------------
+// AJOUTER
+// ---------------------------------------------------------
+
+function ajouterEvenementAgenda() {
+
+    const titre = document.getElementById("agenda-ajout-titre").value.trim();
+    const date = document.getElementById("agenda-ajout-date").value;
+    const heure = document.getElementById("agenda-ajout-heure").value;
+
+    if (!titre || !date || !heure) {
+
+        document.getElementById("agenda-reponse").textContent =
+            "Remplis tous les champs.";
+
+        return;
+    }
+
+    const [annee, mois, jour] = date.split("-");
+    const dateTexte = `${jour}/${mois}/${annee}`;
+    const heureTexte = heureEnTexteAgenda(heure);
+
+    const commande = `Ajoute un événement ${titre} ${dateTexte} à ${heureTexte}`;
+
+    envoyerCommandePrédéfinie(commande);
+    setTimeout(chargerEvenementsAgenda, 2000);
+
+    fermerFormulairesAgenda();
+
+    document.getElementById("agenda-ajout-titre").value = "";
+    document.getElementById("agenda-ajout-date").value = "";
+    document.getElementById("agenda-ajout-heure").value = "";
+}
+
+
+// ---------------------------------------------------------
+// PROCHAINS ÉVÉNEMENTS
+// ---------------------------------------------------------
+
+function afficherProchainsEvenements() {
+
+    fermerFormulairesAgenda();
+
+    envoyerCommandePrédéfinie(
+        "Donne-moi mes prochains événements"
+    );
+    setTimeout(chargerEvenementsAgenda, 2000);
+}
+
+
+// ---------------------------------------------------------
+// SUPPRIMER
+// ---------------------------------------------------------
+
+function supprimerEvenementAgenda() {
+
+    const titre = document.getElementById("agenda-suppression-titre").value.trim();
+    const date = document.getElementById("agenda-suppression-date").value;
+    const heure = document.getElementById("agenda-suppression-heure").value;
+
+    if (!titre || !date || !heure) {
+
+        document.getElementById("agenda-reponse").textContent =
+            "Remplis tous les champs.";
+
+        return;
+    }
+
+    const dateTexte = dateEnTexteAgenda(date);
+    const heureTexte = heureEnTexteAgenda(heure);
+
+    const commande =
+        `Supprime l'événement ${titre} le ${dateTexte} à ${heureTexte}`;
+
+    envoyerCommandePrédéfinie(commande);
+    setTimeout(chargerEvenementsAgenda, 3000);
+
+    fermerFormulairesAgenda();
+
+    document.getElementById("agenda-suppression-titre").value = "";
+    document.getElementById("agenda-suppression-date").value = "";
+    document.getElementById("agenda-suppression-heure").value = "";
+}
+
+
+// ---------------------------------------------------------
+// MODIFIER
+// ---------------------------------------------------------
+
+function modifierEvenementAgenda() {
+
+    const ancien = document.getElementById("agenda-modification-ancien").value.trim();
+    const date = document.getElementById("agenda-modification-date").value;
+    const heure = document.getElementById("agenda-modification-heure").value;
+
+    if (!ancien || !date || !heure) {
+
+        document.getElementById("agenda-reponse").textContent =
+            "Remplis tous les champs.";
+
+        return;
+    }
+
+    const dateTexte = dateEnTexteAgenda(date);
+    const heureTexte = heureEnTexteAgenda(heure);
+
+    const commande =
+        `Modifie l'événement ${ancien} le ${dateTexte} à ${heureTexte}`;
+
+    envoyerCommandePrédéfinie(commande);
+    setTimeout(chargerEvenementsAgenda, 2000);
+
+    fermerFormulairesAgenda();
+
+    document.getElementById("agenda-modification-ancien").value = "";
+    document.getElementById("agenda-modification-date").value = "";
+    document.getElementById("agenda-modification-heure").value = "";
+}
+
+let evenementsAgenda = [];
+
+function chargerEvenementsAgenda() {
+
+    const annee = dateAgenda.getFullYear();
+    const mois = dateAgenda.getMonth() + 1;
+
+    fetch(`https://api.gogekko.fr/agenda?annee=${annee}&mois=${mois}`, {
+        headers: {
+            "Authorization": "Bearer " + TOKEN
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (!data.succes) {
+            console.error("Erreur récupération agenda :", data.erreur);
+            evenementsAgenda = [];
+            afficherCalendrierAgenda();
+            return;
+        }
+
+        evenementsAgenda = data.evenements || [];
+
+        afficherCalendrierAgenda();
+
+    })
+    .catch(error => {
+
+        console.error(
+            "Erreur connexion agenda :",
+            error
+        );
+
+    });
+}
+
+function ouvrirHasard() {
+    document.getElementById("popup-hasard").style.display = "flex";
+}
+
+function fermerHasard() {
+    document.getElementById("popup-hasard").style.display = "none";
+}
+
+function pileOuFace() {
+    envoyerCommandePrédéfinie("pile ou face");
+}
+
+
+function lancerDe() {
+    const input = document.getElementById("lancer-de-input");
+    const faces = parseInt(input.value);
+
+    if (isNaN(faces) || faces < 2) {
+        document.getElementById("reponse-hasard").textContent =
+            "Réponse : un dé doit avoir au moins 2 faces.";
+        return;
+    }
+
+    envoyerCommandePrédéfinie(`lance un dé de ${faces} faces`);
+}
+
+
+function nombreAleatoireSite() {
+    const minimum = parseInt(
+        document.getElementById("nombre-min-input").value
+    );
+
+    const maximum = parseInt(
+        document.getElementById("nombre-max-input").value
+    );
+
+    if (isNaN(minimum) || isNaN(maximum)) {
+        document.getElementById("reponse-hasard").textContent =
+            "Réponse : entre deux nombres valides.";
+        return;
+    }
+
+    if (minimum > maximum) {
+        document.getElementById("reponse-hasard").textContent =
+            "Réponse : le minimum doit être inférieur au maximum.";
+        return;
+    }
+
+    envoyerCommandePrédéfinie(
+        `nombre aléatoire entre ${minimum} et ${maximum}`
+    );
+}
+
+function choixAleatoire() {
+    const input = document.getElementById("choix-hasard-input");
+    const texte = input.value.trim();
+
+    if (!texte) {
+        document.getElementById("reponse-hasard").textContent =
+            "Réponse : entre au moins deux choix.";
+        return;
+    }
+
+    const choix = texte
+        .split(",")
+        .map(element => element.trim())
+        .filter(element => element.length > 0);
+
+    if (choix.length < 2) {
+        document.getElementById("reponse-hasard").textContent =
+            "Réponse : entre au moins deux choix.";
+        return;
+    }
+
+    envoyerCommandePrédéfinie(
+        `choix au hasard entre ${choix.join(", ")}`
+    );
+}
+
+function nombreAleatoireSite() {
+    const minimum = parseInt(
+        document.getElementById("nombre-min-input").value
+    );
+
+    const maximum = parseInt(
+        document.getElementById("nombre-max-input").value
+    );
+
+    if (isNaN(minimum) || isNaN(maximum)) {
+        document.getElementById("reponse-hasard").textContent =
+            "Réponse : entre deux nombres valides.";
+        return;
+    }
+
+    if (minimum > maximum) {
+        document.getElementById("reponse-hasard").textContent =
+            "Réponse : le minimum doit être inférieur au maximum.";
+        return;
+    }
+
+    envoyerCommandePrédéfinie(
+        `nombre au hasard entre ${minimum} et ${maximum}`
+    );
+}
+
+
+
+
+
+
+
 
 
 
@@ -1559,7 +2181,7 @@ function convertir() {
 
 
 window.onclick = function(event) {
-    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir"];
+    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard"];
     for (const id of popups) {
         const popup = document.getElementById(id);
         if (event.target === popup) {
@@ -1567,3 +2189,82 @@ window.onclick = function(event) {
         }
     }
 };
+
+
+
+
+let dernierEtatDeskBot = null;
+
+const ETATS_DESKBOT = {
+    attente: {
+        nom: "En veille",
+        image: "img/sleep.svg",
+        classe: "etat-attente"
+    },
+
+    ecoute: {
+        nom: "Écoute",
+        image: "img/micro.svg",
+        classe: "etat-ecoute"
+    },
+
+    reflexion: {
+        nom: "Réflexion",
+        image: "img/cerveau.svg",
+        classe: "etat-reflexion"
+    },
+
+    parle: {
+        nom: "Parle",
+        image: "img/parler.svg",
+        classe: "etat-parle"
+    }
+};
+
+
+function afficherEtatDeskBot(etat) {
+
+    const infos = ETATS_DESKBOT[etat];
+
+    if (!infos) return;
+
+    const image = document.getElementById("etat-deskbot-image");
+    const texte = document.getElementById("etat-deskbot-texte");
+    const carte = document.getElementById("etat-deskbot");
+
+    if (!image || !texte || !carte) return;
+
+    image.src = infos.image;
+    texte.textContent = infos.nom;
+
+    carte.className = "module etat-deskbot " + infos.classe;
+
+    dernierEtatDeskBot = etat;
+}
+
+
+function chargerEtatDeskBot() {
+
+    if (!TOKEN) return;
+
+    fetch("https://api.gogekko.fr/etat", {
+        headers: {
+            "Authorization": "Bearer " + TOKEN
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.etat) {
+            afficherEtatDeskBot(data.etat);
+        }
+
+    })
+    .catch(() => {
+        afficherEtatDeskBot("attente");
+    });
+}
+
+setInterval(chargerEtatDeskBot, 500);
+
+chargerEtatDeskBot();

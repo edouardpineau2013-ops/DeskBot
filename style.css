@@ -61,7 +61,9 @@ h2 {
 #import-fichier,
 #unité-convertir,
 #select-mesures-unitées,
-#select-mesures-unitées-fin {
+#select-mesures-unitées-fin,
+#traduction-mot-input,
+#traduction-langue-input {
     width: 90%;
     padding: 10px;
     margin-bottom: 20px;
@@ -142,14 +144,23 @@ h2 {
 #repeter-button,
 #todo-bouton-ajouter,
 .todo-action,
-#revision-continuer {
-    background-color: var(--vert);
-    color: var(--rouge);
+#revision-continuer,
+#traduction-button,
+#notification-button,
+#pile-ou-face-button,
+#lancer-de-button,
+#nombre-aleatoire-button,
+#choix-aleatoire-button {
+    margin-top: 25px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: rgb(27, 206, 30);
+    color: #bd0f0f;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    box-shadow: 4px 4px 4px var(--noir);
-    text-shadow: 2px 2px 10px var(--rouge-ombre);
+    box-shadow: 4px 4px 4px #000000;
+    text-shadow: 2px 2px 10px #a01414;
 }
 
 /* =========================================================
@@ -179,7 +190,13 @@ h2 {
 #question-ia-button:hover,
 #repeter-button:hover,
 #todo-bouton-ajouter:hover,
-.todo-action:hover {
+.todo-action:hover,
+#traduction-button:hover,
+#notification-button:hover,
+#pile-ou-face-button:hover,
+#lancer-de-button:hover,
+#nombre-aleatoire-button:hover,
+#choix-aleatoire-button:hover {
     background-color: var(--vert-hover);
 }
 
@@ -210,7 +227,13 @@ h2 {
 #question-ia-button:active,
 #repeter-button:active,
 #todo-bouton-ajouter:active,
-.todo-action:active {
+.todo-action:active,
+#traduction-button:active,
+#notification-button:active,
+#pile-ou-face-button:active,
+#lancer-de-button:active,
+#nombre-aleatoire-button:active,
+#choix-aleatoire-button:active {
     background-color: var(--bleu-active);
 }
 
@@ -256,6 +279,145 @@ h2 {
 }
 
 /* =========================================================
+RECHERCHE COMMANDES PRÉDÉFINIES
+========================================================= */
+
+#recherche-commandes {
+    width: 500px;
+    max-width: 90%;
+    padding: 12px 15px;
+    margin: 10px auto 35px;
+
+    display: block;
+
+    font-size: 1.2rem;
+
+    border: 3px solid var(--vert);
+    border-radius: 10px;
+
+    box-shadow: 4px 4px 4px var(--noir);
+
+    outline: none;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#recherche-commandes:focus {
+    transform: scale(1.02);
+    box-shadow: 0 0 12px var(--vert);
+}
+
+
+/* =========================================================
+CONTENEUR DES COMMANDES
+========================================================= */
+
+/*
+   IMPORTANT :
+   On annule le flex des anciennes commandes ici.
+   Chaque classe prend toute la largeur.
+*/
+
+.commandes-prédéfinies {
+    display: block;
+    width: 100%;
+}
+
+
+/* =========================================================
+CLASSE DE COMMANDES
+========================================================= */
+
+.classe-commandes {
+    width: 100%;
+    margin: 0 auto 45px;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    animation: apparition-classe-commandes 0.3s ease;
+}
+
+
+/* =========================================================
+TITRE DE LA CLASSE
+========================================================= */
+
+.titre-classe-commandes {
+    width: 100%;
+
+    margin: 0 0 20px;
+
+    color: var(--rouge);
+
+    font-size: 1.8rem;
+
+    text-shadow:
+        3px 3px 3px var(--noir);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+COMMANDES
+========================================================= */
+
+.classe-commandes .commande-prédéfinie {
+    flex: 0 0 auto;
+
+    opacity: 1;
+    transform: scale(1);
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+/* =========================================================
+COMMANDE MASQUÉE
+========================================================= */
+
+.classe-commandes .commande-prédéfinie.commande-cachee {
+    display: none;
+}
+
+
+/* =========================================================
+CLASSE MASQUÉE
+========================================================= */
+
+.classe-commandes.classe-cachee {
+    display: none;
+}
+
+
+/* =========================================================
+ANIMATION
+========================================================= */
+
+@keyframes apparition-classe-commandes {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+/* =========================================================
    RÉPONSES
 ========================================================= */
 
@@ -265,7 +427,9 @@ h2 {
 #reponse-recherche,
 #reponse-trajet,
 #reponse-question-ia,
-#reponse-convertir {
+#reponse-convertir,
+#reponse-traduction,
+#reponse-hasard {
     margin-top: 40px;
     font-size: 1.5rem;
     color: var(--rouge);
@@ -366,6 +530,253 @@ h2 {
     margin-left: 10px;
 }
 
+.notification-date,
+.notification-heure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#notification-jour,
+#notification-heure,
+#notification-minutes,
+#notification-mois,
+#notification-contenu {
+    padding: 10px;
+    font-size: 1.1rem;
+    border: 3px solid var(--vert);
+    border-radius: 10px;
+    box-shadow: 3px 3px 4px var(--noir);
+}
+
+#notification-jour {
+    width: 80px;
+}
+
+#notification-heure,
+#notification-minutes {
+    width: 80px;
+    text-align: center;
+}
+
+#notification-mois {
+    width: 150px;
+}
+
+#notification-contenu {
+    width: 90%;
+    height: 100px;
+    resize: vertical;
+    font-family: 'Open Sans', Arial, sans-serif;
+}
+
+/* =========================================================
+   AGENDA
+========================================================= */
+
+.popup-agenda-contenu {
+    width: 700px;
+    max-width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.agenda-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.agenda-navigation h3 {
+    margin: 0;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.agenda-navigation button {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--vert);
+    color: var(--rouge);
+    font-size: 2rem;
+    cursor: pointer;
+    box-shadow: 3px 3px 4px var(--noir);
+}
+
+.agenda-navigation button:hover {
+    background-color: var(--vert-hover);
+}
+
+.agenda-semaine {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.agenda-semaine span {
+    color: var(--vert);
+    font-weight: bold;
+    padding: 8px 2px;
+}
+
+.agenda-calendrier {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.agenda-case {
+    min-height: 65px;
+    padding: 7px;
+    background-color: #292929;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.agenda-case-vide {
+    background-color: transparent;
+}
+
+.agenda-jour {
+    color: white;
+    font-weight: bold;
+}
+
+.agenda-aujourd-hui {
+    border: 3px solid var(--vert);
+}
+
+.agenda-evenement-point {
+    width: 8px;
+    height: 8px;
+    margin-top: 7px;
+    background-color: var(--vert);
+    border-radius: 50%;
+}
+
+.agenda-separateur {
+    width: 100%;
+    height: 2px;
+    margin: 25px 0;
+    background-color: #444;
+}
+
+.agenda-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.agenda-actions button {
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--vert);
+    color: var(--rouge);
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 3px 3px 4px var(--noir);
+}
+
+.agenda-actions button:hover {
+    background-color: var(--vert-hover);
+}
+
+.agenda-formulaire {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #292929;
+}
+
+.agenda-formulaire h3 {
+    margin-top: 0;
+    color: var(--vert);
+}
+
+.agenda-formulaire input {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 3px solid var(--vert);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.agenda-formulaire button {
+    margin-top: 10px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--vert);
+    color: var(--rouge);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.agenda-reponse {
+    min-height: 25px;
+    margin-top: 20px;
+    color: var(--vert);
+    font-weight: bold;
+}
+
+#lancer-de-input {
+    width: 30%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border: 3px solid var(--vert);
+    border-radius: 10px;
+}
+
+#label-input-de {
+    margin-top: 40px;
+    font-size: 1.5rem;
+    color: var(--rouge);
+    text-shadow: 2px 2px 10px var(--rouge-ombre);
+    background-color: var(--vert);
+    border-radius: 10px;
+    width: fit-content;
+    padding: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 4px 4px 4px var(--noir);
+}
+
+#label-input-nombre,
+#label-input-choix {
+    margin-top: 15px;
+    font-size: 1.3rem;
+    color: #bd0f0f;
+}
+
+#nombre-min-input,
+#nombre-max-input {
+    width: 30%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border: 3px solid var(--vert);
+    border-radius: 10px;
+}
+
+#choix-hasard-input {
+    width: 70%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border: 3px solid var(--vert);
+    border-radius: 10px;
+}
+
 /* =========================================================
    CHRONOMÈTRE / MINUTEUR / ALARME
 ========================================================= */
@@ -374,6 +785,47 @@ h2 {
     display: flex;
 }
 
+.etat-deskbot {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 15px;
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.etat-deskbot img {
+    width: 55px;
+    height: 55px;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.etat-deskbot-infos h3 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.etat-deskbot-infos p {
+    margin: 4px 0 0;
+}
+
+.etat-deskbot-infos {
+    height: 100px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.etat-deskbot,
 .chrono,
 .minuteur,
 .alarme {
@@ -391,8 +843,13 @@ h2 {
     box-shadow: 4px 4px 4px var(--noir);
 }
 
-.chrono {
+.etat-deskbot {
     margin-left: auto;
+    margin-right: 20px;
+}
+
+.chrono {
+    margin-left: 20px;
     margin-right: 20px;
 }
 
@@ -406,6 +863,7 @@ h2 {
     margin-right: auto;
 }
 
+#etat-deskbot-infos
 #chronometre-texte,
 #minuteur-texte,
 #alarme-texte {
@@ -424,6 +882,87 @@ h2 {
 .btn-alarme {
     width: 50px;
     padding-top: 10px;
+}
+
+/* ATTENTE */
+
+.etat-attente {
+    background-color: #888;
+}
+
+.etat-attente img {
+    border-radius: 10px;
+}
+
+
+/* ÉCOUTE */
+
+.etat-ecoute {
+    background-color: #00aaff;
+}
+
+.etat-ecoute img {
+    animation: ecoute 1s infinite ease-in-out;
+}
+
+
+/* RÉFLEXION */
+
+.etat-reflexion {
+    background-color: #a855f7;
+}
+
+.etat-reflexion img {
+    animation: cerveau-reflexion 1s infinite ease-in-out;
+}
+
+
+/* PARLE */
+
+.etat-parle {
+    background-color: #00cc66;
+}
+
+.etat-parle img {
+    animation: parler-animation 0.7s infinite ease-in-out;
+}
+
+
+@keyframes ecoute {
+
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+}
+
+@keyframes cerveau-reflexion {
+
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+}
+
+
+@keyframes parler-animation {
+
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+
 }
 
 .minuteur-input-ligne {
@@ -1244,9 +1783,27 @@ h2 {
         align-items: stretch;
     }
 
+    #recherche-commandes {
+        width: 90%;
+        font-size: 1rem;
+    }
+
+    .titre-classe-commandes {
+        font-size: 1.4rem;
+    }
+
     .popup-contenu {
         width: 100%;
         padding: 18px;
+    }
+
+    .agenda-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .agenda-case {
+        min-height: 50px;
+        padding: 4px;
     }
 
     .modules {

@@ -109,7 +109,7 @@
                 <span class="span-minuteur">Heure</span>
                 <div class="minuteur-controle">
                     <img src="img/arrow-up.svg" class="fleche-minuteur" onclick="ajusterAlarme('heure', 1)">
-                    <input id="alarme-heure" type="number" min="0" max="23" value="7">
+                    <input id="alarme-heure" type="number" min="0" max="23" value="0">
                     <img src="img/arrow-down.svg" class="fleche-minuteur" onclick="ajusterAlarme('heure', -1)">
                 </div>
             </div>
@@ -476,6 +476,169 @@
         </div>
     </div>
 
+    <div id="popup-traduction" class="popup">
+        <div class="popup-contenu" style="text-align:center;">
+            <span class="fermer" onclick="fermerTraduction()">&times;</span>
+            <h2>Traduire des mots</h2>
+            <input id="traduction-mot-input" type="text" placeholder="Les mots à traduire...">
+            <input id="traduction-langue-input" type="text" placeholder="La langue...">
+            <button onclick="traduire()" id="traduction-button">Traduire</button>
+            <p id="reponse-traduction">Réponse: ...</p>
+        </div>
+    </div>
+
+    <div id="popup-notification" class="popup">
+        <div class="popup-contenu" style="text-align:center;">
+            <span class="fermer" onclick="fermerNotification()">&times;</span>
+            <h2>Programmer une notification</h2>
+            <div class="notification-date">
+                <input type="number" id="notification-jour" min="1" max="31" placeholder="Jour">
+
+                <select id="notification-mois">
+                    <option value="">Mois actuel</option>
+                    <option value="janvier">Janvier</option>
+                    <option value="février">Février</option>
+                    <option value="mars">Mars</option>
+                    <option value="avril">Avril</option>
+                    <option value="mai">Mai</option>
+                    <option value="juin">Juin</option>
+                    <option value="juillet">Juillet</option>
+                    <option value="août">Août</option>
+                    <option value="septembre">Septembre</option>
+                    <option value="octobre">Octobre</option>
+                    <option value="novembre">Novembre</option>
+                    <option value="décembre">Décembre</option>
+                </select>
+            </div>
+
+            <div class="notification-heure">
+                <input type="number" id="notification-heure" min="0" max="23" placeholder="H">
+                <span>:</span>
+                <input type="number" id="notification-minutes" min="0" max="59" placeholder="Min">
+            </div>
+
+            <textarea id="notification-contenu" placeholder="Écris ta notification..."></textarea>
+            <button onclick="programmerNotification()" id="notification-button">Programmer</button>
+        </div>
+    </div>
+
+    <div id="popup-agenda" class="popup">
+        <div class="popup-contenu popup-agenda-contenu">
+            <span class="fermer" onclick="fermerAgenda()">&times;</span>
+            <h2>Agenda</h2>
+
+            <div class="agenda-navigation">
+                <button onclick="changerMoisAgenda(-1)">‹</button>
+                <h3 id="agenda-mois-annee"></h3>
+                <button onclick="changerMoisAgenda(1)">›</button>
+            </div>
+
+            <div class="agenda-semaine">
+                <span>Lun</span>
+                <span>Mar</span>
+                <span>Mer</span>
+                <span>Jeu</span>
+                <span>Ven</span>
+                <span>Sam</span>
+                <span>Dim</span>
+            </div>
+
+            <div id="agenda-calendrier" class="agenda-calendrier"></div>
+
+            <div class="agenda-separateur"></div>
+
+            <div class="agenda-actions">
+                <button onclick="ouvrirAjoutEvenement()">➕ Ajouter un événement</button>
+                <button onclick="afficherProchainsEvenements()">🗓️ Prochains événements</button>
+                <button onclick="ouvrirSuppressionEvenement()">🗑️ Supprimer un événement</button>
+                <button onclick="ouvrirModificationEvenement()">✏️ Modifier un événement</button>
+            </div>
+
+            <div id="agenda-ajout" class="agenda-formulaire">
+                <h3>Ajouter un événement</h3>
+
+                <input type="text" id="agenda-ajout-titre" placeholder="Nom de l'événement">
+
+                <input type="date" id="agenda-ajout-date">
+
+                <input type="time" id="agenda-ajout-heure">
+
+                <button onclick="ajouterEvenementAgenda()">Ajouter</button>
+            </div>
+
+            <div id="agenda-suppression" class="agenda-formulaire">
+                <h3>Supprimer un événement</h3>
+
+                <input type="text" id="agenda-suppression-titre" placeholder="Nom de l'événement">
+
+                <input type="date" id="agenda-suppression-date">
+
+                <input type="time" id="agenda-suppression-heure">
+
+                <button onclick="supprimerEvenementAgenda()">Supprimer</button>
+            </div>
+
+            <div id="agenda-modification" class="agenda-formulaire">
+                <h3>Modifier un événement</h3>
+
+                <input type="text" id="agenda-modification-ancien" placeholder="Événement à modifier">
+
+                <input type="date" id="agenda-modification-date">
+
+                <input type="time" id="agenda-modification-heure">
+
+                <button onclick="modifierEvenementAgenda()">Modifier</button>
+            </div>
+
+            <div id="agenda-reponse" class="agenda-reponse"></div>
+
+        </div>
+    </div>
+
+    <div id="popup-hasard" class="popup">
+        <div class="popup-contenu" style="text-align:center;">
+            <span class="fermer" onclick="fermerHasard()">&times;</span>
+
+            <h2>Demander au hasard</h2>
+
+            <button onclick="pileOuFace()" id="pile-ou-face-button">
+                Pile ou face ? 🪙
+            </button>
+
+            <p id="label-input-de">
+                Lancer un dé de <input type="number" id="lancer-de-input" min="2" value="6"> faces.
+            </p>
+
+            <button onclick="lancerDe()" id="lancer-de-button">
+                Lancer ! 🎲
+            </button>
+
+            <p id="label-input-nombre">
+                Nombre aléatoire entre
+                <input type="number" id="nombre-min-input" value="0">
+                et
+                <input type="number" id="nombre-max-input" value="100">
+            </p>
+
+            <button onclick="nombreAleatoireSite()" id="nombre-aleatoire-button">
+                Générer ! 🔢
+            </button>
+
+            <p id="label-input-choix">
+                Choisir au hasard entre
+                <input type="text" id="choix-hasard-input" placeholder="pizza, burger, sushis">
+            </p>
+
+            <button onclick="choixAleatoire()" id="choix-aleatoire-button">
+                Choisir ! 🎯
+            </button>
+
+            <p id="reponse-hasard">
+                Réponse : ...
+            </p>
+        </div>
+    </div>
+
     <h1>DeskBot</h1>
     <h2>crée par Edouard</h2>
 
@@ -490,6 +653,14 @@
     <h2>Modules</h2>
 
     <div class="modules">
+        <div id="etat-deskbot" class="module etat-deskbot etat-attente">
+            <img id="etat-deskbot-image" src="img/sleep.svg" alt="État du DeskBot">
+            <div class="etat-deskbot-infos">
+                <h3>DeskBot</h3>
+                <p id="etat-deskbot-texte">En veille</p>
+            </div>
+        </div>
+
         <div class="chrono">
             <div id="chrono">
                 <p id="chronometre-texte">Chronomètre: 0 sec</p>
@@ -522,76 +693,159 @@
     
     <h2>Commandes prédéfinies</h2>
 
+    <input type="text" id="recherche-commandes" placeholder="Rechercher une commande..." oninput="rechercherCommandes()">
+
     <div class="commandes-prédéfinies">
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('deskBot activé')">
-            <p class="commande-texte">Activer le DeskBot</p>
+
+        <!-- SYSTÈME -->
+        <div class="classe-commandes">
+            <h3 class="titre-classe-commandes">Système</h3>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('deskBot activé')">
+                <p class="commande-texte">Activer le DeskBot</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('deskBot désactivé')">
+                <p class="commande-texte">Désactiver le DeskBot</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('au revoir')">
+                <p class="commande-texte">Arrêter le programme</p>
+            </div>
         </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('deskBot désactivé')">
-            <p class="commande-texte">Désactiver le DeskBot</p>
+
+
+        <!-- DISCUSSION -->
+        <div class="classe-commandes">
+            <h3 class="titre-classe-commandes">Discussion</h3>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('bonjour')">
+                <p class="commande-texte">Dire : bonjour</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('merci')">
+                <p class="commande-texte">Dire : merci</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('ça va')">
+                <p class="commande-texte">Dire : comment ça va</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('qui es-tu')">
+                <p class="commande-texte">Dire : qui es-tu</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('quelle heure est-il')">
+                <p class="commande-texte">Demander l'heure</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirRepeter()">
+                <p class="commande-texte">Répéter</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('Fais moi une blague')">
+                <p class="commande-texte">Demander une blague</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('Dis moi une anecdote')">
+                <p class="commande-texte">Demander une anecdote</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('Pose moi une devinette')">
+                <p class="commande-texte">Demander une devinette</p>
+            </div>
         </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('au revoir')">
-            <p class="commande-texte">Arrêter le programme</p>
+
+
+        <!-- UTILITAIRES -->
+        <div class="classe-commandes">
+            <h3 class="titre-classe-commandes">Utilitaires</h3>
+
+            <div class="commande-prédéfinie" onclick="ouvrirMeteo()">
+                <p class="commande-texte">Demander la météo</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirMusique()">
+                <p class="commande-texte">Contrôler la musique</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirMails()">
+                <p class="commande-texte">Vérifier mes mails</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirRecherche()">
+                <p class="commande-texte">Faire une recherche</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirTrajet()">
+                <p class="commande-texte">Calculer un trajet</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirStatsYoutube()">
+                <p class="commande-texte">Regarder les stats YT</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirAgenda()">
+                <p class="commande-texte">Agenda</p>
+            </div>
         </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('bonjour')">
-            <p class="commande-texte">Dire: bonjour</p>
+
+
+        <!-- SCOLARITE -->
+        <div class="classe-commandes">
+            <h3 class="titre-classe-commandes">Scolarité</h3>
+
+            <div class="commande-prédéfinie" onclick="ouvrirPronote()">
+                <p class="commande-texte">Regarder Pronote</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirImportCours()">
+                <p class="commande-texte">Importer un cours</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirRevisionAccueil()">
+                <p class="commande-texte">Révisions</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('démarre une session de révision')">
+                <p class="commande-texte">Session de révision</p>
+            </div>
         </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('merci')">
-            <p class="commande-texte">Dire: merci</p>
+
+
+        <!-- OUTILS -->
+        <div class="classe-commandes">
+            <h3 class="titre-classe-commandes">Outils</h3>
+
+            <div class="commande-prédéfinie" onclick="ouvrirTodo()">
+                <p class="commande-texte">Ma To-Do List</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirQuestionIA()">
+                <p class="commande-texte">Demander à l'IA</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirCalculatrice()">
+                <p class="commande-texte">Calculatrice</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirConvertir()">
+                <p class="commande-texte">Convertir des unités</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirTraduction()">
+                <p class="commande-texte">Traduire des mots</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirNotification()">
+                <p class="commande-texte">Créer une notification</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirHasard()">
+                <p class="commande-texte">Demander au hasard</p>
+            </div>
         </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('ça va')">
-            <p class="commande-texte">Dire: comment ça va</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('qui es-tu')">
-            <p class="commande-texte">Dire: qui es-tu</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('quelle heure est-il')">
-            <p class="commande-texte">Demander l'heure</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirMeteo()">
-            <p class="commande-texte">Demander la météo</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirMusique()">
-            <p class="commande-texte">Controler la musique</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirMails()">
-            <p class="commande-texte">Vérifier mes mails</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirStatsYoutube()">
-            <p class="commande-texte">Regarder les stats YT</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirRecherche()">
-            <p class="commande-texte">Faire une recherche</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirTrajet()">
-            <p class="commande-texte">Calculer un trajet</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirPronote()">
-            <p class="commande-texte">Regarder Pronote</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirImportCours()">
-            <p class="commande-texte">Importer un cours</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirTodo()">
-            <p class="commande-texte">Ma To-Do List</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirRevisionAccueil()">
-            <p class="commande-texte">Révisions</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirQuestionIA()">
-            <p class="commande-texte">Demander à l'IA</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="envoyerCommandePrédéfinie('démarre une session de révision')">
-            <p class="commande-texte">Session de révision</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirRepeter()">
-            <p class="commande-texte">Répèter</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirCalculatrice()">
-            <p class="commande-texte">Calculatrice</p>
-        </div>
-        <div class="commande-prédéfinie" onclick="ouvrirConvertir()">
-            <p class="commande-texte">Convertir des unitées</p>
-        </div>
+
     </div>
 </body>
 </html>
