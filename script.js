@@ -112,6 +112,47 @@ function afficherReponse(commande, reponse) {
     }
 }
 
+let derniereReponseDeskBot = "";
+
+function surveillerReponseDeskBot() {
+
+    if (!TOKEN) {
+        return;
+    }
+
+    fetch("https://api.gogekko.fr/etat", {
+        headers: {
+            "Authorization": "Bearer " + TOKEN
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        const reponse = data.reponse;
+
+        if (!reponse) {
+            return;
+        }
+
+        // Ne pas afficher plusieurs fois la même réponse
+        if (reponse === derniereReponseDeskBot) {
+            return;
+        }
+
+        derniereReponseDeskBot = reponse;
+
+        // AFFICHER LA RÉPONSE DU MODE VOCAL DANS #reponse
+        document.getElementById("reponse").textContent =
+            "Réponse : " + reponse;
+
+    })
+    .catch(erreur => {
+        console.error("Erreur récupération réponse DeskBot :", erreur);
+    });
+}
+
+setInterval(surveillerReponseDeskBot, 500);
+
 function rechercherCommandes() {
 
     const input = document.getElementById("recherche-commandes");
@@ -2076,33 +2117,6 @@ function lancerDe() {
     envoyerCommandePrédéfinie(`lance un dé de ${faces} faces`);
 }
 
-
-function nombreAleatoireSite() {
-    const minimum = parseInt(
-        document.getElementById("nombre-min-input").value
-    );
-
-    const maximum = parseInt(
-        document.getElementById("nombre-max-input").value
-    );
-
-    if (isNaN(minimum) || isNaN(maximum)) {
-        document.getElementById("reponse-hasard").textContent =
-            "Réponse : entre deux nombres valides.";
-        return;
-    }
-
-    if (minimum > maximum) {
-        document.getElementById("reponse-hasard").textContent =
-            "Réponse : le minimum doit être inférieur au maximum.";
-        return;
-    }
-
-    envoyerCommandePrédéfinie(
-        `nombre aléatoire entre ${minimum} et ${maximum}`
-    );
-}
-
 function choixAleatoire() {
     const input = document.getElementById("choix-hasard-input");
     const texte = input.value.trim();
@@ -2155,6 +2169,313 @@ function nombreAleatoireSite() {
     );
 }
 
+/* ---------------------------------------------------------
+   NOTES
+   --------------------------------------------------------- */
+
+function ouvrirNotes() {
+
+    document.getElementById("popup-notes").style.display = "flex";
+
+    chargerNotes();
+}
+
+
+function fermerNotes() {
+
+    document.getElementById("popup-notes").style.display = "none";
+}
+
+
+/* ---------------------------------------------------------
+   Charger les notes
+   --------------------------------------------------------- */
+
+async function chargerNotes() {
+
+    const liste = document.getElementById("notes-liste");
+    const message = document.getElementById("notes-message");
+
+    liste.innerHTML = '<p class="notes-vide">Chargement...</p>';
+    message.textContent = "";
+
+    try {
+
+        const reponse = await fetch(
+            "https://api.gogekko.fr/notes",
+            {
+                method: "GET",
+
+                headers: {
+                    "Authorization": "Bearer " + TOKEN
+                }
+            }
+        );
+
+        const resultat = await reponse.json();
+
+        if (!reponse.ok) {
+            throw new Error(
+                resultat.erreur || "Erreur lors du chargement."
+            );
+        }
+
+        const notes = resultat.notes || [];
+
+        liste.innerHTML = "";
+
+        if (notes.length === 0) {
+
+            liste.innerHTML =
+                '<p class="notes-vide">Aucune note enregistrée.</p>';
+
+            return;
+        }
+
+        notes.forEach(note => {
+
+            const bloc = document.createElement("div");
+            bloc.className = "note";
+
+            const contenu = document.createElement("div");
+            contenu.className = "note-contenu";
+
+            const titre = document.createElement("h3");
+            titre.textContent = note.titre;
+
+            const texte = document.createElement("p");
+            texte.textContent =
+                note.texte || "Cette note est vide.";
+
+            const actions = document.createElement("div");
+            actions.className = "note-actions";
+
+            const boutonModifier = document.createElement("button");
+
+            boutonModifier.className = "note-modifier";
+            boutonModifier.textContent = "Modifier";
+
+            boutonModifier.onclick = function () {
+                modifierNoteDepuisSite(note);
+            };
+
+
+            const boutonSupprimer = document.createElement("button");
+
+            boutonSupprimer.className = "note-supprimer";
+            boutonSupprimer.textContent = "Supprimer";
+
+            boutonSupprimer.onclick = function () {
+                supprimerNoteDepuisSite(note.titre);
+            };
+
+            actions.appendChild(boutonModifier);
+            actions.appendChild(boutonSupprimer);
+
+            contenu.appendChild(titre);
+            contenu.appendChild(texte);
+            contenu.appendChild(actions);
+
+            bloc.appendChild(contenu);
+
+            liste.appendChild(bloc);
+        });
+
+    } catch (erreur) {
+
+        console.error("Erreur notes :", erreur);
+
+        liste.innerHTML =
+            '<p class="notes-vide">Impossible de charger les notes.</p>';
+
+        message.textContent = erreur.message;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   Ajouter une note
+   --------------------------------------------------------- */
+
+async function ajouterNoteDepuisSite() {
+
+    const titreInput =
+        document.getElementById("note-titre");
+
+    const texteInput =
+        document.getElementById("note-texte");
+
+    const message =
+        document.getElementById("notes-message");
+
+    const titre = titreInput.value.trim();
+    const texte = texteInput.value.trim();
+
+    if (!titre) {
+
+        message.textContent =
+            "Le titre de la note est obligatoire.";
+
+        return;
+    }
+
+    try {
+
+        const reponse = await fetch(
+            "https://api.gogekko.fr/notes",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + TOKEN
+                },
+
+                body: JSON.stringify({
+                    titre: titre,
+                    texte: texte
+                })
+            }
+        );
+
+        const resultat = await reponse.json();
+
+        if (!reponse.ok) {
+
+            message.textContent =
+                resultat.erreur || "Impossible d'ajouter la note.";
+
+            return;
+        }
+
+        titreInput.value = "";
+        texteInput.value = "";
+
+        message.textContent = "Note ajoutée !";
+
+        chargerNotes();
+
+    } catch (erreur) {
+
+        console.error("Erreur ajout note :", erreur);
+
+        message.textContent =
+            "Erreur lors de l'ajout de la note.";
+    }
+}
+
+
+/* ---------------------------------------------------------
+   Modifier une note
+   --------------------------------------------------------- */
+
+async function modifierNoteDepuisSite(note) {
+
+    const nouveauTexte = prompt(
+        "Modifier la note « " + note.titre + " » :",
+        note.texte || ""
+    );
+
+    if (nouveauTexte === null) {
+        return;
+    }
+
+    try {
+
+        const reponse = await fetch(
+            "https://api.gogekko.fr/notes/" +
+            encodeURIComponent(note.titre),
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + TOKEN
+                },
+
+                body: JSON.stringify({
+                    texte: nouveauTexte
+                })
+            }
+        );
+
+        const resultat = await reponse.json();
+
+        if (!reponse.ok) {
+
+            document.getElementById("notes-message").textContent =
+                resultat.erreur ||
+                "Impossible de modifier la note.";
+
+            return;
+        }
+
+        document.getElementById("notes-message").textContent =
+            "Note modifiée !";
+
+        chargerNotes();
+
+    } catch (erreur) {
+
+        console.error("Erreur modification note :", erreur);
+
+        document.getElementById("notes-message").textContent =
+            "Erreur lors de la modification.";
+    }
+}
+
+
+/* ---------------------------------------------------------
+   Supprimer une note
+   --------------------------------------------------------- */
+
+async function supprimerNoteDepuisSite(titre) {
+
+    if (!confirm(
+        'Supprimer la note "' + titre + '" ?'
+    )) {
+        return;
+    }
+
+    try {
+
+        const reponse = await fetch(
+            "https://api.gogekko.fr/notes/" +
+            encodeURIComponent(titre),
+            {
+                method: "DELETE",
+
+                headers: {
+                    "Authorization": "Bearer " + TOKEN
+                }
+            }
+        );
+
+        const resultat = await reponse.json();
+
+        if (!reponse.ok) {
+
+            document.getElementById("notes-message").textContent =
+                resultat.erreur ||
+                "Impossible de supprimer la note.";
+
+            return;
+        }
+
+        document.getElementById("notes-message").textContent =
+            "Note supprimée !";
+
+        chargerNotes();
+
+    } catch (erreur) {
+
+        console.error("Erreur suppression note :", erreur);
+
+        document.getElementById("notes-message").textContent =
+            "Erreur lors de la suppression.";
+    }
+}
+
 
 
 
@@ -2181,7 +2502,7 @@ function nombreAleatoireSite() {
 
 
 window.onclick = function(event) {
-    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard"];
+    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes"];
     for (const id of popups) {
         const popup = document.getElementById(id);
         if (event.target === popup) {
@@ -2257,6 +2578,11 @@ function chargerEtatDeskBot() {
 
         if (data.etat) {
             afficherEtatDeskBot(data.etat);
+        }
+
+        if (data.reponse) {
+            document.getElementById("reponse").textContent =
+                "Réponse: " + data.reponse;
         }
 
     })

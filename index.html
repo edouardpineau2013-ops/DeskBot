@@ -548,10 +548,10 @@
             <div class="agenda-separateur"></div>
 
             <div class="agenda-actions">
-                <button onclick="ouvrirAjoutEvenement()">➕ Ajouter un événement</button>
-                <button onclick="afficherProchainsEvenements()">🗓️ Prochains événements</button>
-                <button onclick="ouvrirSuppressionEvenement()">🗑️ Supprimer un événement</button>
-                <button onclick="ouvrirModificationEvenement()">✏️ Modifier un événement</button>
+                <button onclick="ouvrirAjoutEvenement()">Ajouter un événement</button>
+                <button onclick="afficherProchainsEvenements()">Prochains événements</button>
+                <button onclick="ouvrirSuppressionEvenement()">Supprimer un événement</button>
+                <button onclick="ouvrirModificationEvenement()">Modifier un événement</button>
             </div>
 
             <div id="agenda-ajout" class="agenda-formulaire">
@@ -636,6 +636,48 @@
             <p id="reponse-hasard">
                 Réponse : ...
             </p>
+        </div>
+    </div>
+
+    <div id="popup-notes" class="popup">
+        <div class="popup-contenu popup-notes-contenu">
+
+            <span class="fermer" onclick="fermerNotes()">&times;</span>
+
+            <h2>Notes</h2>
+
+            <!-- AJOUTER UNE NOTE -->
+            <div class="notes-ajout">
+
+                <input
+                    type="text"
+                    id="note-titre"
+                    placeholder="Titre de la note..."
+                    maxlength="100"
+                >
+
+                <textarea
+                    id="note-texte"
+                    placeholder="Écris ta note..."
+                    maxlength="5000"
+                ></textarea>
+
+                <button
+                    onclick="ajouterNoteDepuisSite()"
+                    id="note-bouton-ajouter"
+                >
+                    Ajouter
+                </button>
+
+            </div>
+
+            <p id="notes-message"></p>
+
+            <!-- LISTE DES NOTES -->
+            <div id="notes-liste">
+                <p class="notes-vide">Chargement...</p>
+            </div>
+
         </div>
     </div>
 
@@ -787,6 +829,10 @@
 
             <div class="commande-prédéfinie" onclick="ouvrirAgenda()">
                 <p class="commande-texte">Agenda</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirNotes()">
+                <p class="commande-texte">Notes</p>
             </div>
         </div>
 

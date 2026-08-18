@@ -1,51 +1,117 @@
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Bungee+Spice&family=DM+Serif+Display:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Orbitron:wght@400..900&family=Oswald:wght@200..700&display=swap');
 
 /* =========================================================
-   GLOBAL
-========================================================= */
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Open Sans', Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
-    background-color: #000099;
-}
-
-h1,
-h2 {
-    color: #bd0f0f;
-    text-shadow: 4px 4px 4px #000000;
-}
-
-h1 {
-    font-size: 5rem;
-    margin-bottom: 10px;
-}
-
-h2 {
-    font-size: 2rem;
-    margin: 40px 0;
-}
-
-/* =========================================================
-   VARIABLES VISUELLES
+   VARIABLES
 ========================================================= */
 
 :root {
     --vert: rgb(27, 206, 30);
     --vert-hover: #4eff1d;
     --bleu-active: #0c84c5;
+
     --rouge: #bd0f0f;
     --rouge-ombre: #a01414;
-    --noir: #000000;
+    --rouge-hover: #df2020;
+    --rouge-dark: #a81010;
+
+    --noir: #000;
+    --blanc: #fff;
+
+    --gris-fond: #1b1b1b;
+    --gris-case: #292929;
+    --gris-case-hover: #333;
+    --gris-scroll: #2b2b2b;
+    --gris-scroll-thumb: #666;
+    --gris-scroll-hover: #888;
+
+    --ombre: 4px 4px 4px var(--noir);
+    --ombre-petite: 3px 3px 4px var(--noir);
+    --texte-ombre: 2px 2px 10px var(--rouge-ombre);
+
+    --rayon: 10px;
+    --transition: 0.2s ease;
+}
+
+/* EXCEPTION */
+
+#bouton-ouvrir-boite {
+    margin-top: 25px;
+    padding: 10px 20px;
+
+    font-size: 1.2rem;
+    color: var(--rouge);
+
+    background-color: var(--vert);
+
+    border: none;
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+    text-shadow: var(--texte-ombre);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        filter 0.15s ease;
+}
+
+#bouton-ouvrir-boite:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* =========================================================
-   INPUTS
+   RESET / GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin-top: 50px;
+    font-family: 'Open Sans', Arial, sans-serif;
+    text-align: center;
+    background-color: #000099;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+h1,
+h2 {
+    color: var(--rouge);
+    text-shadow: 4px 4px 4px var(--noir);
+}
+
+h1 {
+    margin-bottom: 10px;
+    font-size: 5rem;
+}
+
+h2 {
+    margin: 40px 0;
+    font-size: 2rem;
+}
+
+/* =========================================================
+   INPUTS COMMUNS
 ========================================================= */
 
 #commande,
@@ -63,61 +129,81 @@ h2 {
 #select-mesures-unitées,
 #select-mesures-unitées-fin,
 #traduction-mot-input,
-#traduction-langue-input {
+#traduction-langue-input,
+#todo-input,
+#question-ia-input,
+#repeter-input {
     width: 90%;
-    padding: 10px;
     margin-bottom: 20px;
+    padding: 10px;
+
     font-size: 1.2rem;
+
     border: 3px solid var(--vert);
-    border-radius: 10px;
-    box-shadow: 4px 4px 4px var(--noir);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
 }
 
 #commande {
     width: 300px;
 }
 
-#chiffre-de-depart {
-    width: 120px;
+/* =========================================================
+   PETITS INPUTS NUMÉRIQUES
+========================================================= */
+
+#chiffre-de-depart,
+#lancer-de-input,
+#nombre-min-input,
+#nombre-max-input {
     padding: 10px;
     font-size: 1.2rem;
-    text-align: center;
+
     border: 3px solid var(--vert);
-    border-radius: 10px;
-    box-shadow: 4px 4px 4px var(--noir);
+    border-radius: var(--rayon);
+}
+
+#chiffre-de-depart {
+    width: 120px;
+    text-align: center;
+}
+
+#lancer-de-input,
+#nombre-min-input,
+#nombre-max-input {
+    width: 30%;
+}
+
+#input-volume,
+#alarme-heure,
+#alarme-minute,
+.minuteur-controle input {
+    width: 60px;
+    padding: 8px;
+
+    font-size: 1.2rem;
+    text-align: center;
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
 }
 
 #input-volume {
-    width: 60px;
-    text-align: center;
-    padding: 8px;
-    font-size: 1.2rem;
-    border: 3px solid var(--vert);
-    border-radius: 10px;
     margin-bottom: 10px;
 }
 
-#alarme-heure,
-#alarme-minute {
-    width: 60px;
-    text-align: center;
-    padding: 8px;
+#choix-hasard-input {
+    width: 70%;
+    padding: 10px;
     font-size: 1.2rem;
-    border: 3px solid var(--vert);
-    border-radius: 10px;
-}
 
-.minuteur-controle input {
-    width: 60px;
-    text-align: center;
-    padding: 8px;
-    font-size: 1.2rem;
     border: 3px solid var(--vert);
-    border-radius: 10px;
+    border-radius: var(--rayon);
 }
 
 /* =========================================================
-   STYLE COMMUN DES BOUTONS
+   BOUTONS COMMUNS
 ========================================================= */
 
 #bouton-envoyer,
@@ -136,7 +222,6 @@ h2 {
 #bouton-trajet,
 #bouton-importer-cours,
 #bouton-convertir,
-#bouton-ouvrir-boite,
 #bouton-reviser,
 #bouton-fermer-resultat,
 #popup-fin-revision button,
@@ -150,22 +235,29 @@ h2 {
 #pile-ou-face-button,
 #lancer-de-button,
 #nombre-aleatoire-button,
-#choix-aleatoire-button {
+#choix-aleatoire-button,
+#note-bouton-ajouter {
     margin-top: 25px;
     padding: 10px 20px;
-    font-size: 1.2rem;
-    background-color: rgb(27, 206, 30);
-    color: #bd0f0f;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 4px 4px 4px #000000;
-    text-shadow: 2px 2px 10px #a01414;
-}
 
-/* =========================================================
-   HOVER COMMUN
-========================================================= */
+    font-size: 1.2rem;
+    color: var(--rouge);
+
+    background-color: var(--vert);
+
+    border: none;
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+    text-shadow: var(--texte-ombre);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        filter 0.15s ease;
+}
 
 #bouton-envoyer:hover,
 .commande-prédéfinie:hover,
@@ -183,7 +275,6 @@ h2 {
 #bouton-trajet:hover,
 #bouton-importer-cours:hover,
 #bouton-convertir:hover,
-#bouton-ouvrir-boite:hover,
 #bouton-reviser:hover,
 #bouton-fermer-resultat:hover,
 #popup-fin-revision button:hover,
@@ -191,18 +282,16 @@ h2 {
 #repeter-button:hover,
 #todo-bouton-ajouter:hover,
 .todo-action:hover,
+#revision-continuer:hover,
 #traduction-button:hover,
 #notification-button:hover,
 #pile-ou-face-button:hover,
 #lancer-de-button:hover,
 #nombre-aleatoire-button:hover,
-#choix-aleatoire-button:hover {
+#choix-aleatoire-button:hover,
+#note-bouton-ajouter:hover {
     background-color: var(--vert-hover);
 }
-
-/* =========================================================
-   ACTIVE COMMUN
-========================================================= */
 
 #bouton-envoyer:active,
 .commande-prédéfinie:active,
@@ -220,7 +309,6 @@ h2 {
 #bouton-trajet:active,
 #bouton-importer-cours:active,
 #bouton-convertir:active,
-#bouton-ouvrir-boite:active,
 #bouton-reviser:active,
 #bouton-fermer-resultat:active,
 #popup-fin-revision button:active,
@@ -228,50 +316,47 @@ h2 {
 #repeter-button:active,
 #todo-bouton-ajouter:active,
 .todo-action:active,
+#revision-continuer:active,
 #traduction-button:active,
 #notification-button:active,
 #pile-ou-face-button:active,
 #lancer-de-button:active,
 #nombre-aleatoire-button:active,
-#choix-aleatoire-button:active {
+#choix-aleatoire-button:active,
+#note-bouton-ajouter:active {
     background-color: var(--bleu-active);
 }
 
 /* =========================================================
-   COMMANDE
+   COMMANDES
 ========================================================= */
 
 #bouton-envoyer {
     padding: 10px 20px;
-    font-size: 1.2rem;
 }
 
 .commande-prédéfinie {
+    width: 300px;
     margin: 10px;
     padding: 10px;
     font-size: 2rem;
-    width: 300px;
     text-align: center;
 }
 
-.commande-prédéfinie:active {
-    background-color: var(--bleu-active);
-}
-
 .commande-texte {
-    font-size: 1.5rem;
     color: var(--rouge);
-    text-shadow: 2px 2px 10px var(--rouge-ombre);
+    font-size: 1.5rem;
+    text-shadow: var(--texte-ombre);
 }
 
 .commandes-prédéfinies {
+    display: block;
+    width: 100%;
     margin-top: 40px;
-    font-size: 1.2rem;
+
     color: var(--rouge);
+    font-size: 1.2rem;
     text-shadow: 2px 2px 2px var(--noir);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
 }
 
 .commande-texte-trop-longue {
@@ -279,29 +364,28 @@ h2 {
 }
 
 /* =========================================================
-RECHERCHE COMMANDES PRÉDÉFINIES
+   RECHERCHE COMMANDES
 ========================================================= */
 
 #recherche-commandes {
+    display: block;
     width: 500px;
     max-width: 90%;
-    padding: 12px 15px;
-    margin: 10px auto 35px;
 
-    display: block;
+    margin: 10px auto 35px;
+    padding: 12px 15px;
 
     font-size: 1.2rem;
 
     border: 3px solid var(--vert);
-    border-radius: 10px;
-
-    box-shadow: 4px 4px 4px var(--noir);
+    border-radius: var(--rayon);
 
     outline: none;
+    box-shadow: var(--ombre);
 
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        transform var(--transition),
+        box-shadow var(--transition);
 }
 
 #recherche-commandes:focus {
@@ -309,65 +393,34 @@ RECHERCHE COMMANDES PRÉDÉFINIES
     box-shadow: 0 0 12px var(--vert);
 }
 
-
 /* =========================================================
-CONTENEUR DES COMMANDES
-========================================================= */
-
-/*
-   IMPORTANT :
-   On annule le flex des anciennes commandes ici.
-   Chaque classe prend toute la largeur.
-*/
-
-.commandes-prédéfinies {
-    display: block;
-    width: 100%;
-}
-
-
-/* =========================================================
-CLASSE DE COMMANDES
+   CLASSES DE COMMANDES
 ========================================================= */
 
 .classe-commandes {
-    width: 100%;
-    margin: 0 auto 45px;
-
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     align-items: flex-start;
+    justify-content: center;
 
+    width: 100%;
     gap: 10px;
+
+    margin: 0 auto 45px;
 
     animation: apparition-classe-commandes 0.3s ease;
 }
 
-
-/* =========================================================
-TITRE DE LA CLASSE
-========================================================= */
-
 .titre-classe-commandes {
     width: 100%;
-
     margin: 0 0 20px;
 
     color: var(--rouge);
-
     font-size: 1.8rem;
-
-    text-shadow:
-        3px 3px 3px var(--noir);
-
     text-align: center;
+
+    text-shadow: 3px 3px 3px var(--noir);
 }
-
-
-/* =========================================================
-COMMANDES
-========================================================= */
 
 .classe-commandes .commande-prédéfinie {
     flex: 0 0 auto;
@@ -380,31 +433,12 @@ COMMANDES
         transform 0.25s ease;
 }
 
-
-/* =========================================================
-COMMANDE MASQUÉE
-========================================================= */
-
-.classe-commandes .commande-prédéfinie.commande-cachee {
-    display: none;
+.commande-cachee,
+.classe-cachee {
+    display: none !important;
 }
-
-
-/* =========================================================
-CLASSE MASQUÉE
-========================================================= */
-
-.classe-commandes.classe-cachee {
-    display: none;
-}
-
-
-/* =========================================================
-ANIMATION
-========================================================= */
 
 @keyframes apparition-classe-commandes {
-
     from {
         opacity: 0;
         transform: translateY(10px);
@@ -414,7 +448,6 @@ ANIMATION
         opacity: 1;
         transform: translateY(0);
     }
-
 }
 
 /* =========================================================
@@ -429,19 +462,34 @@ ANIMATION
 #reponse-question-ia,
 #reponse-convertir,
 #reponse-traduction,
-#reponse-hasard {
-    margin-top: 40px;
-    font-size: 1.5rem;
-    color: var(--rouge);
-    text-shadow: 2px 2px 10px var(--rouge-ombre);
-    background-color: var(--vert);
-    border-radius: 10px;
+#reponse-hasard,
+#label-input-de {
     width: fit-content;
+    max-width: 90%;
+
+    margin: 40px auto 0;
     padding: 10px;
+
+    color: var(--rouge);
+    font-size: 1.5rem;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 4px 4px 4px var(--noir);
+
+    background-color: var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+    text-shadow: var(--texte-ombre);
+}
+
+#label-input-de {
+    margin-top: 40px;
+}
+
+#label-input-nombre,
+#label-input-choix {
+    margin-top: 15px;
+    color: var(--rouge);
+    font-size: 1.3rem;
 }
 
 /* =========================================================
@@ -449,80 +497,105 @@ ANIMATION
 ========================================================= */
 
 .popup {
-    display: none;
     position: fixed;
-    left: 0;
-    top: 0;
+    inset: 0;
+    z-index: 9999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
     width: 100%;
     height: 100%;
+
     background: rgba(0, 0, 0, 0.55);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
 }
 
 .popup-contenu {
+    position: relative;
+
     width: 400px;
     max-width: 90%;
     max-height: 80vh;
-    overflow-y: auto;
-    background: #1b1b1b;
-    color: white;
-    border-radius: 15px;
+
     padding: 25px;
-    position: relative;
+
+    overflow-y: auto;
+
+    color: var(--blanc);
+    background: var(--gris-fond);
+
+    border-radius: 15px;
+
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+
+    animation: popup 0.2s ease;
 }
 
 .fermer {
     position: absolute;
-    right: 15px;
     top: 10px;
+    right: 15px;
+
+    color: var(--rouge);
     font-size: 28px;
     cursor: pointer;
-    color: var(--rouge);
-}
-
-.popup-contenu::-webkit-scrollbar {
-    width: 10px;
-}
-
-.popup-contenu::-webkit-scrollbar-track {
-    background: #2b2b2b;
-    border-radius: 10px;
-}
-
-.popup-contenu::-webkit-scrollbar-thumb {
-    background: #666;
-    border-radius: 10px;
-}
-
-.popup-contenu::-webkit-scrollbar-thumb:hover {
-    background: #888;
 }
 
 @keyframes popup {
     from {
-        transform: scale(.8);
         opacity: 0;
+        transform: scale(0.8);
     }
 
     to {
-        transform: scale(1);
         opacity: 1;
+        transform: scale(1);
     }
 }
 
 /* =========================================================
-   MÉTÉO
+   SCROLLBARS
+========================================================= */
+
+.popup-contenu::-webkit-scrollbar,
+#notes-liste::-webkit-scrollbar {
+    width: 10px;
+}
+
+.popup-contenu::-webkit-scrollbar-track,
+#notes-liste::-webkit-scrollbar-track {
+    background: var(--gris-scroll);
+    border-radius: 10px;
+}
+
+.popup-contenu::-webkit-scrollbar-thumb {
+    background: var(--gris-scroll-thumb);
+    border-radius: 10px;
+}
+
+.popup-contenu::-webkit-scrollbar-thumb:hover {
+    background: var(--gris-scroll-hover);
+}
+
+#notes-liste::-webkit-scrollbar-thumb {
+    background: var(--vert);
+    border-radius: 10px;
+}
+
+#notes-liste::-webkit-scrollbar-thumb:hover {
+    background: var(--vert-hover);
+}
+
+/* =========================================================
+   MÉTÉO / NOTIFICATIONS
 ========================================================= */
 
 #bouton-envoyer-meteo,
 .météo-ici,
 #date {
-    padding: 10px;
-    font-size: 1.2rem;
     margin-top: 20px;
+    padding: 10px;
 }
 
 .météo-ici,
@@ -536,6 +609,7 @@ ANIMATION
     align-items: center;
     justify-content: center;
     gap: 10px;
+
     margin-bottom: 15px;
 }
 
@@ -546,15 +620,14 @@ ANIMATION
 #notification-contenu {
     padding: 10px;
     font-size: 1.1rem;
+
     border: 3px solid var(--vert);
-    border-radius: 10px;
-    box-shadow: 3px 3px 4px var(--noir);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
 }
 
-#notification-jour {
-    width: 80px;
-}
-
+#notification-jour,
 #notification-heure,
 #notification-minutes {
     width: 80px;
@@ -569,7 +642,6 @@ ANIMATION
     width: 90%;
     height: 100px;
     resize: vertical;
-    font-family: 'Open Sans', Arial, sans-serif;
 }
 
 /* =========================================================
@@ -580,71 +652,78 @@ ANIMATION
     width: 700px;
     max-width: 95%;
     max-height: 90vh;
-    overflow-y: auto;
 }
 
 .agenda-navigation {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     margin: 20px 0;
 }
 
 .agenda-navigation h3 {
     margin: 0;
-    color: white;
+    color: var(--blanc);
     font-size: 1.5rem;
 }
 
 .agenda-navigation button {
     width: 45px;
     height: 45px;
+
     border: none;
-    border-radius: 10px;
+    border-radius: var(--rayon);
+
     background-color: var(--vert);
     color: var(--rouge);
+
     font-size: 2rem;
-    cursor: pointer;
-    box-shadow: 3px 3px 4px var(--noir);
+
+    box-shadow: var(--ombre-petite);
+
+    transition: background-color var(--transition);
 }
 
-.agenda-navigation button:hover {
+.agenda-navigation button:hover,
+.agenda-actions button:hover,
+.agenda-formulaire button:hover {
     background-color: var(--vert-hover);
 }
 
-.agenda-semaine {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    margin-bottom: 5px;
-}
-
-.agenda-semaine span {
-    color: var(--vert);
-    font-weight: bold;
-    padding: 8px 2px;
-}
-
+.agenda-semaine,
 .agenda-calendrier {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
 }
 
+.agenda-semaine {
+    margin-bottom: 5px;
+}
+
+.agenda-semaine span {
+    padding: 8px 2px;
+    color: var(--vert);
+    font-weight: bold;
+}
+
 .agenda-case {
     min-height: 65px;
     padding: 7px;
-    background-color: #292929;
-    border-radius: 8px;
+
     text-align: left;
+
+    background-color: var(--gris-case);
+    border-radius: 8px;
 }
 
 .agenda-case-vide {
-    background-color: transparent;
+    background: transparent;
 }
 
 .agenda-jour {
-    color: white;
+    color: var(--blanc);
     font-weight: bold;
 }
 
@@ -656,6 +735,7 @@ ANIMATION
     width: 8px;
     height: 8px;
     margin-top: 7px;
+
     background-color: var(--vert);
     border-radius: 50%;
 }
@@ -664,6 +744,7 @@ ANIMATION
     width: 100%;
     height: 2px;
     margin: 25px 0;
+
     background-color: #444;
 }
 
@@ -673,27 +754,34 @@ ANIMATION
     gap: 15px;
 }
 
-.agenda-actions button {
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background-color: var(--vert);
+.agenda-actions button,
+.agenda-formulaire button {
+    padding: 10px 20px;
+
     color: var(--rouge);
     font-weight: bold;
+
+    background-color: var(--vert);
+
+    border: none;
+    border-radius: var(--rayon);
+
     cursor: pointer;
-    box-shadow: 3px 3px 4px var(--noir);
+    box-shadow: var(--ombre-petite);
 }
 
-.agenda-actions button:hover {
-    background-color: var(--vert-hover);
+.agenda-actions button {
+    padding: 14px;
 }
 
 .agenda-formulaire {
     display: none;
+
     margin-top: 25px;
     padding: 20px;
+
+    background-color: var(--gris-case);
     border-radius: 12px;
-    background-color: #292929;
 }
 
 .agenda-formulaire h3 {
@@ -704,77 +792,22 @@ ANIMATION
 .agenda-formulaire input {
     display: block;
     width: 90%;
+
     margin: 10px auto;
     padding: 10px;
-    box-sizing: border-box;
+
+    font-size: 1rem;
+
     border: 3px solid var(--vert);
     border-radius: 8px;
-    font-size: 1rem;
-}
-
-.agenda-formulaire button {
-    margin-top: 10px;
-    padding: 10px 25px;
-    border: none;
-    border-radius: 8px;
-    background-color: var(--vert);
-    color: var(--rouge);
-    font-weight: bold;
-    cursor: pointer;
 }
 
 .agenda-reponse {
     min-height: 25px;
     margin-top: 20px;
+
     color: var(--vert);
     font-weight: bold;
-}
-
-#lancer-de-input {
-    width: 30%;
-    padding: 10px;
-    font-size: 1.2rem;
-    border: 3px solid var(--vert);
-    border-radius: 10px;
-}
-
-#label-input-de {
-    margin-top: 40px;
-    font-size: 1.5rem;
-    color: var(--rouge);
-    text-shadow: 2px 2px 10px var(--rouge-ombre);
-    background-color: var(--vert);
-    border-radius: 10px;
-    width: fit-content;
-    padding: 10px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 4px 4px 4px var(--noir);
-}
-
-#label-input-nombre,
-#label-input-choix {
-    margin-top: 15px;
-    font-size: 1.3rem;
-    color: #bd0f0f;
-}
-
-#nombre-min-input,
-#nombre-max-input {
-    width: 30%;
-    padding: 10px;
-    font-size: 1.2rem;
-    border: 3px solid var(--vert);
-    border-radius: 10px;
-}
-
-#choix-hasard-input {
-    width: 70%;
-    padding: 10px;
-    font-size: 1.2rem;
-    border: 3px solid var(--vert);
-    border-radius: 10px;
 }
 
 /* =========================================================
@@ -785,17 +818,53 @@ ANIMATION
     display: flex;
 }
 
+.etat-deskbot,
+.chrono,
+.minuteur,
+.alarme {
+    width: fit-content;
+    height: fit-content;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+
+    color: var(--rouge);
+    font-size: 1.5rem;
+    text-align: center;
+
+    background-color: var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+    text-shadow: var(--texte-ombre);
+}
+
 .etat-deskbot {
     display: flex;
     align-items: center;
     gap: 15px;
 
-    padding: 15px;
+    margin-left: auto;
+    margin-right: 20px;
+
+    padding: 10px;
 
     transition:
         background-color 0.3s ease,
         border-color 0.3s ease,
         transform 0.3s ease;
+}
+
+.chrono,
+.minuteur {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.alarme {
+    margin-left: 20px;
+    margin-right: auto;
 }
 
 .etat-deskbot img {
@@ -809,67 +878,29 @@ ANIMATION
         filter 0.3s ease;
 }
 
+.etat-deskbot-infos {
+    height: 100px;
+    /* padding: 10px 10px 10px 0; */
+}
+
 .etat-deskbot-infos h3 {
-    margin: 0;
+    margin-top: 15px;
+    margin-bottom: 0px;
     font-weight: normal;
 }
 
 .etat-deskbot-infos p {
-    margin: 4px 0 0;
+    margin: 0;
+    font-weight: normal;
 }
 
-.etat-deskbot-infos {
-    height: 100px;
-    padding-right: 10px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
-
-.etat-deskbot,
-.chrono,
-.minuteur,
-.alarme {
-    margin-top: 20px;
-    font-size: 1.5rem;
-    color: var(--rouge);
-    text-shadow: 2px 2px 10px var(--rouge-ombre);
-    background-color: var(--vert);
-    border-radius: 10px;
-    width: fit-content;
-    height: fit-content;
-    padding: 10px;
-    text-align: center;
-    margin-bottom: 20px;
-    box-shadow: 4px 4px 4px var(--noir);
-}
-
-.etat-deskbot {
-    margin-left: auto;
-    margin-right: 20px;
-}
-
-.chrono {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.minuteur {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.alarme {
-    margin-left: 20px;
-    margin-right: auto;
-}
-
-#etat-deskbot-infos
+#etat-deskbot-infos,
 #chronometre-texte,
 #minuteur-texte,
 #alarme-texte {
-    font-size: 1.5rem;
     color: var(--rouge);
-    text-shadow: 2px 2px 10px var(--rouge-ombre);
+    font-size: 1.5rem;
+    text-shadow: var(--texte-ombre);
 }
 
 #minuteur-texte,
@@ -884,18 +915,17 @@ ANIMATION
     padding-top: 10px;
 }
 
-/* ATTENTE */
+/* =========================================================
+   ÉTATS DESKBot
+========================================================= */
 
 .etat-attente {
     background-color: #888;
 }
 
 .etat-attente img {
-    border-radius: 10px;
+    border-radius: var(--rayon);
 }
-
-
-/* ÉCOUTE */
 
 .etat-ecoute {
     background-color: #00aaff;
@@ -905,9 +935,6 @@ ANIMATION
     animation: ecoute 1s infinite ease-in-out;
 }
 
-
-/* RÉFLEXION */
-
 .etat-reflexion {
     background-color: #a855f7;
 }
@@ -915,9 +942,6 @@ ANIMATION
 .etat-reflexion img {
     animation: cerveau-reflexion 1s infinite ease-in-out;
 }
-
-
-/* PARLE */
 
 .etat-parle {
     background-color: #00cc66;
@@ -927,9 +951,7 @@ ANIMATION
     animation: parler-animation 0.7s infinite ease-in-out;
 }
 
-
 @keyframes ecoute {
-
     0%, 100% {
         transform: scale(1);
     }
@@ -937,11 +959,9 @@ ANIMATION
     50% {
         transform: scale(1.15);
     }
-
 }
 
 @keyframes cerveau-reflexion {
-
     0%, 100% {
         transform: scale(1);
     }
@@ -949,12 +969,9 @@ ANIMATION
     50% {
         transform: scale(1.15);
     }
-
 }
 
-
 @keyframes parler-animation {
-
     0%, 100% {
         transform: scale(1);
     }
@@ -962,15 +979,20 @@ ANIMATION
     50% {
         transform: scale(1.12);
     }
-
 }
+
+/* =========================================================
+   MINUTEUR
+========================================================= */
 
 .minuteur-input-ligne {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     margin-bottom: 15px;
-    color: white;
+
+    color: var(--blanc);
     font-size: 1.2rem;
 }
 
@@ -983,6 +1005,7 @@ ANIMATION
 .fleche-minuteur {
     width: 50px;
     cursor: pointer;
+    transition: opacity var(--transition);
 }
 
 .fleche-minuteur:hover {
@@ -992,19 +1015,19 @@ ANIMATION
 .span-minuteur {
     color: var(--rouge);
     font-size: 1.5rem;
-    text-shadow: 4px 4px 4px var(--noir);
+    text-shadow: var(--ombre);
 }
 
 #volume-label {
     color: var(--rouge);
     font-size: 2rem;
-    text-shadow: 4px 4px 4px var(--noir);
+    text-shadow: var(--ombre);
 }
 
 #definir-volume {
+    margin-bottom: 20px;
     padding: 10px;
     font-size: 1.5rem;
-    margin-bottom: 20px;
 }
 
 /* =========================================================
@@ -1016,49 +1039,61 @@ ANIMATION
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+
     margin: 15px 0;
 }
 
 .jours-alarme label {
-    color: var(--rouge);
-    font-size: 1rem;
     display: flex;
     align-items: center;
     gap: 5px;
-    background-color: rgba(27, 206, 30, 0.15);
+
+    padding: 6px 10px;
+
+    color: var(--rouge);
+
+    background: rgba(27, 206, 30, 0.15);
+
     border: 2px solid var(--vert);
     border-radius: 8px;
-    padding: 6px 10px;
+
     cursor: pointer;
 }
 
-.jours-alarme input[type="checkbox"] {
+.jours-alarme input[type="checkbox"],
+.option-sonnerie input[type="radio"] {
     accent-color: var(--rouge);
+}
+
+.jours-alarme input[type="checkbox"] {
     width: 16px;
     height: 16px;
 }
 
 .indication {
-    color: var(--rouge);
     margin: 40px 0;
-    text-shadow: 4px 4px 4px var(--noir);
+    color: var(--rouge);
+    text-shadow: var(--ombre);
 }
 
 .option-sonnerie {
     display: block;
+
+    margin: 10px 0;
+    padding-left: 10px;
+
     color: var(--rouge);
     font-size: 1.2rem;
-    margin: 10px 0;
-    cursor: pointer;
     text-align: left;
-    padding-left: 10px;
+
+    cursor: pointer;
 }
 
 .option-sonnerie input[type="radio"] {
-    accent-color: var(--rouge);
     width: 18px;
     height: 18px;
     margin-right: 8px;
+
     vertical-align: middle;
 }
 
@@ -1067,17 +1102,17 @@ ANIMATION
 ========================================================= */
 
 #mails-non-lus {
-    font-size: 1.4rem;
-    color: var(--rouge);
-    text-shadow: 2px 2px 4px var(--noir);
     margin-bottom: 20px;
+    color: var(--rouge);
+    font-size: 1.4rem;
+    text-shadow: 2px 2px 4px var(--noir);
 }
 
 #expediteur-mail,
 #objet-mail {
-    color: white;
-    font-size: 1.1rem;
     margin: 8px 0;
+    color: var(--blanc);
+    font-size: 1.1rem;
     word-break: break-word;
 }
 
@@ -1086,13 +1121,266 @@ ANIMATION
 }
 
 .mail-item {
-    background-color: rgba(27, 206, 30, 0.1);
-    border: 2px solid var(--vert);
-    border-radius: 10px;
-    padding: 15px;
-    text-align: left;
     margin-bottom: 15px;
+    padding: 15px;
+
     color: var(--rouge);
+    text-align: left;
+
+    background: rgba(27, 206, 30, 0.1);
+
+    border: 2px solid var(--vert);
+    border-radius: var(--rayon);
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.popup-notes-contenu {
+    width: 600px;
+    max-width: 95%;
+    text-align: center;
+}
+
+#notes-formulaire {
+    width: 90%;
+    margin: 20px auto;
+    padding: 18px;
+
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+#note-titre,
+#note-texte {
+    display: block;
+    width: 90%;
+
+    margin: 10px auto;
+    padding: 12px;
+
+    color: var(--noir);
+    background: var(--blanc);
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    outline: none;
+    box-shadow: var(--ombre-petite);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+#note-titre {
+    font-size: 1.2rem;
+}
+
+#note-texte {
+    min-height: 150px;
+
+    font-size: 1.1rem;
+    line-height: 1.5;
+
+    resize: vertical;
+}
+
+#note-titre:focus,
+#note-texte:focus {
+    border-color: var(--vert-hover);
+    box-shadow: 0 0 12px var(--vert);
+    transform: scale(1.01);
+}
+
+#note-titre::placeholder,
+#note-texte::placeholder {
+    color: #777;
+}
+
+/* =========================================================
+   BOUTONS NOTES
+========================================================= */
+
+.notes-formulaire-boutons,
+.note-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.notes-formulaire-boutons {
+    margin-top: 20px;
+}
+
+.notes-formulaire-boutons button,
+.note-actions button {
+    margin: 0;
+    padding: 10px 20px;
+
+    font-size: 1.1rem;
+    font-weight: bold;
+
+    border: none;
+    border-radius: var(--rayon);
+
+    cursor: pointer;
+
+    box-shadow: var(--ombre);
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        filter 0.15s ease;
+}
+
+.notes-formulaire-boutons button {
+    color: var(--rouge);
+    background-color: var(--vert);
+    text-shadow: var(--texte-ombre);
+}
+
+.notes-formulaire-boutons button:hover {
+    background-color: var(--vert-hover);
+    transform: scale(1.03);
+}
+
+.notes-formulaire-boutons button:active {
+    background-color: var(--bleu-active);
+    transform: scale(0.97);
+}
+
+.note-actions {
+    margin-top: 15px;
+}
+
+.note-modifier,
+.note-lire,
+.note-vider {
+    background-color: var(--vert);
+    color: var(--blanc);
+}
+
+.note-supprimer {
+    background-color: var(--rouge);
+    color: var(--blanc);
+}
+
+.note-actions button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.15);
+}
+
+.note-actions button:active {
+    transform: scale(0.96);
+}
+
+.note-modifier:hover,
+.note-lire:hover,
+.note-vider:hover {
+    background-color: var(--vert-hover);
+}
+
+.note-modifier:active,
+.note-lire:active,
+.note-vider:active {
+    background-color: var(--bleu-active);
+}
+
+.note-supprimer:hover {
+    background-color: var(--rouge-hover);
+}
+
+.note-supprimer:active {
+    background-color: var(--rouge-dark);
+}
+
+/* =========================================================
+   MESSAGES / LISTE NOTES
+========================================================= */
+
+#note-message,
+#notes-message {
+    min-height: 22px;
+
+    margin: 15px auto;
+
+    color: var(--rouge);
+    font-size: 1.1rem;
+
+    text-shadow: 2px 2px 4px var(--noir);
+}
+
+#notes-liste {
+    display: flex;
+    flex-direction: column;
+
+    width: 90%;
+    max-height: 400px;
+
+    gap: 15px;
+
+    margin: 25px auto 0;
+
+    overflow-y: auto;
+}
+
+.note-element {
+    padding: 18px;
+
+    text-align: left;
+
+    background: rgba(27, 206, 30, 0.12);
+
+    border: 3px solid var(--vert);
+    border-radius: 12px;
+
+    box-shadow: var(--ombre);
+
+    transition:
+        transform var(--transition),
+        background-color var(--transition);
+}
+
+.note-element:hover {
+    background: rgba(27, 206, 30, 0.18);
+    transform: scale(1.01);
+}
+
+.note-element h3 {
+    margin: 0 0 10px;
+
+    color: var(--rouge);
+    font-size: 1.4rem;
+
+    text-shadow: 2px 2px 4px var(--noir);
+
+    word-break: break-word;
+}
+
+.note-element p {
+    margin: 0 0 15px;
+
+    color: var(--blanc);
+    font-size: 1.05rem;
+    line-height: 1.5;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.notes-vide {
+    padding: 20px;
+
+    color: var(--rouge);
+    font-size: 1.2rem;
+    font-style: italic;
+
+    text-shadow: 2px 2px 4px var(--noir);
 }
 
 /* =========================================================
@@ -1101,8 +1389,8 @@ ANIMATION
 
 .revision-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
 
 .revision-header-droite {
@@ -1111,26 +1399,28 @@ ANIMATION
     gap: 15px;
 }
 
-.revision-points {
+.revision-points,
+.revision-serie {
     display: flex;
     align-items: center;
+}
+
+.revision-points {
     gap: 5px;
     color: var(--rouge);
     font-size: 1.3rem;
 }
 
 .revision-serie {
-    display: flex;
-    align-items: center;
     gap: 4px;
     font-size: 1.3rem;
     font-weight: bold;
 }
 
 #revision-serie-total {
+    color: #eeb413;
     font-size: 1.3rem;
     font-weight: bold;
-    color: #eeb413;
 }
 
 .icone-serie {
@@ -1147,14 +1437,14 @@ ANIMATION
 }
 
 .boite-mystere-label {
+    margin-top: 10px;
     color: var(--rouge);
     font-size: 1.2rem;
-    margin-top: 10px;
 }
 
 .revision-boite-mystere {
-    text-align: center;
     margin: 20px 0;
+    text-align: center;
 }
 
 .image-boite-mystere {
@@ -1162,28 +1452,37 @@ ANIMATION
 }
 
 #animation-ouverture-boite {
-    width: 250px;
-    height: auto;
-    max-width: 100%;
-    margin: 15px auto;
     display: block;
+
+    width: 250px;
+    max-width: 100%;
+
+    height: auto;
+
+    margin: 15px auto;
 }
 
 #icone-prof-obtenu {
-    width: 100px;
-    height: 100px;
-    margin: 15px auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 15px;
+
+    width: 100px;
+    height: 100px;
+
+    margin: 15px auto;
+
     overflow: hidden;
+
+    border-radius: 15px;
 }
 
 #icone-prof-obtenu img {
     width: 100%;
     height: 100%;
+
     object-fit: contain;
+
     border-radius: 10px;
 }
 
@@ -1210,14 +1509,16 @@ ANIMATION
 
 .revision-demarrer input {
     width: 90%;
-    padding: 8px;
     margin: 5px 0;
-    border-radius: 8px;
+    padding: 8px;
+
     border: 2px solid var(--vert);
+    border-radius: 8px;
 }
 
 #revision-stats-matiere {
     margin-top: 20px;
+
     color: var(--rouge);
     font-size: 1.2rem;
     text-align: left;
@@ -1227,21 +1528,25 @@ ANIMATION
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
     gap: 10px;
+
     margin-top: 10px;
 }
 
 #resultat-ouverture-boite {
     margin-top: 20px;
+
     color: var(--rouge);
     font-size: 1.2rem;
     text-align: center;
 }
 
 .carte-collection {
-    border-radius: 10px;
     padding: 8px;
+
     text-align: center;
+
     border: 3px solid;
+    border-radius: 10px;
 }
 
 .carte-collection img {
@@ -1250,9 +1555,10 @@ ANIMATION
 }
 
 .carte-collection p {
+    margin: 5px 0 0;
+
     color: var(--rouge);
     font-size: 0.8rem;
-    margin: 5px 0 0;
 }
 
 .rarete-commun {
@@ -1277,79 +1583,94 @@ ANIMATION
 
 .popup-revision {
     position: relative;
+
     width: 900px;
     max-width: 95%;
-    text-align: center;
+
     overflow: hidden;
+
+    text-align: center;
 }
 
 .revision-progression {
     width: 100%;
     height: 18px;
+
+    margin-bottom: 25px;
+
+    overflow: hidden;
+
     background: #444;
     border-radius: 30px;
-    overflow: hidden;
-    margin-bottom: 25px;
 }
 
 #revision-progression-barre {
-    width: 0%;
+    width: 0;
     height: 100%;
+
     background: var(--vert-hover);
-    transition: .4s;
+
+    transition: width 0.4s ease;
 }
 
 #revision-numero {
-    color: white;
-    font-size: 1.5rem;
     margin-bottom: 25px;
+
+    color: var(--blanc);
+    font-size: 1.5rem;
 }
 
 #revision-question {
-    color: white;
     min-height: 100px;
+    color: var(--blanc);
 }
 
 #revision-reponse {
     width: 100%;
     height: 90px;
-    font-size: 22px;
-    font-family: 'Open Sans', Arial, sans-serif;
-    border-radius: 15px;
+
     padding: 18px;
+
+    color: var(--noir);
+    font-family: inherit;
+    font-size: 22px;
+
+    border-radius: 15px;
 }
 
-/* IMPORTANT : pas de hover/active ici */
 #revision-valider {
     margin-top: 25px;
-    font-size: 1.4rem;
     padding: 15px 40px;
+
+    color: var(--rouge);
+    font-size: 1.4rem;
+
+    background-color: var(--vert);
+
     border: none;
     border-radius: 15px;
-    cursor: pointer;
-    background-color: var(--vert);
-    color: var(--rouge);
-    box-shadow: 4px 4px 4px var(--noir);
-    text-shadow: 2px 2px 10px var(--rouge-ombre);
-}
 
-#popup-fin-revision button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    margin-top: 15px;
+    cursor: pointer;
+
+    box-shadow: var(--ombre);
+    text-shadow: var(--texte-ombre);
 }
 
 .revision-resultat {
     position: absolute;
-    left: 0;
     right: 0;
     bottom: -220px;
+    left: 0;
+
     display: flex;
     align-items: center;
     gap: 25px;
+
     padding: 25px;
-    transition: .45s;
+
     background: #2f3136;
+
+    transition: bottom 0.45s ease;
 }
 
 .revision-resultat.visible {
@@ -1362,7 +1683,7 @@ ANIMATION
 
 #revision-resultat-titre,
 #revision-resultat-explication {
-    color: white;
+    color: var(--blanc);
 }
 
 #revision-resultat-titre {
@@ -1385,10 +1706,13 @@ ANIMATION
     position: absolute;
     top: 20px;
     right: 20px;
+
+    color: var(--rouge-ombre);
+
     font-size: 28px;
     font-weight: bold;
-    color: var(--rouge-ombre);
-    animation: gainOrbes .8s;
+
+    animation: gainOrbes 0.8s;
 }
 
 .gain-orbes img {
@@ -1398,11 +1722,12 @@ ANIMATION
 }
 
 #revision-continuer {
+    margin-top: 20px;
+
     padding: 12px 35px;
+
     font-size: 1.3rem;
     font-weight: bold;
-    margin-top: 20px;
-    transition: transform .2s, opacity .2s;
 }
 
 #revision-continuer:hover {
@@ -1418,11 +1743,14 @@ ANIMATION
     align-items: center;
     justify-content: center;
     gap: 8px;
+
+    margin: 15px 0;
+
     color: var(--rouge);
     font-size: 1.8rem;
     font-weight: bold;
-    text-shadow: 2px 2px 10px var(--rouge-ombre);
-    margin: 15px 0;
+
+    text-shadow: var(--texte-ombre);
 }
 
 .revision-score-final img {
@@ -1431,7 +1759,7 @@ ANIMATION
 }
 
 /* =========================================================
-   TODO LIST
+   TODO
 ========================================================= */
 
 .popup-todo-contenu {
@@ -1442,6 +1770,7 @@ ANIMATION
 .todo-ajout {
     display: flex;
     gap: 10px;
+
     margin-bottom: 20px;
 }
 
@@ -1450,11 +1779,12 @@ ANIMATION
 #repeter-input {
     flex: 1;
     min-width: 0;
+
+    margin-bottom: 0;
+
     padding: 12px;
+
     font-size: 1.1rem;
-    border: 3px solid var(--vert);
-    border-radius: 10px;
-    box-shadow: 3px 3px 4px var(--noir);
 }
 
 #todo-bouton-ajouter {
@@ -1466,7 +1796,8 @@ ANIMATION
 #todo-message {
     min-height: 20px;
     margin: 10px 0;
-    color: white;
+
+    color: var(--blanc);
     font-size: 1rem;
 }
 
@@ -1474,6 +1805,7 @@ ANIMATION
     display: flex;
     flex-direction: column;
     gap: 10px;
+
     margin-top: 15px;
 }
 
@@ -1486,11 +1818,16 @@ ANIMATION
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #292929;
-    border: 2px solid var(--vert);
-    border-radius: 10px;
+
     padding: 12px;
+
     text-align: left;
+
+    background: var(--gris-case);
+
+    border: 2px solid var(--vert);
+    border-radius: var(--rayon);
+
     transition:
         transform 0.15s ease,
         opacity 0.2s ease,
@@ -1498,22 +1835,26 @@ ANIMATION
 }
 
 .todo-tache:hover {
+    background: var(--gris-case-hover);
     transform: scale(1.01);
-    background: #333;
 }
 
 .todo-checkbox {
+    flex-shrink: 0;
+
     width: 24px;
     height: 24px;
-    flex-shrink: 0;
-    cursor: pointer;
+
     accent-color: var(--vert);
+    cursor: pointer;
 }
 
 .todo-texte {
     flex: 1;
-    color: white;
+
+    color: var(--blanc);
     font-size: 1.1rem;
+
     word-break: break-word;
 }
 
@@ -1523,16 +1864,18 @@ ANIMATION
 }
 
 .todo-tache.terminee .todo-texte {
-    text-decoration: line-through;
     color: #aaa;
+    text-decoration: line-through;
 }
 
 .todo-supprimer {
-    border: none;
-    background: transparent;
-    font-size: 1.3rem;
-    cursor: pointer;
     padding: 5px;
+
+    color: inherit;
+    font-size: 1.3rem;
+
+    background: transparent;
+    border: none;
 }
 
 .todo-supprimer:hover {
@@ -1544,18 +1887,19 @@ ANIMATION
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+
     margin-top: 25px;
 }
 
 .todo-action {
     padding: 10px 15px;
     font-size: 1rem;
-    box-shadow: 3px 3px 4px var(--noir);
+    box-shadow: var(--ombre-petite);
 }
 
 .todo-danger {
+    color: var(--blanc);
     background-color: #d93636;
-    color: white;
 }
 
 .todo-danger:hover {
@@ -1572,9 +1916,8 @@ ANIMATION
 
 #question-ia-button,
 #repeter-button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
     margin-top: 30px;
+    padding: 10px 20px;
 }
 
 /* =========================================================
@@ -1594,29 +1937,41 @@ ANIMATION
 .calculatrice {
     width: 100%;
     max-width: 330px;
+
     margin: 0 auto;
-    background: #111;
-    border-radius: 18px;
     padding: 15px;
-    box-shadow: inset 0 0 10px var(--noir), 4px 4px 8px var(--noir);
+
+    background: #111;
+
+    border-radius: 18px;
+
+    box-shadow:
+        inset 0 0 10px var(--noir),
+        var(--ombre);
 }
 
 #calculatrice-affichage {
-    width: 100%;
-    min-height: 70px;
-    background: #050505;
-    border: 3px solid var(--vert);
-    border-radius: 12px;
-    margin-bottom: 15px;
-    padding: 12px;
-    color: white;
-    font-family: 'Open Sans', Arial, sans-serif;
-    font-size: 2rem;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    width: 100%;
+    min-height: 70px;
+
+    margin-bottom: 15px;
+    padding: 12px;
+
     overflow: hidden;
+
+    color: var(--blanc);
+    background: #050505;
+
+    border: 3px solid var(--vert);
+    border-radius: 12px;
+
+    font-size: 2rem;
     white-space: nowrap;
+
     box-shadow: inset 0 0 10px var(--noir);
 }
 
@@ -1628,15 +1983,18 @@ ANIMATION
 
 .calculatrice-boutons button {
     height: 60px;
+
+    color: var(--blanc);
+    background: var(--gris-case);
+
     border: none;
     border-radius: 12px;
-    background-color: #292929;
-    color: white;
+
     font-size: 1.4rem;
-    font-family: 'Open Sans', Arial, sans-serif;
     font-weight: bold;
-    cursor: pointer;
-    box-shadow: 3px 3px 4px var(--noir);
+
+    box-shadow: var(--ombre-petite);
+
     transition:
         transform 0.1s ease,
         background-color 0.1s ease;
@@ -1652,7 +2010,6 @@ ANIMATION
 
 .calculatrice-boutons .calc-fonction {
     background-color: #555;
-    color: white;
 }
 
 .calculatrice-boutons .calc-fonction:hover {
@@ -1664,8 +2021,8 @@ ANIMATION
 }
 
 .calculatrice-boutons .calc-operation {
-    background-color: var(--vert);
     color: var(--rouge);
+    background-color: var(--vert);
 }
 
 .calculatrice-boutons .calc-operation:hover {
@@ -1677,16 +2034,16 @@ ANIMATION
 }
 
 .calculatrice-boutons .calc-egal {
+    color: var(--blanc);
     background-color: var(--rouge);
-    color: white;
 }
 
 .calculatrice-boutons .calc-egal:hover {
-    background-color: #df2020;
+    background-color: var(--rouge-hover);
 }
 
 .calculatrice-boutons .calc-egal:active {
-    background-color: #a81010;
+    background-color: var(--rouge-dark);
 }
 
 .calculatrice-boutons .calc-zero {
@@ -1710,8 +2067,6 @@ ANIMATION
 
 #bouton-convertir {
     margin-top: 25px;
-    padding: 10px 20px;
-    font-size: 1.2rem;
 }
 
 /* =========================================================
@@ -1719,7 +2074,7 @@ ANIMATION
 ========================================================= */
 
 .cache {
-    display: none;
+    display: none !important;
 }
 
 /* =========================================================
@@ -1728,8 +2083,8 @@ ANIMATION
 
 @keyframes gainOrbes {
     from {
-        transform: translateY(20px);
         opacity: 0;
+        transform: translateY(20px);
     }
 
     30% {
@@ -1737,8 +2092,8 @@ ANIMATION
     }
 
     to {
-        transform: translateY(-40px);
         opacity: 0;
+        transform: translateY(-40px);
     }
 }
 
@@ -1758,9 +2113,8 @@ ANIMATION
     }
 
     h2 {
+        margin: 25px 0;
         font-size: 1.3rem;
-        margin-top: 25px;
-        margin-bottom: 25px;
     }
 
     #commande {
@@ -1769,18 +2123,14 @@ ANIMATION
 
     .commande-prédéfinie {
         width: 100%;
-        font-size: 1.3rem;
-        padding: 12px;
         margin: 8px 0;
+        padding: 12px;
+
+        font-size: 1.3rem;
     }
 
     #commande-prédéfinie-trop-longue {
         font-size: 0.9rem;
-    }
-
-    .commandes-prédéfinies {
-        flex-direction: column;
-        align-items: stretch;
     }
 
     #recherche-commandes {
@@ -1811,6 +2161,7 @@ ANIMATION
         align-items: center;
     }
 
+    .etat-deskbot,
     .chrono,
     .minuteur,
     .alarme {
@@ -1837,6 +2188,7 @@ ANIMATION
         width: 50px;
     }
 
+    .popup-notes-contenu,
     .calculatrice-popup {
         width: 100%;
     }
@@ -1852,5 +2204,54 @@ ANIMATION
 
     #calculatrice-affichage {
         font-size: 1.6rem;
+    }
+
+    #notes-formulaire,
+    #notes-liste,
+    #note-titre,
+    #note-texte {
+        width: 100%;
+    }
+
+    .note-element {
+        padding: 14px;
+    }
+
+    .note-element h3 {
+        font-size: 1.2rem;
+    }
+
+    .note-element p {
+        font-size: 1rem;
+    }
+
+    .notes-formulaire-boutons {
+        flex-direction: column;
+    }
+
+    .notes-formulaire-boutons button {
+        width: 100%;
+    }
+
+    .todo-ajout {
+        flex-direction: column;
+    }
+
+    #todo-bouton-ajouter {
+        width: 100%;
+    }
+
+    .revision-header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .revision-resultat {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .conversion-ligne {
+        flex-wrap: wrap;
     }
 }
