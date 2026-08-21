@@ -681,6 +681,83 @@
         </div>
     </div>
 
+    <div id="popup-resumer" class="popup">
+        <div class="popup-contenu" style="text-align:center;">
+            <span class="fermer" onclick="fermerResumer()">&times;</span>
+            <h2>Résumer un texte</h2>
+            <textarea id="resumer-textarea" placeholder="Texte à résumer..."></textarea>
+            <button onclick="resumer()" id="resumer-button">Résumer</button>
+            <p id="reponse-resumer">Réponse : ...</p>
+        </div>
+    </div>
+
+    <div id="popup-analyser-image" class="popup">
+        <div class="popup-contenu popup-analyser-image">
+
+            <span class="fermer" onclick="fermerAnalyserImage()">&times;</span>
+
+            <h2>Analyser une image</h2>
+
+            <input
+                type="file"
+                id="image-a-analyser"
+                accept="image/jpeg,image/png,image/webp"
+            >
+
+            <div id="apercu-image-container" style="display:none;">
+                <img id="apercu-image" alt="Aperçu de l'image">
+            </div>
+
+            <button onclick="analyserImage()" id="bouton-analyser-image">
+                <img src="img/loupe.svg" alt="">
+                Analyser
+            </button>
+
+            <p id="statut-analyse-image"></p>
+
+            <div id="resultat-analyse-image" style="display:none;">
+
+                <h3>Texte détecté</h3>
+
+                <textarea
+                    id="texte-image"
+                    placeholder="Le texte détecté apparaîtra ici..."
+                ></textarea>
+
+                <div class="actions-texte-image">
+
+                    <button onclick="copierTexteImage()">
+                        <img src="img/copié.svg" alt="">
+                        Copier
+                    </button>
+
+                    <button onclick="telechargerTexteImage()">
+                        <img src="img/télécharger.svg" alt="">
+                        Télécharger TXT
+                    </button>
+
+                    <button onclick="telechargerPdfImage()">
+                        <img src="img/télécharger.svg" alt="">
+                        Télécharger PDF
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div id="popup-correction" class="popup">
+        <div class="popup-contenu" style="text-align:center;">
+            <span class="fermer" onclick="fermerCorrection()">&times;</span>
+            <h2>Corriger un texte</h2>
+            <textarea id="corriger-textarea" placeholder="Texte à corriger..."></textarea>
+            <button onclick="corriger()" id="corriger-button">Corriger</button>
+            <p id="reponse-corriger">Réponse : ...</p>
+        </div>
+    </div>
+
     <h1>DeskBot</h1>
     <h2>crée par Edouard</h2>
 
@@ -834,6 +911,10 @@
             <div class="commande-prédéfinie" onclick="ouvrirNotes()">
                 <p class="commande-texte">Notes</p>
             </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirTodo()">
+                <p class="commande-texte">Ma To-Do List</p>
+            </div>
         </div>
 
 
@@ -863,10 +944,6 @@
         <div class="classe-commandes">
             <h3 class="titre-classe-commandes">Outils</h3>
 
-            <div class="commande-prédéfinie" onclick="ouvrirTodo()">
-                <p class="commande-texte">Ma To-Do List</p>
-            </div>
-
             <div class="commande-prédéfinie" onclick="ouvrirQuestionIA()">
                 <p class="commande-texte">Demander à l'IA</p>
             </div>
@@ -889,6 +966,18 @@
 
             <div class="commande-prédéfinie" onclick="ouvrirHasard()">
                 <p class="commande-texte">Demander au hasard</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirResumer()">
+                <p class="commande-texte">Résumer un texte</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirAnalyserImage()">
+                <p class="commande-texte">Analyser une image</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirCorrection()">
+                <p class="commande-texte">Corriger un texte</p>
             </div>
         </div>
 

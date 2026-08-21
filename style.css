@@ -236,7 +236,9 @@ h2 {
 #lancer-de-button,
 #nombre-aleatoire-button,
 #choix-aleatoire-button,
-#note-bouton-ajouter {
+#note-bouton-ajouter,
+#resumer-button,
+#corriger-button {
     margin-top: 25px;
     padding: 10px 20px;
 
@@ -289,7 +291,9 @@ h2 {
 #lancer-de-button:hover,
 #nombre-aleatoire-button:hover,
 #choix-aleatoire-button:hover,
-#note-bouton-ajouter:hover {
+#note-bouton-ajouter:hover,
+#resumer-button:hover,
+#corriger-button:hover {
     background-color: var(--vert-hover);
 }
 
@@ -323,7 +327,9 @@ h2 {
 #lancer-de-button:active,
 #nombre-aleatoire-button:active,
 #choix-aleatoire-button:active,
-#note-bouton-ajouter:active {
+#note-bouton-ajouter:active,
+#resumer-button:active,
+#corriger-button:active {
     background-color: var(--bleu-active);
 }
 
@@ -463,7 +469,9 @@ h2 {
 #reponse-convertir,
 #reponse-traduction,
 #reponse-hasard,
-#label-input-de {
+#label-input-de,
+#reponse-resumer,
+#reponse-corriger {
     width: fit-content;
     max-width: 90%;
 
@@ -1383,6 +1391,344 @@ h2 {
     text-shadow: 2px 2px 4px var(--noir);
 }
 
+/* RESUMER */
+
+#resumer-textarea {
+    width: 90%;
+    height: 220px;
+    margin-bottom: 20px;
+    padding: 10px;
+
+    font-size: 1.2rem;
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+}
+
+/* =========================================================
+   ANALYSE D'IMAGE
+========================================================= */
+
+.popup-analyser-image {
+    width: 520px;
+    max-width: 95%;
+    text-align: center;
+}
+
+.popup-analyser-image h2 {
+    margin: 0 0 25px;
+    color: var(--rouge);
+    font-size: 2rem;
+    text-shadow: 4px 4px 4px var(--noir);
+}
+
+
+/* ---------------------------------------------------------
+   Sélecteur de fichier
+--------------------------------------------------------- */
+
+#image-a-analyser {
+    display: block;
+    width: 100%;
+    margin: 0 auto 20px;
+    padding: 10px;
+    color: var(--blanc);
+    background-color: var(--gris-case);
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+    cursor: pointer;
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+#image-a-analyser:hover {
+    background-color: var(--gris-case-hover);
+}
+
+#image-a-analyser:focus {
+    outline: none;
+    border-color: var(--vert-hover);
+    box-shadow: 0 0 12px var(--vert);
+}
+
+#image-a-analyser::file-selector-button {
+    margin-right: 10px;
+    padding: 9px 14px;
+    color: var(--rouge);
+    background-color: var(--vert);
+    border: none;
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+#image-a-analyser::file-selector-button:hover {
+    background-color: var(--vert-hover);
+    transform: scale(1.03);
+}
+
+#image-a-analyser::file-selector-button:active {
+    background-color: var(--bleu-active);
+    transform: scale(0.97);
+}
+
+
+/* ---------------------------------------------------------
+   Aperçu de l'image
+--------------------------------------------------------- */
+
+#apercu-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-height: 300px;
+    margin: 15px 0 20px;
+    padding: 10px;
+    overflow: hidden;
+    background-color: var(--gris-case);
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+}
+
+#apercu-image {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+
+/* ---------------------------------------------------------
+   Bouton analyser
+--------------------------------------------------------- */
+
+#bouton-analyser-image {
+    width: 100%;
+    margin: 10px 0 15px;
+    padding: 10px 20px;
+    color: var(--rouge);
+    background-color: var(--vert);
+    border: none;
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    text-shadow: var(--texte-ombre);
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        filter 0.15s ease;
+}
+
+#bouton-analyser-image:hover {
+    background-color: var(--vert-hover);
+    transform: scale(1.02);
+}
+
+#bouton-analyser-image:active {
+    background-color: var(--bleu-active);
+    transform: scale(0.98);
+}
+
+#bouton-analyser-image:disabled {
+    background-color: #777;
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+}
+
+
+/* ---------------------------------------------------------
+   Statut
+--------------------------------------------------------- */
+
+#statut-analyse-image {
+    min-height: 24px;
+    margin: 10px 0;
+    color: var(--rouge);
+    font-size: 1.1rem;
+    text-shadow: 2px 2px 4px var(--noir);
+}
+
+
+/* ---------------------------------------------------------
+   Résultat
+--------------------------------------------------------- */
+
+#resultat-analyse-image {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    text-align: left;
+    background-color: var(--gris-case);
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+}
+
+#resultat-analyse-image h3 {
+    margin: 0 0 12px;
+    color: var(--rouge);
+    font-size: 1.4rem;
+    text-align: center;
+    text-shadow: 2px 2px 4px var(--noir);
+}
+
+
+/* ---------------------------------------------------------
+   Texte détecté
+--------------------------------------------------------- */
+
+#texte-image {
+    display: block;
+    width: 100%;
+    min-height: 180px;
+    padding: 12px;
+    resize: vertical;
+    color: var(--noir);
+    background-color: var(--blanc);
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+    font-family: inherit;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    outline: none;
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+#texte-image:focus {
+    border-color: var(--vert-hover);
+    box-shadow: 0 0 12px var(--vert);
+}
+
+
+/* ---------------------------------------------------------
+   Boutons Copier / TXT / PDF
+--------------------------------------------------------- */
+
+.actions-texte-image {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.actions-texte-image button {
+    flex: 1;
+    min-width: 140px;
+    margin: 0;
+    padding: 10px 20px;
+    color: var(--rouge);
+    background-color: var(--vert);
+    border: none;
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+    text-shadow: var(--texte-ombre);
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        filter 0.15s ease;
+}
+
+.actions-texte-image button:hover {
+    background-color: var(--vert-hover);
+    transform: scale(1.03);
+}
+
+.actions-texte-image button:active {
+    background-color: var(--bleu-active);
+    transform: scale(0.97);
+}
+
+.actions-texte-image button,
+#bouton-analyser-image {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.actions-texte-image button img,
+#bouton-analyser-image img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+
+/* ---------------------------------------------------------
+   Responsive
+--------------------------------------------------------- */
+
+@media (max-width: 600px) {
+
+    .popup-analyser-image {
+        width: 100%;
+    }
+
+    .popup-analyser-image h2 {
+        font-size: 1.5rem;
+    }
+
+    #apercu-image-container {
+        max-height: 220px;
+    }
+
+    #apercu-image {
+        max-height: 200px;
+    }
+
+    .actions-texte-image {
+        flex-direction: column;
+    }
+
+    .actions-texte-image button {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* RESUMER */
+
+#corriger-textarea {
+    width: 90%;
+    height: 175px;
+    margin-bottom: 20px;
+    padding: 10px;
+
+    font-size: 1.2rem;
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+}
+
 /* =========================================================
    RÉVISION
 ========================================================= */
@@ -2168,6 +2514,10 @@ h2 {
         width: 100%;
         margin-left: 0;
         margin-right: 0;
+    }
+
+    .etat-deskbot {
+        padding-left: 70px;
     }
 
     .btn-chrono,
