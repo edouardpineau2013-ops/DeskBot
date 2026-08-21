@@ -1,20 +1,46 @@
-if (!localStorage.getItem("deskbot_reset_fait")) {
-
-    localStorage.setItem("deskbot_reset_fait", "1");
-
-    localStorage.removeItem("deskbot_token");
-    sessionStorage.removeItem("deskbot_token");
-
-    location.reload();
-}
-
 console.log("SCRIPT CHARGÉ", Date.now());
+
 const API_URL = "https://deskbot-q7ce.onrender.com";
 
-let TOKEN = localStorage.getItem("deskbot_token") || sessionStorage.getItem("deskbot_token");
+let TOKEN =
+    localStorage.getItem("deskbot_token") ||
+    sessionStorage.getItem("deskbot_token");
+
 
 function afficherLogin() {
     document.getElementById("popup-login").style.display = "flex";
+}
+
+
+function gererErreur401(response) {
+
+    if (response.status === 401) {
+
+        console.warn("⚠️ Token refusé par le serveur.");
+
+        localStorage.removeItem("deskbot_token");
+        sessionStorage.removeItem("deskbot_token");
+
+        TOKEN = null;
+
+        afficherLogin();
+
+        return true;
+    }
+
+    return false;
+}
+
+
+if (!TOKEN) {
+    afficherLogin();
+}
+
+function reinitialiserConnexion() {
+    localStorage.removeItem("deskbot_token");
+    sessionStorage.removeItem("deskbot_token");
+    TOKEN = null;
+    afficherLogin();
 }
 
 function seConnecter() {
@@ -48,9 +74,15 @@ if (!TOKEN) {
 }
 
 function envoyerCommande() {
+
     const commande = document.getElementById("commande").value;
 
-    fetch(`${API_URL}/commande`, {        
+    if (!TOKEN) {
+        afficherLogin();
+        return;
+    }
+
+    fetch(`${API_URL}/commande`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -60,16 +92,29 @@ function envoyerCommande() {
             texte: commande
         })
     })
-    .then(r => r.json())
+    .then(response => {
+
+        if (gererErreur401(response)) {
+            return null;
+        }
+
+        return response.json();
+    })
     .then(data => {
+
+        if (!data) return;
 
         document.getElementById("reponse").textContent =
             "Réponse: " + data.reponse;
+
         let reponse = data.reponse;
 
         afficherReponse(commande, reponse);
 
         chargerChronometre();
+    })
+    .catch(erreur => {
+        console.error("Erreur commande :", erreur);
     });
 }
 
@@ -422,28 +467,54 @@ function afficherMinuteur() {
 }
 
 function chargerMinuteur() {
+
+    if (!TOKEN) {
+        return;
+    }
+
     fetch(`${API_URL}/minuteur`, {
-        headers: { "Authorization": "Bearer " + TOKEN }
+        headers: {
+            "Authorization": "Bearer " + TOKEN
+        }
     })
-        .then(response => response.json())
-        .then(data => {
+    .then(response => {
 
-            const nouveauDemarrage = data.actif && !minuteurActifPrecedent;
-            minuteurActifPrecedent = data.actif;
+        if (gererErreur401(response)) {
+            return null;
+        }
 
-            enMarcheMinuteur = data.actif;
-            enPauseMinuteur = data.en_pause;
-            secondesMinuteur = data.secondes;
+        return response.json();
+    })
+    .then(data => {
 
-            if (nouveauDemarrage) {
-                notificationEnvoyee = false;
-            }
+        if (!data) return;
 
-            const bouton = document.getElementById("PausePlayMinuteur");
-            bouton.src = enPauseMinuteur ? "img/play.svg" : "img/pause.svg";
+        const nouveauDemarrage =
+            data.actif && !minuteurActifPrecedent;
 
-            afficherMinuteur();
-        });
+        minuteurActifPrecedent = data.actif;
+
+        enMarcheMinuteur = data.actif;
+        enPauseMinuteur = data.en_pause;
+        secondesMinuteur = data.secondes;
+
+        if (nouveauDemarrage) {
+            notificationEnvoyee = false;
+        }
+
+        const bouton =
+            document.getElementById("PausePlayMinuteur");
+
+        bouton.src =
+            enPauseMinuteur
+                ? "img/play.svg"
+                : "img/pause.svg";
+
+        afficherMinuteur();
+    })
+    .catch(erreur => {
+        console.error("Erreur minuteur :", erreur);
+    });
 }
 
 chargerMinuteur();
