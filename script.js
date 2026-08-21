@@ -1,4 +1,5 @@
 console.log("SCRIPT CHARGÉ", Date.now());
+const API_URL = "https://deskbot-q7ce.onrender.com";
 
 let TOKEN = localStorage.getItem("deskbot_token") || sessionStorage.getItem("deskbot_token");
 
@@ -10,7 +11,7 @@ function seConnecter() {
     const motDePasse = document.getElementById("mot-de-passe").value;
     const seSouvenir = document.getElementById("checkbox-se-souvenir").checked;
 
-    fetch("https://api.gogekko.fr/login", {
+    fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mot_de_passe: motDePasse })
@@ -39,7 +40,7 @@ if (!TOKEN) {
 function envoyerCommande() {
     const commande = document.getElementById("commande").value;
 
-    fetch("https://api.gogekko.fr/commande", {        
+    fetch(`${API_URL}/commande`, {        
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -63,7 +64,7 @@ function envoyerCommande() {
 }
 
 function envoyerCommandePrédéfinie(commande) {
-    fetch("https://api.gogekko.fr/commande", {        
+    fetch(`${API_URL}/commande`, {        
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -110,6 +111,12 @@ function afficherReponse(commande, reponse) {
     else if (commande.includes("hasard") || commande.includes("aléatoire") || commande.includes("pile") || commande.includes("face") || commande.includes("nombre") || commande.includes("choix")) {
         document.getElementById("reponse-hasard").textContent = reponse;
     }
+    else if (commande.includes("résume") || commande.includes("resume") || commande.includes("résumer") || commande.includes("resumer") || commande.includes("résume ce texte: ")) {
+        document.getElementById("reponse-resumer").textContent = reponse;
+    }
+    else if (commande.includes("corrige") || commande.includes("corriger") || commande.includes("Corrige ce texte")) {
+        document.getElementById("reponse-corriger").textContent = reponse;
+    }
 }
 
 let derniereReponseDeskBot = "";
@@ -120,7 +127,7 @@ function surveillerReponseDeskBot() {
         return;
     }
 
-    fetch("https://api.gogekko.fr/etat", {
+    fetch(`${API_URL}/etat`, {
         headers: {
             "Authorization": "Bearer " + TOKEN
         }
@@ -244,7 +251,7 @@ function envoyerMeteo() {
     const ville = document.getElementById("ville").value;
     const date = document.getElementById("date").value;
 
-    fetch("https://api.gogekko.fr/commande", {        
+    fetch(`${API_URL}/commande`, {        
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -271,7 +278,7 @@ let secondes = 0;
 
 function chargerChronometre() {
 
-    fetch("https://api.gogekko.fr/chronometre", {
+    fetch(`${API_URL}/chronometre`, {
         headers: { "Authorization": "Bearer " + TOKEN }
     })
         .then(response => response.json())
@@ -322,7 +329,7 @@ function PausePlayChrono() {
         commande = "pause le chronomètre";
     }
 
-    fetch("https://api.gogekko.fr/commande", {
+    fetch(`${API_URL}/commande`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -405,7 +412,7 @@ function afficherMinuteur() {
 }
 
 function chargerMinuteur() {
-    fetch("https://api.gogekko.fr/minuteur", {
+    fetch(`${API_URL}/minuteur`, {
         headers: { "Authorization": "Bearer " + TOKEN }
     })
         .then(response => response.json())
@@ -464,7 +471,7 @@ function PausePlayMinuteur() {
 
     let commande = enPauseMinuteur ? "reprends le minuteur" : "pause le minuteur";
 
-    fetch("https://api.gogekko.fr/commande", {
+    fetch(`${API_URL}/commande`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -488,7 +495,7 @@ let alarmeActive = false;
 let dernierEtatAlarme = null;
 
 function chargerAlarme() {
-    fetch("https://api.gogekko.fr/alarme", {
+    fetch(`${API_URL}/alarme`, {
         headers: { "Authorization": "Bearer " + TOKEN }
     })
         .then(r => r.json())
@@ -604,7 +611,7 @@ function fermerMails() {
 }
 
 function chargerMails() {
-    fetch("https://api.gogekko.fr/mails", {
+    fetch(`${API_URL}/mails`, {
         headers: {
             "Authorization": "Bearer " + TOKEN
         }
@@ -671,7 +678,7 @@ function envoyerImportCours() {
     donnees.append("fichier", fichier);
     document.getElementById("import-cours-statut").textContent = `Chargement...`;
 
-    fetch("https://api.gogekko.fr/cours/importer", {
+    fetch(`${API_URL}/cours/importer`, {
         method: "POST",
         headers: { "Authorization": "Bearer " + TOKEN },
         body: donnees
@@ -748,7 +755,7 @@ function fermerRevisionAccueil() {
 }
 
 function chargerProfilRevision() {
-    fetch("https://api.gogekko.fr/revision/profil", {
+    fetch(`${API_URL}/revision/profil`, {
         headers: { "Authorization": "Bearer " + TOKEN }
     })
         .then(r => r.json())
@@ -769,7 +776,7 @@ function chargerProfilRevision() {
 function ouvrirStatistiquesRevision() {
     document.getElementById("popup-statistiques-revision").style.display = "flex";
 
-    fetch("https://api.gogekko.fr/revision/profil", {
+    fetch(`${API_URL}/revision/profil`, {
         headers: { "Authorization": "Bearer " + TOKEN }
     })
         .then(r => r.json())
@@ -824,7 +831,7 @@ function ouvrirBoiteMystere() {
     animation.currentTime = 0;
     animation.play();
 
-    fetch("https://api.gogekko.fr/revision/boite", {
+    fetch(`${API_URL}/revision/boite`, {
         method: "POST",
         headers: {
             "Authorization": "Bearer " + TOKEN
@@ -900,7 +907,7 @@ function demarrerRevisionDepuisPopup() {
 
     if (!matiere || !chapitre) return;
 
-    fetch("https://api.gogekko.fr/revision/demarrer", {
+    fetch(`${API_URL}/revision/demarrer`, {
 
         method: "POST",
 
@@ -1012,7 +1019,7 @@ function validerReponseRevision() {
         return;
     }
 
-    fetch("https://api.gogekko.fr/revision/repondre", {
+    fetch(`${API_URL}/revision/repondre`, {
 
         method: "POST",
 
@@ -1204,7 +1211,7 @@ function fermerTodo() {
 
 function chargerTodo() {
 
-    fetch("https://api.gogekko.fr/taches", {
+    fetch(`${API_URL}/taches`, {
         headers: {
             "Authorization": "Bearer " + TOKEN
         }
@@ -2202,7 +2209,7 @@ async function chargerNotes() {
     try {
 
         const reponse = await fetch(
-            "https://api.gogekko.fr/notes",
+            `${API_URL}/notes`,
             {
                 method: "GET",
 
@@ -2322,7 +2329,7 @@ async function ajouterNoteDepuisSite() {
     try {
 
         const reponse = await fetch(
-            "https://api.gogekko.fr/notes",
+            `${API_URL}/notes`,
             {
                 method: "POST",
 
@@ -2383,7 +2390,7 @@ async function modifierNoteDepuisSite(note) {
     try {
 
         const reponse = await fetch(
-            "https://api.gogekko.fr/notes/" +
+            `${API_URL}/notes/` +
             encodeURIComponent(note.titre),
             {
                 method: "PUT",
@@ -2440,7 +2447,7 @@ async function supprimerNoteDepuisSite(titre) {
     try {
 
         const reponse = await fetch(
-            "https://api.gogekko.fr/notes/" +
+            `${API_URL}/notes/` +
             encodeURIComponent(titre),
             {
                 method: "DELETE",
@@ -2476,6 +2483,361 @@ async function supprimerNoteDepuisSite(titre) {
     }
 }
 
+function ouvrirResumer() {
+    document.getElementById("popup-resumer").style.display = "flex";
+}
+
+function fermerResumer() {
+    document.getElementById("popup-resumer").style.display = "none";
+}
+
+function resumer() {
+    const texte = document.getElementById("resumer-textarea").value;
+    envoyerCommandePrédéfinie(`Résume ce texte: ${texte}`)
+}
+
+// =========================================================
+// ANALYSE D'IMAGE
+// =========================================================
+
+function ouvrirAnalyserImage() {
+
+    const popup = document.getElementById("popup-analyser-image");
+    const input = document.getElementById("image-a-analyser");
+    const statut = document.getElementById("statut-analyse-image");
+    const resultat = document.getElementById("resultat-analyse-image");
+    const texte = document.getElementById("texte-image");
+    const apercuContainer = document.getElementById("apercu-image-container");
+    const apercu = document.getElementById("apercu-image");
+
+    if (popup) {
+        popup.style.display = "flex";
+    }
+
+    if (input) {
+        input.value = "";
+    }
+
+    if (statut) {
+        statut.textContent = "";
+    }
+
+    if (resultat) {
+        resultat.style.display = "none";
+    }
+
+    if (texte) {
+        texte.value = "";
+    }
+
+    if (apercuContainer) {
+        apercuContainer.style.display = "none";
+    }
+
+    if (apercu) {
+        apercu.src = "";
+    }
+}
+
+
+function fermerAnalyserImage() {
+
+    const popup = document.getElementById("popup-analyser-image");
+
+    if (popup) {
+        popup.style.display = "none";
+    }
+}
+
+
+async function analyserImage() {
+
+    const input = document.getElementById("image-a-analyser");
+    const statut = document.getElementById("statut-analyse-image");
+    const resultat = document.getElementById("resultat-analyse-image");
+    const texteImage = document.getElementById("texte-image");
+    const apercuContainer = document.getElementById("apercu-image-container");
+    const apercu = document.getElementById("apercu-image");
+    const bouton = document.getElementById("bouton-analyser-image");
+
+    if (!input || input.files.length === 0) {
+        statut.textContent = "Sélectionne une image.";
+        return;
+    }
+
+    const fichier = input.files[0];
+
+    if (!fichier.type.startsWith("image/")) {
+        statut.textContent = "Le fichier sélectionné n'est pas une image.";
+        return;
+    }
+
+    // Aperçu
+    if (apercu && apercuContainer) {
+        apercu.src = URL.createObjectURL(fichier);
+        apercuContainer.style.display = "block";
+    }
+
+    statut.textContent = "Analyse de l'image en cours...";
+
+    if (bouton) {
+        bouton.disabled = true;
+        bouton.textContent = "🔍 Analyse...";
+    }
+
+    const donnees = new FormData();
+    donnees.append("image", fichier);
+
+    try {
+
+        const resultatRequete = await fetch(
+            `${API_URL}/analyser-image`,
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + TOKEN
+                },
+                body: donnees
+            }
+        );
+
+        const data = await resultatRequete.json();
+
+        console.log("Réponse analyse image :", data);
+
+        if (!resultatRequete.ok) {
+            statut.textContent =
+                data.erreur || "Impossible d'analyser l'image.";
+            return;
+        }
+
+        if (!data.succes) {
+            statut.textContent =
+                data.erreur || "Impossible d'analyser l'image.";
+            return;
+        }
+
+        // IMPORTANT :
+        // Flask renvoie "texte"
+        const texte = data.texte || "";
+
+        if (!texte) {
+            statut.textContent =
+                "Aucun texte n'a été détecté.";
+            return;
+        }
+
+        // Affichage du texte détecté
+        texteImage.value = texte;
+
+        resultat.style.display = "block";
+
+        statut.textContent = "Analyse terminée.";
+
+        // Affichage également dans la réponse principale
+        document.getElementById("reponse").textContent =
+            "Réponse : " + texte;
+
+    } catch (erreur) {
+
+        console.error("Erreur analyse image :", erreur);
+
+        statut.textContent =
+            "Erreur lors de l'analyse de l'image.";
+
+    } finally {
+
+        if (bouton) {
+            bouton.disabled = false;
+            bouton.textContent = "🔍 Analyser";
+        }
+    }
+}
+
+
+// =========================================================
+// COPIER LE TEXTE DÉTECTÉ
+// =========================================================
+
+async function copierTexteImage() {
+
+    const textarea =
+        document.getElementById("texte-image");
+
+    if (!textarea || !textarea.value.trim()) {
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(
+            textarea.value
+        );
+
+        const statut =
+            document.getElementById(
+                "statut-analyse-image"
+            );
+
+        if (statut) {
+            statut.textContent =
+                "Texte copié dans le presse-papiers.";
+        }
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur copie texte image :",
+            erreur
+        );
+
+        // Fallback pour les navigateurs qui bloquent
+        textarea.select();
+        document.execCommand("copy");
+
+        const statut =
+            document.getElementById(
+                "statut-analyse-image"
+            );
+
+        if (statut) {
+            statut.textContent =
+                "Texte copié dans le presse-papiers.";
+        }
+    }
+}
+
+
+// =========================================================
+// TÉLÉCHARGER TXT
+// =========================================================
+
+function telechargerTexteImage() {
+
+    const textarea =
+        document.getElementById("texte-image");
+
+    if (!textarea || !textarea.value.trim()) {
+        return;
+    }
+
+    const blob = new Blob(
+        [textarea.value],
+        {
+            type: "text/plain;charset=utf-8"
+        }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const lien = document.createElement("a");
+
+    lien.href = url;
+    lien.download = "texte-image.txt";
+
+    document.body.appendChild(lien);
+
+    lien.click();
+
+    document.body.removeChild(lien);
+
+    URL.revokeObjectURL(url);
+}
+
+
+// =========================================================
+// TÉLÉCHARGER PDF
+// =========================================================
+
+function telechargerPdfImage() {
+
+    const textarea =
+        document.getElementById("texte-image");
+
+    if (!textarea || !textarea.value.trim()) {
+        return;
+    }
+
+    const texte = textarea.value;
+
+    const fenetre = window.open(
+        "",
+        "_blank"
+    );
+
+    if (!fenetre) {
+        alert(
+            "Impossible d'ouvrir la fenêtre PDF. Vérifie que les popups sont autorisées."
+        );
+        return;
+    }
+
+    fenetre.document.write(`
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <title>Texte détecté</title>
+
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 40px;
+                    line-height: 1.6;
+                    white-space: pre-wrap;
+                }
+
+                h1 {
+                    margin-bottom: 30px;
+                }
+            </style>
+        </head>
+
+        <body>
+
+            <h1>Texte détecté</h1>
+
+            ${texte
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\n/g, "<br>")
+            }
+
+        </body>
+        </html>
+    `);
+
+    fenetre.document.close();
+
+    fenetre.focus();
+
+    setTimeout(() => {
+
+        fenetre.print();
+
+    }, 300);
+}
+
+function ouvrirCorrection() {
+    document.getElementById("popup-correction").style.display = "flex";
+}
+
+function fermerCorrection() {
+    document.getElementById("popup-correction").style.display = "none";
+}
+
+function corriger() {
+    const texte = document.getElementById("corriger-textarea").value;
+
+    envoyerCommandePrédéfinie(`Corrige ce texte: ${texte}`)
+}
+
+
+
+
+
+
 
 
 
@@ -2502,7 +2864,7 @@ async function supprimerNoteDepuisSite(titre) {
 
 
 window.onclick = function(event) {
-    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes"];
+    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-analyser-image", "popup-correction"];
     for (const id of popups) {
         const popup = document.getElementById(id);
         if (event.target === popup) {
@@ -2568,7 +2930,7 @@ function chargerEtatDeskBot() {
 
     if (!TOKEN) return;
 
-    fetch("https://api.gogekko.fr/etat", {
+    fetch(`${API_URL}/etat`, {
         headers: {
             "Authorization": "Bearer " + TOKEN
         }
