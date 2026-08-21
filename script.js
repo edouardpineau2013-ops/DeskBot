@@ -1,3 +1,13 @@
+if (!localStorage.getItem("deskbot_reset_fait")) {
+
+    localStorage.setItem("deskbot_reset_fait", "1");
+
+    localStorage.removeItem("deskbot_token");
+    sessionStorage.removeItem("deskbot_token");
+
+    location.reload();
+}
+
 console.log("SCRIPT CHARGÉ", Date.now());
 const API_URL = "https://deskbot-q7ce.onrender.com";
 
