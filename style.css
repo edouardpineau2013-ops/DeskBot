@@ -2570,6 +2570,7 @@ input:checked + .slider:before {
         align-items: center;
     }
 
+    #slide-render-cloudflare,
     .etat-deskbot,
     .chrono,
     .minuteur,
