@@ -2166,7 +2166,7 @@ function chargerEvenementsAgenda() {
     const annee = dateAgenda.getFullYear();
     const mois = dateAgenda.getMonth() + 1;
 
-    fetch(`https://api.gogekko.fr/agenda?annee=${annee}&mois=${mois}`, {
+    fetch(`${API_URL}/agenda?annee=${annee}&mois=${mois}`, {
         headers: {
             "Authorization": "Bearer " + TOKEN
         }
