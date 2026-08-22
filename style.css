@@ -826,6 +826,7 @@ h2 {
     display: flex;
 }
 
+#slide-render-cloudflare,
 .etat-deskbot,
 .chrono,
 .minuteur,
@@ -848,12 +849,73 @@ h2 {
     text-shadow: var(--texte-ombre);
 }
 
+/* Le conteneur autour du bouton */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Cache la case à cocher d'origine */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Le fond du bouton (ovale arrière) */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: .4s;
+}
+
+/* Le rond blanc qui bouge */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+/* Couleur de fond quand c'est activé (Après) */
+input:checked + .slider {
+  background-color: var(--rouge); /* Bleu */
+}
+
+/* Mouvement du rond blanc vers la droite */
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+#slide-render-cloudflare {
+    width: 300px;
+
+    margin-right: 20px;
+    margin-left: auto;
+}
+
+#texte-slide {
+    font-weight: normal;
+    margin-top: 13.8px;
+    margin-bottom: 13.8px;
+}
+
 .etat-deskbot {
     display: flex;
     align-items: center;
     gap: 15px;
 
-    margin-left: auto;
+    margin-left: 20px;
     margin-right: 20px;
 
     padding: 10px;
@@ -864,6 +926,7 @@ h2 {
         transform 0.3s ease;
 }
 
+.etat-deskbot,
 .chrono,
 .minuteur {
     margin-left: 20px;

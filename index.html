@@ -564,6 +564,16 @@
                 <input type="time" id="agenda-ajout-heure">
 
                 <button onclick="ajouterEvenementAgenda()">Ajouter</button>
+
+                <h3>...Ou ajouter un événement depuis une URL</h3>
+
+                <input
+                    type="url"
+                    id="agenda-ajout-url"
+                    placeholder="Tapez l'URL"
+                >
+
+                <button onclick="ajouterEvenementDepuisURL()">Ajouter depuis l'URL</button>
             </div>
 
             <div id="agenda-suppression" class="agenda-formulaire">
@@ -772,6 +782,14 @@
     <h2>Modules</h2>
 
     <div class="modules">
+        <div id="slide-render-cloudflare">
+            <h3 id="texte-slide">Serveur</h3>
+            <label class="switch">
+                <input type="checkbox" onchange="changeSlide(this)">
+                <span class="slider"></span>
+            </label>
+        </div>
+
         <div id="etat-deskbot" class="module etat-deskbot etat-attente">
             <img id="etat-deskbot-image" src="img/sleep.svg" alt="État du DeskBot">
             <div class="etat-deskbot-infos">
@@ -889,7 +907,7 @@
             </div>
 
             <div class="commande-prédéfinie" onclick="ouvrirMails()">
-                <p class="commande-texte">Vérifier mes mails</p>
+                <p class="commande-texte">Mails</p>
             </div>
 
             <div class="commande-prédéfinie" onclick="ouvrirRecherche()">

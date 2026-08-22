@@ -1,6 +1,17 @@
 console.log("SCRIPT CHARGÉ", Date.now());
+let API_URL = "https://deskbot-q7ce.onrender.com";
 
-const API_URL = "https://deskbot-q7ce.onrender.com";
+function changeSlide(checkbox) {
+    const texte_slide = document.getElementById("texte-slide");
+
+    if (checkbox.checked) {
+        API_URL = "https://api.gogekko.fr"
+        texte_slide.textContent = "Enceinte DeskBot"
+    } else {
+        API_URL = "https://deskbot-q7ce.onrender.com"
+        texte_slide.textContent = "Serveur"
+    }
+}
 
 let TOKEN =
     localStorage.getItem("deskbot_token") ||
@@ -2055,6 +2066,12 @@ function ajouterEvenementAgenda() {
     document.getElementById("agenda-ajout-titre").value = "";
     document.getElementById("agenda-ajout-date").value = "";
     document.getElementById("agenda-ajout-heure").value = "";
+}
+
+function ajouterEvenementDepuisURL() {
+    const url = document.getElementById("agenda-ajout-url").value;
+
+    envoyerCommandePrédéfinie(`Ajoute cet évenement: ${url}`)
 }
 
 
