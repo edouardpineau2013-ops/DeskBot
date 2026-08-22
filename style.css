@@ -990,6 +990,14 @@ input:checked + .slider:before {
    ÉTATS DESKBot
 ========================================================= */
 
+.etat-connecté {
+    background-color: var(--vert);
+}
+
+.etat-attente img {
+    border-radius: var(--rayon);
+}
+
 .etat-attente {
     background-color: #888;
 }

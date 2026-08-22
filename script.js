@@ -221,6 +221,9 @@ function surveillerReponseDeskBot() {
     })
     .catch(erreur => {
         console.error("Erreur récupération réponse DeskBot :", erreur);
+        afficherEtat({
+            etat: "attente"
+        })
     });
 }
 
@@ -703,9 +706,11 @@ function fermerMails() {
 }
 
 function chargerMails() {
+    console.log("TOKEN utilisé pour /mails :", TOKEN);
+
     fetch(`${API_URL}/mails`, {
         headers: {
-            "Authorization": "Bearer " + TOKEN
+            "Authorization": `Bearer ${TOKEN}`
         }
     })
     .then(r => r.json())
@@ -2977,6 +2982,12 @@ window.onclick = function(event) {
 let dernierEtatDeskBot = null;
 
 const ETATS_DESKBOT = {
+    connecté: {
+        nom: "En ligne",
+        image: "img/live.svg",
+        classe: "etat-connecté"
+    },
+
     attente: {
         nom: "En veille",
         image: "img/sleep.svg",
