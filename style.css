@@ -238,7 +238,8 @@ h2 {
 #choix-aleatoire-button,
 #note-bouton-ajouter,
 #resumer-button,
-#corriger-button {
+#corriger-button,
+#stl-convertir {
     margin-top: 25px;
     padding: 10px 20px;
 
@@ -293,7 +294,8 @@ h2 {
 #choix-aleatoire-button:hover,
 #note-bouton-ajouter:hover,
 #resumer-button:hover,
-#corriger-button:hover {
+#corriger-button:hover,
+#stl-convertir:hover {
     background-color: var(--vert-hover);
 }
 
@@ -329,7 +331,8 @@ h2 {
 #choix-aleatoire-button:active,
 #note-bouton-ajouter:active,
 #resumer-button:active,
-#corriger-button:active {
+#corriger-button:active,
+#stl-convertir:active {
     background-color: var(--bleu-active);
 }
 
@@ -1784,7 +1787,7 @@ input:checked + .slider:before {
     }
 }
 
-/* RESUMER */
+/* CORRIGER */
 
 #corriger-textarea {
     width: 90%;
@@ -1798,6 +1801,288 @@ input:checked + .slider:before {
     border-radius: var(--rayon);
 
     box-shadow: var(--ombre);
+}
+
+/* =========================================================
+   STL → G-CODE
+========================================================= */
+
+#stl-gcode {
+    width: 700px;
+    max-width: 90%;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: var(--gris-fond);
+    border-radius: 15px;
+    box-shadow: var(--ombre);
+}
+
+#stl-gcode h2 {
+    margin: 0 0 30px;
+    color: var(--rouge);
+    font-size: 2rem;
+    text-shadow: 4px 4px 4px var(--noir);
+}
+
+#stl-fichier {
+    display: block;
+    width: 100%;
+    margin: 0 auto 20px;
+    padding: 10px;
+    color: var(--blanc);
+    background-color: var(--gris-case);
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+    cursor: pointer;
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+#stl-fichier:hover {
+    background-color: var(--gris-case-hover);
+}
+
+#stl-fichier:focus {
+    outline: none;
+    border-color: var(--vert-hover);
+    box-shadow: 0 0 12px var(--vert);
+}
+
+#stl-fichier::file-selector-button {
+    margin-right: 10px;
+    padding: 9px 14px;
+    color: var(--rouge);
+    background-color: var(--vert);
+    border: none;
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+#stl-fichier::file-selector-button:hover {
+    background-color: var(--vert-hover);
+    transform: scale(1.03);
+}
+
+#stl-fichier::file-selector-button:active {
+    background-color: var(--bleu-active);
+    transform: scale(0.97);
+}
+
+#stl-convertir {
+    margin-top: 10px;
+    padding: 10px 20px;
+    color: var(--rouge);
+    font-size: 1.2rem;
+    background-color: var(--vert);
+    border: none;
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    text-shadow: var(--texte-ombre);
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        filter 0.15s ease;
+}
+
+#stl-convertir:hover {
+    background-color: var(--vert-hover);
+}
+
+#stl-convertir:active {
+    background-color: var(--bleu-active);
+}
+
+#stl-convertir:disabled {
+    background-color: #666;
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#stl-statut {
+    width: fit-content;
+    max-width: 90%;
+    margin: 25px auto 0;
+    padding: 10px 15px;
+    color: var(--rouge);
+    font-size: 1.2rem;
+    background-color: var(--vert);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+    text-shadow: var(--texte-ombre);
+}
+
+/* =========================================================
+   COMPRESSEUR DE FICHIERS
+========================================================= */
+
+#fichiers-a-compresser {
+    display: block;
+    width: 100%;
+    margin: 0 auto 20px;
+    padding: 10px;
+
+    color: var(--blanc);
+    background-color: var(--gris-case);
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    cursor: pointer;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+#fichiers-a-compresser:hover {
+    background-color: var(--gris-case-hover);
+}
+
+#fichiers-a-compresser:focus {
+    outline: none;
+
+    border-color: var(--vert-hover);
+
+    box-shadow: 0 0 12px var(--vert);
+}
+
+#fichiers-a-compresser::file-selector-button {
+    margin-right: 10px;
+
+    padding: 9px 14px;
+
+    color: var(--rouge);
+    background-color: var(--vert);
+
+    border: none;
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    font-family: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+#fichiers-a-compresser::file-selector-button:hover {
+    background-color: var(--vert-hover);
+    transform: scale(1.03);
+}
+
+#fichiers-a-compresser::file-selector-button:active {
+    background-color: var(--bleu-active);
+    transform: scale(0.97);
+}
+
+#liste-fichiers-compresseur {
+    width: 90%;
+    max-height: 200px;
+
+    margin: 20px auto;
+
+    padding: 12px 15px;
+
+    color: var(--rouge);
+
+    background-color: var(--gris-case);
+
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    text-align: left;
+
+    overflow-y: auto;
+}
+
+#liste-fichiers-compresseur ul {
+    margin: 10px 0 0;
+    padding-left: 25px;
+}
+
+#liste-fichiers-compresseur li {
+    margin: 5px 0;
+}
+
+#bouton-compresser {
+    margin-top: 10px;
+
+    padding: 10px 20px;
+
+    color: var(--rouge);
+
+    font-size: 1.2rem;
+
+    background-color: var(--vert);
+
+    border: none;
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+
+    text-shadow: var(--texte-ombre);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        filter 0.15s ease;
+}
+
+#bouton-compresser:hover {
+    background-color: var(--vert-hover);
+}
+
+#bouton-compresser:active {
+    background-color: var(--bleu-active);
+}
+
+#bouton-compresser:disabled {
+    background-color: #666;
+    color: #ccc;
+
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#statut-compresseur {
+    width: fit-content;
+    max-width: 90%;
+
+    margin: 25px auto 0;
+    padding: 10px 15px;
+
+    color: var(--rouge);
+
+    font-size: 1.2rem;
+
+    background-color: var(--vert);
+
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    text-shadow: var(--texte-ombre);
 }
 
 /* =========================================================

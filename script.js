@@ -2936,6 +2936,445 @@ function corriger() {
     envoyerCommandePrédéfinie(`Corrige ce texte: ${texte}`)
 }
 
+function ouvrirStlGcode() {
+    document.getElementById("popup-stl-gcode").style.display = "flex";
+}
+
+function fermerStlGcode() {
+    document.getElementById("popup-stl-gcode").style.display = "none";
+}
+
+const stlFichier = document.getElementById("stl-fichier");
+const stlConvertir = document.getElementById("stl-convertir");
+const stlStatut = document.getElementById("stl-statut");
+
+if (stlFichier && stlConvertir && stlStatut) {
+
+    stlConvertir.addEventListener("click", async () => {
+
+        const fichier = stlFichier.files[0];
+
+        if (!fichier) {
+            stlStatut.style.display = "flex";
+            stlStatut.textContent =
+                "❌ Sélectionne un fichier STL.";
+            return;
+        }
+
+        if (!fichier.name.toLowerCase().endsWith(".stl")) {
+            stlStatut.style.display = "flex";
+            stlStatut.textContent =
+                "❌ Le fichier doit être au format .stl.";
+            return;
+        }
+
+        stlConvertir.disabled = true;
+        stlStatut.style.display = "flex";
+        stlStatut.textContent =
+            "⏳ Conversion en cours...";
+
+        try {
+
+            const formData = new FormData();
+
+            formData.append("fichier", fichier);
+
+            const response = await fetch(
+                `${API_URL}/stl-gcode`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+            if (!response.ok) {
+
+                let message =
+                    "Erreur pendant la conversion.";
+
+                try {
+                    const data = await response.json();
+
+                    if (data.erreur) {
+                        message = data.erreur;
+                    }
+
+                } catch {
+                    // Réponse non JSON
+                }
+
+                throw new Error(message);
+            }
+
+            // Récupérer le G-code
+            const blob = await response.blob();
+
+            // Nom par défaut
+            let nomGcode = fichier.name
+                .replace(/\.stl$/i, ".gcode");
+
+            // Récupérer le vrai nom envoyé par Flask
+            const disposition =
+                response.headers.get(
+                    "Content-Disposition"
+                );
+
+            if (disposition) {
+
+                const match = disposition.match(
+                    /filename="?([^"]+)"?/i
+                );
+
+                if (match && match[1]) {
+                    nomGcode = match[1];
+                }
+            }
+
+            // Créer le téléchargement
+            const url =
+                window.URL.createObjectURL(blob);
+
+            const lien =
+                document.createElement("a");
+
+            lien.href = url;
+            lien.download = nomGcode;
+
+            document.body.appendChild(lien);
+
+            lien.click();
+
+            lien.remove();
+
+            window.URL.revokeObjectURL(url);
+
+            stlStatut.style.display = "flex";
+            stlStatut.textContent =
+                "✅ Conversion terminée ! " +
+                "Le G-code a été téléchargé.";
+
+        } catch (erreur) {
+
+            console.error(
+                "Erreur STL → G-code :",
+                erreur
+            );
+
+            stlStatut.style.display = "flex";
+            stlStatut.textContent =
+                "❌ " + erreur.message;
+
+        } finally {
+
+            stlConvertir.disabled = false;
+        }
+    });
+}
+
+// =========================================================
+// COMPRESSEUR DE FICHIERS
+// =========================================================
+
+function ouvrirCompresseur() {
+    const popup = document.getElementById("popup-compresseur");
+
+    if (popup) {
+        popup.style.display = "flex";
+    }
+
+    const input = document.getElementById("fichiers-a-compresser");
+    const liste = document.getElementById("liste-fichiers-compresseur");
+    const statut = document.getElementById("statut-compresseur");
+    const bouton = document.getElementById("bouton-compresser");
+
+    if (input) {
+        input.value = "";
+    }
+
+    if (liste) {
+        liste.textContent = "Aucun fichier sélectionné.";
+    }
+
+    if (statut) {
+        statut.textContent = "";
+        statut.style.display = "none";
+    }
+
+    if (bouton) {
+        bouton.disabled = false;
+        bouton.textContent = "Compresser";
+    }
+}
+
+
+function fermerCompresseur() {
+    const popup = document.getElementById("popup-compresseur");
+
+    if (popup) {
+        popup.style.display = "none";
+    }
+}
+
+
+// Affichage des fichiers sélectionnés
+document.addEventListener("DOMContentLoaded", () => {
+
+    const input = document.getElementById("fichiers-a-compresser");
+    const liste = document.getElementById("liste-fichiers-compresseur");
+
+    if (!input || !liste) {
+        return;
+    }
+
+    input.addEventListener("change", () => {
+
+        const fichiers = Array.from(input.files);
+
+        if (fichiers.length === 0) {
+            liste.textContent = "Aucun fichier sélectionné.";
+            return;
+        }
+
+        liste.innerHTML = "";
+
+        const titre = document.createElement("strong");
+
+        titre.textContent =
+            `${fichiers.length} fichier${fichiers.length > 1 ? "s" : ""} sélectionné${fichiers.length > 1 ? "s" : ""} :`;
+
+        liste.appendChild(titre);
+
+        const ul = document.createElement("ul");
+
+        fichiers.forEach((fichier) => {
+
+            const li = document.createElement("li");
+
+            li.textContent =
+                `${fichier.name} (${formaterTailleFichier(fichier.size)})`;
+
+            ul.appendChild(li);
+
+        });
+
+        liste.appendChild(ul);
+    });
+
+});
+
+
+// Formatage de la taille
+function formaterTailleFichier(taille) {
+
+    if (taille < 1024) {
+        return `${taille} o`;
+    }
+
+    if (taille < 1024 * 1024) {
+        return `${(taille / 1024).toFixed(1)} Ko`;
+    }
+
+    if (taille < 1024 * 1024 * 1024) {
+        return `${(taille / (1024 * 1024)).toFixed(1)} Mo`;
+    }
+
+    return `${(taille / (1024 * 1024 * 1024)).toFixed(1)} Go`;
+}
+
+
+// Compression
+async function compresserFichiers() {
+
+    const input = document.getElementById("fichiers-a-compresser");
+    const bouton = document.getElementById("bouton-compresser");
+    const statut = document.getElementById("statut-compresseur");
+
+    if (!input || !bouton || !statut) {
+        console.error("Éléments du compresseur introuvables.");
+        return;
+    }
+
+    const fichiers = Array.from(input.files);
+
+    if (fichiers.length === 0) {
+
+        statut.textContent =
+            "❌ Sélectionne au moins un fichier.";
+
+        statut.style.display = "block";
+
+        return;
+    }
+
+
+    // Création du formulaire
+    const formData = new FormData();
+
+    fichiers.forEach((fichier) => {
+        formData.append("fichiers", fichier);
+    });
+
+
+    // Interface pendant la compression
+    bouton.disabled = true;
+    bouton.textContent = "Compression en cours...";
+
+    statut.style.display = "block";
+
+    statut.textContent =
+        "⏳ Compression des fichiers en cours...";
+
+
+    try {
+
+        const TOKEN =
+            localStorage.getItem("deskbot_token") ||
+            sessionStorage.getItem("deskbot_token");
+
+
+        const headers = {};
+
+        if (TOKEN) {
+            headers["Authorization"] =
+                `Bearer ${TOKEN}`;
+        }
+
+
+        const response = await fetch(
+            `${API_URL}/compresser`,
+            {
+                method: "POST",
+                headers: headers,
+                body: formData
+            }
+        );
+
+
+        if (!response.ok) {
+
+            let message =
+                "Une erreur est survenue pendant la compression.";
+
+            const type =
+                response.headers.get("content-type") || "";
+
+
+            if (type.includes("application/json")) {
+
+                const data =
+                    await response.json();
+
+                message =
+                    data.erreur ||
+                    data.error ||
+                    data.message ||
+                    message;
+
+            } else {
+
+                const texte =
+                    await response.text();
+
+                if (texte) {
+                    message = texte;
+                }
+            }
+
+
+            throw new Error(message);
+        }
+
+
+        // Récupération du ZIP
+        const blob =
+            await response.blob();
+
+
+        // Nom du fichier
+        let nomFichier =
+            "fichiers_compresse.zip";
+
+
+        const disposition =
+            response.headers.get(
+                "Content-Disposition"
+            );
+
+
+        if (disposition) {
+
+            const match =
+                disposition.match(
+                    /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i
+                );
+
+
+            if (match && match[1]) {
+
+                try {
+
+                    nomFichier =
+                        decodeURIComponent(match[1]);
+
+                } catch {
+
+                    nomFichier =
+                        match[1];
+
+                }
+            }
+        }
+
+
+        // Téléchargement
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const lien =
+            document.createElement("a");
+
+        lien.href = url;
+        lien.download = nomFichier;
+
+        document.body.appendChild(lien);
+
+        lien.click();
+
+        lien.remove();
+
+
+        URL.revokeObjectURL(url);
+
+
+        statut.textContent =
+            "✅ Compression terminée ! Le fichier ZIP a été téléchargé.";
+
+        bouton.textContent =
+            "Compresser";
+
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur compression :",
+            erreur
+        );
+
+
+        statut.textContent =
+            `❌ ${erreur.message || "Erreur lors de la compression."}`;
+
+        bouton.textContent =
+            "Réessayer";
+
+
+    } finally {
+
+        bouton.disabled = false;
+    }
+}
+
 
 
 
@@ -2967,7 +3406,7 @@ function corriger() {
 
 
 window.onclick = function(event) {
-    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-analyser-image", "popup-correction"];
+    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-resumer", "popup-analyser-image", "popup-correction", "popup-stl-gcode", "popup-compresseur"];
     for (const id of popups) {
         const popup = document.getElementById(id);
         if (event.target === popup) {

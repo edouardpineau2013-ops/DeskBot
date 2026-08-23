@@ -768,6 +768,54 @@
         </div>
     </div>
 
+    <div id="popup-stl-gcode" class="popup">
+        <div class="popup-contenu" style="text-align:center;">
+            <span class="fermer" onclick="fermerStlGcode()">&times;</span>
+            <h2>STL → G-code</h2>
+
+            <input
+                type="file"
+                id="stl-fichier"
+                accept=".stl"
+            >
+
+            <button id="stl-convertir">
+                Convertir en G-code
+            </button>
+
+            <p id="stl-statut" style="display: none;"></p>
+        </div>
+    </div>
+
+    <div id="popup-compresseur" class="popup">
+        <div class="popup-contenu popup-compresseur-contenu">
+
+            <span class="fermer" onclick="fermerCompresseur()">&times;</span>
+
+            <h2>Compresser des fichiers</h2>
+
+            <input
+                type="file"
+                id="fichiers-a-compresser"
+                multiple
+            >
+
+            <p id="liste-fichiers-compresseur">
+                Aucun fichier sélectionné.
+            </p>
+
+            <button
+                id="bouton-compresser"
+                onclick="compresserFichiers()"
+            >
+                Compresser
+            </button>
+
+            <p id="statut-compresseur" style="display:none;"></p>
+
+        </div>
+    </div>
+
     <h1>DeskBot</h1>
     <h2>crée par Edouard</h2>
 
@@ -996,6 +1044,14 @@
 
             <div class="commande-prédéfinie" onclick="ouvrirCorrection()">
                 <p class="commande-texte">Corriger un texte</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirStlGcode()">
+                <p class="commande-texte">Convertir STL en GCODE</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirCompresseur()">
+                <p class="commande-texte">Compresser des fichiers</p>
             </div>
         </div>
 
