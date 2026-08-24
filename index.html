@@ -240,13 +240,7 @@
             <h2>Ma To-Do List</h2>
 
             <div class="todo-ajout">
-                <input
-                    id="todo-input"
-                    type="text"
-                    placeholder="Nouvelle tâche..."
-                    maxlength="200"
-                    autocomplete="off"
-                >
+                <input id="todo-input" type="text" placeholder="Nouvelle tâche..." maxlength="200" autocomplete="off">
 
                 <button onclick="ajouterTacheDepuisSite()" id="todo-bouton-ajouter">
                     Ajouter
@@ -344,10 +338,7 @@
                 Chargement...
             </h2>
 
-            <textarea
-                id="revision-reponse"
-                placeholder="Écris ta réponse..."
-            ></textarea>
+            <textarea id="revision-reponse" placeholder="Écris ta réponse..."></textarea>
 
             <button id="revision-valider" type="button">
                 VALIDER
@@ -567,11 +558,7 @@
 
                 <h3>...Ou ajouter un événement depuis une URL</h3>
 
-                <input
-                    type="url"
-                    id="agenda-ajout-url"
-                    placeholder="Tapez l'URL"
-                >
+                <input type="url" id="agenda-ajout-url" placeholder="Tapez l'URL">
 
                 <button onclick="ajouterEvenementDepuisURL()">Ajouter depuis l'URL</button>
             </div>
@@ -659,23 +646,11 @@
             <!-- AJOUTER UNE NOTE -->
             <div class="notes-ajout">
 
-                <input
-                    type="text"
-                    id="note-titre"
-                    placeholder="Titre de la note..."
-                    maxlength="100"
-                >
+                <input type="text" id="note-titre" placeholder="Titre de la note..." maxlength="100">
 
-                <textarea
-                    id="note-texte"
-                    placeholder="Écris ta note..."
-                    maxlength="5000"
-                ></textarea>
+                <textarea id="note-texte" placeholder="Écris ta note..." maxlength="5000"></textarea>
 
-                <button
-                    onclick="ajouterNoteDepuisSite()"
-                    id="note-bouton-ajouter"
-                >
+                <button onclick="ajouterNoteDepuisSite()" id="note-bouton-ajouter">
                     Ajouter
                 </button>
 
@@ -708,11 +683,7 @@
 
             <h2>Analyser une image</h2>
 
-            <input
-                type="file"
-                id="image-a-analyser"
-                accept="image/jpeg,image/png,image/webp"
-            >
+            <input type="file" id="image-a-analyser" accept="image/jpeg,image/png,image/webp">
 
             <div id="apercu-image-container" style="display:none;">
                 <img id="apercu-image" alt="Aperçu de l'image">
@@ -729,10 +700,7 @@
 
                 <h3>Texte détecté</h3>
 
-                <textarea
-                    id="texte-image"
-                    placeholder="Le texte détecté apparaîtra ici..."
-                ></textarea>
+                <textarea id="texte-image" placeholder="Le texte détecté apparaîtra ici..."></textarea>
 
                 <div class="actions-texte-image">
 
@@ -773,11 +741,7 @@
             <span class="fermer" onclick="fermerStlGcode()">&times;</span>
             <h2>STL → G-code</h2>
 
-            <input
-                type="file"
-                id="stl-fichier"
-                accept=".stl"
-            >
+            <input type="file" id="stl-fichier" accept=".stl">
 
             <button id="stl-convertir">
                 Convertir en G-code
@@ -794,20 +758,13 @@
 
             <h2>Compresser des fichiers</h2>
 
-            <input
-                type="file"
-                id="fichiers-a-compresser"
-                multiple
-            >
+            <input type="file" id="fichiers-a-compresser" multiple>
 
             <p id="liste-fichiers-compresseur">
                 Aucun fichier sélectionné.
             </p>
 
-            <button
-                id="bouton-compresser"
-                onclick="compresserFichiers()"
-            >
+            <button id="bouton-compresser" onclick="compresserFichiers()">
                 Compresser
             </button>
 
@@ -823,10 +780,7 @@
 
             <h2>Convertisseur de fichiers</h2>
 
-            <input
-                type="file"
-                id="fichier-a-convertir"
-            >
+            <input type="file" id="fichier-a-convertir">
 
             <p id="nom-fichier-convertisseur">
                 Aucun fichier sélectionné.
@@ -840,18 +794,37 @@
                 <option value="">Choisir un format</option>
             </select>
 
-            <button
-                id="bouton-convertir-fichier"
-                onclick="convertirFichierDepuisSite()"
-            >
+            <button id="bouton-convertir-fichier" onclick="convertirFichierDepuisSite()">
                 Convertir
             </button>
 
-            <p
-                id="statut-convertisseur-fichier"
-                style="display:none;"
-            ></p>
+            <p id="statut-convertisseur-fichier" style="display:none;"></p>
 
+        </div>
+    </div>
+
+    <div id="popup-generer-image" class="popup">
+        <div class="popup-contenu popup-generer-image-contenu">
+
+            <span class="fermer" onclick="fermerGenererImage()">&times;</span>
+
+            <h2>Générer une image</h2>
+
+            <textarea id="prompt-generer-image" placeholder="Décris l'image que tu veux générer..." maxlength="2000"></textarea>
+
+            <button onclick="genererImageDepuisSite()" id="bouton-generer-image">
+                Générer l'image
+            </button>
+
+            <p id="statut-generer-image" style="display:none;"></p>
+
+            <div id="resultat-generer-image" style="display:none;">
+                <img id="image-generee" alt="Image générée par DeskBot">
+
+                <button onclick="telechargerImageGeneree()" id="bouton-telecharger-image">
+                    Télécharger l'image
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1027,6 +1000,10 @@
 
             <div class="commande-prédéfinie" onclick="ouvrirTraduction()">
                 <p class="commande-texte">Traduire des mots</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirGenererImage()">
+                <p class="commande-texte">Générer une image</p>
             </div>
         </div>
 

@@ -3864,6 +3864,292 @@ async function convertirFichierDepuisSite() {
     }
 }
 
+// =========================================================
+// GÉNÉRATION D'IMAGE
+// =========================================================
+
+function ouvrirGenererImage() {
+
+    const popup =
+        document.getElementById("popup-generer-image");
+
+    if (!popup) {
+        console.error(
+            "Popup génération d'image introuvable."
+        );
+        return;
+    }
+
+    popup.style.display = "flex";
+
+    const prompt =
+        document.getElementById("prompt-generer-image");
+
+    const statut =
+        document.getElementById("statut-generer-image");
+
+    const resultat =
+        document.getElementById("resultat-generer-image");
+
+    const image =
+        document.getElementById("image-generee");
+
+    const bouton =
+        document.getElementById("bouton-generer-image");
+
+    if (prompt) {
+        prompt.value = "";
+    }
+
+    if (statut) {
+        statut.style.display = "none";
+        statut.textContent = "";
+    }
+
+    if (resultat) {
+        resultat.style.display = "none";
+    }
+
+    if (image) {
+        image.removeAttribute("src");
+    }
+
+    if (bouton) {
+        bouton.disabled = false;
+        bouton.textContent = "Générer l'image";
+    }
+}
+
+
+function fermerGenererImage() {
+
+    const popup =
+        document.getElementById("popup-generer-image");
+
+    if (popup) {
+        popup.style.display = "none";
+    }
+}
+
+
+async function genererImageDepuisSite() {
+
+    const prompt =
+        document.getElementById("prompt-generer-image");
+
+    const bouton =
+        document.getElementById("bouton-generer-image");
+
+    const statut =
+        document.getElementById("statut-generer-image");
+
+    const resultat =
+        document.getElementById("resultat-generer-image");
+
+    const image =
+        document.getElementById("image-generee");
+
+
+    if (!prompt || !bouton || !statut || !resultat || !image) {
+        console.error(
+            "Éléments de génération d'image introuvables."
+        );
+        return;
+    }
+
+
+    const texte =
+        prompt.value.trim();
+
+
+    if (!texte) {
+
+        statut.style.display = "block";
+
+        statut.textContent =
+            "❌ Décris l'image que tu veux générer.";
+
+        return;
+    }
+
+
+    if (!TOKEN) {
+        afficherLogin();
+        return;
+    }
+
+
+    bouton.disabled = true;
+
+    bouton.textContent =
+        "Génération en cours...";
+
+
+    statut.style.display = "block";
+
+    statut.textContent =
+        "⏳ DeskBot génère ton image...";
+
+
+    resultat.style.display = "none";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/generer-image`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${TOKEN}`
+                    },
+
+                    body: JSON.stringify({
+                        prompt: texte
+                    })
+                }
+            );
+
+
+        if (response.status === 401) {
+
+            gererErreur401(response);
+
+            return;
+        }
+
+
+        if (!response.ok) {
+
+            let message =
+                "Erreur lors de la génération de l'image.";
+
+            try {
+
+                const data =
+                    await response.json();
+
+                if (data.erreur) {
+                    message = data.erreur;
+                }
+
+            } catch {
+                // Réponse non JSON
+            }
+
+            throw new Error(message);
+        }
+
+
+        const blob =
+            await response.blob();
+
+
+        if (!blob.type.startsWith("image/")) {
+
+            throw new Error(
+                "Le serveur n'a pas retourné une image."
+            );
+        }
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        image.src = url;
+
+
+        resultat.style.display =
+            "block";
+
+
+        statut.textContent =
+            "✅ Image générée !";
+
+
+        // -----------------------------------------------------
+        // Permet de télécharger l'image plus tard.
+        // -----------------------------------------------------
+
+        image.dataset.url =
+            url;
+
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur génération image :",
+            erreur
+        );
+
+
+        statut.textContent =
+            `❌ ${erreur.message || "Erreur lors de la génération."}`;
+
+
+        resultat.style.display =
+            "none";
+
+
+    } finally {
+
+        bouton.disabled =
+            false;
+
+        bouton.textContent =
+            "Générer l'image";
+    }
+}
+
+
+function telechargerImageGeneree() {
+
+    const image =
+        document.getElementById("image-generee");
+
+    if (!image || !image.dataset.url) {
+
+        return;
+    }
+
+
+    const lien =
+        document.createElement("a");
+
+
+    lien.href =
+        image.dataset.url;
+
+
+    lien.download =
+        "deskbot-image.jpg";
+
+
+    document.body.appendChild(lien);
+
+    lien.click();
+
+    lien.remove();
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3895,7 +4181,7 @@ async function convertirFichierDepuisSite() {
 
 
 window.onclick = function(event) {
-    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-resumer", "popup-analyser-image", "popup-correction", "popup-stl-gcode", "popup-compresseur", "popup-convertisseur-fichier"];
+    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-resumer", "popup-analyser-image", "popup-correction", "popup-stl-gcode", "popup-compresseur", "popup-convertisseur-fichier", "popup-generer-image"];
     for (const id of popups) {
         const popup = document.getElementById(id);
         if (event.target === popup) {
