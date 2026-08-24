@@ -2490,6 +2490,95 @@ input:checked + .slider:before {
 }
 
 /* =========================================================
+   OPTIONS DU GÉNÉRATEUR D'IMAGE
+========================================================= */
+
+.options-generer-image {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    width: 90%;
+    margin: 0 auto 15px;
+}
+
+.option-generer-image {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.option-generer-image label {
+    color: var(--rouge);
+    text-shadow: 4px 4px 4px var(--noir);
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.option-generer-image select {
+    display: block;
+
+    width: 90%;
+
+    margin: 10px auto 20px;
+
+    padding: 10px;
+
+    color: var(--vert);
+    background-color: var(--gris-case);
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+.option-generer-image select:hover {
+    background-color: var(--gris-case-hover);
+}
+
+.option-generer-image select:focus {
+    outline: none;
+    border-color: var(--vert-hover);
+    box-shadow: 0 0 12px var(--vert);
+}
+
+.option-generer-image select option {
+    color: var(--vert);
+    background-color: var(--gris-case);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .options-generer-image {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .option-generer-image {
+        width: 100%;
+    }
+
+}
+
+/* =========================================================
    RÉVISION
 ========================================================= */
 

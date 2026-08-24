@@ -812,6 +812,35 @@
 
             <textarea id="prompt-generer-image" placeholder="Décris l'image que tu veux générer..." maxlength="2000"></textarea>
 
+            <div class="options-generer-image">
+
+                <div class="option-generer-image">
+                    <label for="format-generer-image">Format</label>
+
+                    <select id="format-generer-image">
+                        <option value="1:1">1:1 — Carré</option>
+                        <option value="16:9">16:9 — Paysage</option>
+                        <option value="9:16">9:16 — Portrait</option>
+                        <option value="4:3">4:3 — Paysage classique</option>
+                        <option value="3:4">3:4 — Portrait classique</option>
+                        <option value="3:2">3:2 — Photo paysage</option>
+                        <option value="2:3">2:3 — Photo portrait</option>
+                    </select>
+                </div>
+
+                <div class="option-generer-image">
+                    <label for="qualite-generer-image">Qualité</label>
+
+                    <select id="qualite-generer-image">
+                        <option value="basse">Basse</option>
+                        <option value="moyenne" selected>Moyenne</option>
+                        <option value="haute">Haute</option>
+                        <option value="ultra">Ultra</option>
+                    </select>
+                </div>
+
+            </div>
+
             <button onclick="genererImageDepuisSite()" id="bouton-generer-image">
                 Générer l'image
             </button>
@@ -819,12 +848,15 @@
             <p id="statut-generer-image" style="display:none;"></p>
 
             <div id="resultat-generer-image" style="display:none;">
+
                 <img id="image-generee" alt="Image générée par DeskBot">
 
                 <button onclick="telechargerImageGeneree()" id="bouton-telecharger-image">
                     Télécharger l'image
                 </button>
+
             </div>
+
         </div>
     </div>
 

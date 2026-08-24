@@ -3897,6 +3897,12 @@ function ouvrirGenererImage() {
     const bouton =
         document.getElementById("bouton-generer-image");
 
+    const formatImage =
+        document.getElementById("format-generer-image");
+
+    const qualiteImage =
+        document.getElementById("qualite-generer-image");
+
     if (prompt) {
         prompt.value = "";
     }
@@ -3917,6 +3923,14 @@ function ouvrirGenererImage() {
     if (bouton) {
         bouton.disabled = false;
         bouton.textContent = "Générer l'image";
+    }
+
+        if (formatImage) {
+        formatImage.value = "1:1";
+    }
+
+    if (qualiteImage) {
+        qualiteImage.value = "moyenne";
     }
 }
 
@@ -3949,17 +3963,35 @@ async function genererImageDepuisSite() {
     const image =
         document.getElementById("image-generee");
 
+    const formatImage =
+        document.getElementById("format-generer-image");
 
-    if (!prompt || !bouton || !statut || !resultat || !image) {
+    const qualiteImage =
+        document.getElementById("qualite-generer-image");
+
+    if (
+        !prompt ||
+        !bouton ||
+        !statut ||
+        !resultat ||
+        !image ||
+        !formatImage ||
+        !qualiteImage
+    ) {
         console.error(
             "Éléments de génération d'image introuvables."
         );
         return;
     }
 
-
     const texte =
         prompt.value.trim();
+
+    const format =
+        formatImage.value;
+
+    const qualite =
+        qualiteImage.value;
 
 
     if (!texte) {
@@ -4011,7 +4043,9 @@ async function genererImageDepuisSite() {
                     },
 
                     body: JSON.stringify({
-                        prompt: texte
+                        prompt: texte,
+                        format: formatImage.value,
+                        qualite: qualiteImage.value
                     })
                 }
             );
