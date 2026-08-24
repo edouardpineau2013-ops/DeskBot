@@ -2086,6 +2086,232 @@ input:checked + .slider:before {
 }
 
 /* =========================================================
+   CONVERTISSEUR DE FICHIERS
+========================================================= */
+
+#fichier-a-convertir {
+    display: block;
+    width: 100%;
+    margin: 0 auto 20px;
+    padding: 10px;
+
+    color: var(--blanc);
+    background-color: var(--gris-case);
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    cursor: pointer;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+#fichier-a-convertir:hover {
+    background-color: var(--gris-case-hover);
+}
+
+#fichier-a-convertir:focus {
+    outline: none;
+
+    border-color: var(--vert-hover);
+
+    box-shadow: 0 0 12px var(--vert);
+}
+
+#fichier-a-convertir::file-selector-button {
+    margin-right: 10px;
+
+    padding: 9px 14px;
+
+    color: var(--rouge);
+    background-color: var(--vert);
+
+    border: none;
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    font-family: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+#fichier-a-convertir::file-selector-button:hover {
+    background-color: var(--vert-hover);
+    transform: scale(1.03);
+}
+
+#fichier-a-convertir::file-selector-button:active {
+    background-color: var(--bleu-active);
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   NOM DU FICHIER
+========================================================= */
+
+#nom-fichier-convertisseur {
+    width: 90%;
+
+    margin: 20px auto;
+
+    padding: 12px 15px;
+
+    color: var(--vert);
+    background-color: var(--gris-case);
+
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    text-align: left;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   SELECT DU FORMAT
+========================================================= */
+
+.label-format-conversion-fichier {
+    color: var(--rouge);
+    text-shadow: 4px 4px 4px var(--noir);
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+#format-conversion-fichier {
+    display: block;
+
+    width: 90%;
+
+    margin: 10px auto 20px;
+
+    padding: 10px;
+
+    color: var(--vert);
+    background-color: var(--gris-case);
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+#format-conversion-fichier:hover {
+    background-color: var(--gris-case-hover);
+}
+
+#format-conversion-fichier:focus {
+    outline: none;
+
+    border-color: var(--vert-hover);
+
+    box-shadow: 0 0 12px var(--vert);
+}
+
+
+/* =========================================================
+   BOUTON CONVERTIR
+========================================================= */
+
+#bouton-convertir-fichier {
+    margin-top: 10px;
+
+    padding: 10px 20px;
+
+    color: var(--rouge);
+
+    font-size: 1.2rem;
+
+    background-color: var(--vert);
+
+    border: none;
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+
+    text-shadow: var(--texte-ombre);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        filter 0.15s ease;
+}
+
+#bouton-convertir-fichier:hover {
+    background-color: var(--vert-hover);
+}
+
+#bouton-convertir-fichier:active {
+    background-color: var(--bleu-active);
+
+    transform: scale(0.97);
+}
+
+#bouton-convertir-fichier:disabled {
+    background-color: #666;
+
+    color: #ccc;
+
+    cursor: not-allowed;
+
+    opacity: 0.7;
+}
+
+
+/* =========================================================
+   STATUT
+========================================================= */
+
+#statut-convertisseur-fichier {
+    width: fit-content;
+
+    max-width: 90%;
+
+    margin: 25px auto 0;
+
+    padding: 10px 15px;
+
+    color: var(--rouge);
+
+    font-size: 1.2rem;
+
+    background-color: var(--vert);
+
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre-petite);
+
+    text-shadow: var(--texte-ombre);
+}
+
+/* =========================================================
    RÉVISION
 ========================================================= */
 

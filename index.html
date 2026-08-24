@@ -816,6 +816,45 @@
         </div>
     </div>
 
+    <div id="popup-convertisseur-fichier" class="popup">
+        <div class="popup-contenu popup-convertisseur-fichier-contenu">
+
+            <span class="fermer" onclick="fermerConvertisseurFichier()">&times;</span>
+
+            <h2>Convertisseur de fichiers</h2>
+
+            <input
+                type="file"
+                id="fichier-a-convertir"
+            >
+
+            <p id="nom-fichier-convertisseur">
+                Aucun fichier sélectionné.
+            </p>
+
+            <label for="format-conversion-fichier" class="label-format-conversion-fichier">
+                Convertir en :
+            </label>
+
+            <select id="format-conversion-fichier">
+                <option value="">Choisir un format</option>
+            </select>
+
+            <button
+                id="bouton-convertir-fichier"
+                onclick="convertirFichierDepuisSite()"
+            >
+                Convertir
+            </button>
+
+            <p
+                id="statut-convertisseur-fichier"
+                style="display:none;"
+            ></p>
+
+        </div>
+    </div>
+
     <h1>DeskBot</h1>
     <h2>crée par Edouard</h2>
 
@@ -981,6 +1020,14 @@
             <div class="commande-prédéfinie" onclick="ouvrirTodo()">
                 <p class="commande-texte">Ma To-Do List</p>
             </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirCalculatrice()">
+                <p class="commande-texte">Calculatrice</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirTraduction()">
+                <p class="commande-texte">Traduire des mots</p>
+            </div>
         </div>
 
 
@@ -1014,16 +1061,8 @@
                 <p class="commande-texte">Demander à l'IA</p>
             </div>
 
-            <div class="commande-prédéfinie" onclick="ouvrirCalculatrice()">
-                <p class="commande-texte">Calculatrice</p>
-            </div>
-
             <div class="commande-prédéfinie" onclick="ouvrirConvertir()">
                 <p class="commande-texte">Convertir des unités</p>
-            </div>
-
-            <div class="commande-prédéfinie" onclick="ouvrirTraduction()">
-                <p class="commande-texte">Traduire des mots</p>
             </div>
 
             <div class="commande-prédéfinie" onclick="ouvrirNotification()">
@@ -1052,6 +1091,10 @@
 
             <div class="commande-prédéfinie" onclick="ouvrirCompresseur()">
                 <p class="commande-texte">Compresser des fichiers</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirConvertisseurFichier()">
+                <p class="commande-texte">Convertir un fichier</p>
             </div>
         </div>
 

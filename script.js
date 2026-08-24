@@ -3375,6 +3375,495 @@ async function compresserFichiers() {
     }
 }
 
+// ============================================================
+// CONVERTISSEUR DE FICHIERS
+// ============================================================
+
+const formatsConvertisseurFichier = {
+    image: [
+        { extension: ".jpg", nom: "JPG" },
+        { extension: ".png", nom: "PNG" },
+        { extension: ".webp", nom: "WEBP" },
+        { extension: ".bmp", nom: "BMP" },
+        { extension: ".gif", nom: "GIF" },
+        { extension: ".tiff", nom: "TIFF" }
+    ],
+
+    audioVideo: [
+        { extension: ".mp3", nom: "MP3" },
+        { extension: ".wav", nom: "WAV" },
+        { extension: ".ogg", nom: "OGG" },
+        { extension: ".flac", nom: "FLAC" },
+        { extension: ".m4a", nom: "M4A" },
+        { extension: ".aac", nom: "AAC" },
+        { extension: ".mp4", nom: "MP4" },
+        { extension: ".mkv", nom: "MKV" },
+        { extension: ".avi", nom: "AVI" },
+        { extension: ".mov", nom: "MOV" },
+        { extension: ".webm", nom: "WEBM" }
+    ],
+
+    texte: [
+        { extension: ".pdf", nom: "PDF" }
+    ]
+};
+
+
+// ------------------------------------------------------------
+// OUVRIR
+// ------------------------------------------------------------
+
+function ouvrirConvertisseurFichier() {
+    const popup = document.getElementById(
+        "popup-convertisseur-fichier"
+    );
+
+    document.getElementById("bouton-convertir-fichier").style.disabled = "none";
+
+    if (!popup) return;
+
+    popup.style.display = "flex";
+
+    const input = document.getElementById(
+        "fichier-a-convertir"
+    );
+
+    const select = document.getElementById(
+        "format-conversion-fichier"
+    );
+
+    const nomFichier = document.getElementById(
+        "nom-fichier-convertisseur"
+    );
+
+    const statut = document.getElementById(
+        "statut-convertisseur-fichier"
+    );
+
+    if (input) {
+        input.value = "";
+    }
+
+    if (select) {
+        select.innerHTML =
+            '<option value="">Choisir un format</option>';
+    }
+
+    if (nomFichier) {
+        nomFichier.textContent =
+            "Aucun fichier sélectionné.";
+    }
+
+    if (statut) {
+        statut.style.display = "none";
+        statut.textContent = "";
+    }
+}
+
+
+// ------------------------------------------------------------
+// FERMER
+// ------------------------------------------------------------
+
+function fermerConvertisseurFichier() {
+    const popup = document.getElementById(
+        "popup-convertisseur-fichier"
+    );
+
+    if (popup) {
+        popup.style.display = "none";
+    }
+}
+
+
+// ------------------------------------------------------------
+// DÉTECTION DU TYPE
+// ------------------------------------------------------------
+
+function obtenirCategorieFichierConvertisseur(
+    nomFichier
+) {
+    const extension = nomFichier
+        .substring(
+            nomFichier.lastIndexOf(".")
+        )
+        .toLowerCase();
+
+    const extensionsImage = [
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".bmp",
+        ".gif",
+        ".tiff"
+    ];
+
+    const extensionsAudioVideo = [
+        ".mp3",
+        ".wav",
+        ".ogg",
+        ".flac",
+        ".m4a",
+        ".aac",
+        ".mp4",
+        ".mkv",
+        ".avi",
+        ".mov",
+        ".webm"
+    ];
+
+    const extensionsTexte = [
+        ".txt"
+    ];
+
+    if (extensionsImage.includes(extension)) {
+        return "image";
+    }
+
+    if (extensionsAudioVideo.includes(extension)) {
+        return "audioVideo";
+    }
+
+    if (extensionsTexte.includes(extension)) {
+        return "texte";
+    }
+
+    return null;
+}
+
+
+// ------------------------------------------------------------
+// AFFICHER LES FORMATS
+// ------------------------------------------------------------
+
+function afficherFormatsConvertisseurFichier(
+    categorie,
+    extensionActuelle
+) {
+    const select = document.getElementById(
+        "format-conversion-fichier"
+    );
+
+    if (!select) return;
+
+    select.innerHTML =
+        '<option value="">Choisir un format</option>';
+
+    const formats =
+        formatsConvertisseurFichier[categorie];
+
+    if (!formats) return;
+
+    formats.forEach(format => {
+
+        // Ne pas proposer le même format
+        if (
+            format.extension === extensionActuelle
+        ) {
+            return;
+        }
+
+        const option = document.createElement("option");
+
+        option.value = format.extension;
+        option.textContent = format.nom;
+
+        select.appendChild(option);
+    });
+}
+
+
+// ------------------------------------------------------------
+// SÉLECTION DU FICHIER
+// ------------------------------------------------------------
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const input = document.getElementById(
+        "fichier-a-convertir"
+    );
+
+    if (!input) return;
+
+    input.addEventListener("change", () => {
+
+        const fichier = input.files[0];
+
+        const nomFichier =
+            document.getElementById(
+                "nom-fichier-convertisseur"
+            );
+
+        const select =
+            document.getElementById(
+                "format-conversion-fichier"
+            );
+
+        const statut =
+            document.getElementById(
+                "statut-convertisseur-fichier"
+            );
+
+        if (!fichier) {
+
+            if (nomFichier) {
+                nomFichier.textContent =
+                    "Aucun fichier sélectionné.";
+            }
+
+            if (select) {
+                select.innerHTML =
+                    '<option value="">Choisir un format</option>';
+            }
+
+            return;
+        }
+
+        if (nomFichier) {
+            nomFichier.textContent =
+                fichier.name;
+        }
+
+        const categorie =
+            obtenirCategorieFichierConvertisseur(
+                fichier.name
+            );
+
+        const extension = fichier.name
+            .substring(
+                fichier.name.lastIndexOf(".")
+            )
+            .toLowerCase();
+
+        if (!categorie) {
+
+            if (select) {
+                select.innerHTML =
+                    '<option value="">Format non supporté</option>';
+            }
+
+            if (statut) {
+                statut.style.display = "block";
+                statut.textContent =
+                    "❌ Ce type de fichier n'est pas encore supporté.";
+            }
+
+            return;
+        }
+
+        if (statut) {
+            statut.style.display = "none";
+            statut.textContent = "";
+        }
+
+        afficherFormatsConvertisseurFichier(
+            categorie,
+            extension
+        );
+    });
+});
+
+
+// ------------------------------------------------------------
+// CONVERTIR
+// ------------------------------------------------------------
+
+async function convertirFichierDepuisSite() {
+
+    const input = document.getElementById(
+        "fichier-a-convertir"
+    );
+
+    const select = document.getElementById(
+        "format-conversion-fichier"
+    );
+
+    const statut = document.getElementById(
+        "statut-convertisseur-fichier"
+    );
+
+    const bouton = document.getElementById(
+        "bouton-convertir-fichier"
+    );
+
+    if (!input || !input.files.length) {
+
+        if (statut) {
+            statut.style.display = "block";
+            statut.textContent =
+                "❌ Sélectionne un fichier.";
+        }
+
+        return;
+    }
+
+    if (!select || !select.value) {
+
+        if (statut) {
+            statut.style.display = "block";
+            statut.textContent =
+                "❌ Choisis un format de sortie.";
+        }
+
+        return;
+    }
+
+    const fichier = input.files[0];
+    const format = select.value;
+
+    const formulaire = new FormData();
+
+    formulaire.append(
+        "fichier",
+        fichier
+    );
+
+    formulaire.append(
+        "format",
+        format
+    );
+
+    if (bouton) {
+        bouton.disabled = true;
+        bouton.textContent =
+            "Conversion...";
+    }
+
+    if (statut) {
+        statut.style.display = "block";
+        statut.textContent =
+            "⏳ Conversion du fichier...";
+    }
+
+    try {
+
+        const reponse = await fetch(
+            `${API_URL}/convertir`,
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${TOKEN}`
+                },
+                body: formulaire
+            }
+        );
+
+        if (!reponse.ok) {
+
+            let message =
+                "Erreur lors de la conversion.";
+
+            try {
+                const erreur =
+                    await reponse.json();
+
+                if (erreur.erreur) {
+                    message =
+                        erreur.erreur;
+                }
+
+            } catch (e) {
+                // Réponse non JSON
+            }
+
+            throw new Error(message);
+        }
+
+        const blob =
+            await reponse.blob();
+
+        // ----------------------------------------------------
+        // RÉCUPÉRATION DU NOM DU FICHIER
+        // ----------------------------------------------------
+
+        let nomFichierSortie =
+            fichier.name;
+
+        const extension =
+            format.startsWith(".")
+                ? format
+                : "." + format;
+
+        nomFichierSortie =
+            nomFichierSortie.replace(
+                /\.[^/.]+$/,
+                extension
+            );
+
+        // Si le serveur fournit un nom,
+        // on l'utilise.
+        const disposition =
+            reponse.headers.get(
+                "Content-Disposition"
+            );
+
+        if (disposition) {
+
+            const correspondance =
+                disposition.match(
+                    /filename="?([^"]+)"?/i
+                );
+
+            if (
+                correspondance &&
+                correspondance[1]
+            ) {
+                nomFichierSortie =
+                    correspondance[1];
+            }
+        }
+
+        // ----------------------------------------------------
+        // TÉLÉCHARGEMENT
+        // ----------------------------------------------------
+
+        const url =
+            window.URL.createObjectURL(blob);
+
+        const lien =
+            document.createElement("a");
+
+        lien.href = url;
+        lien.download =
+            nomFichierSortie;
+
+        document.body.appendChild(lien);
+
+        lien.click();
+
+        lien.remove();
+
+        window.URL.revokeObjectURL(url);
+
+        if (statut) {
+            statut.textContent =
+                "✅ Conversion terminée !";
+        }
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur convertisseur :",
+            erreur
+        );
+
+        if (statut) {
+            statut.style.display = "block";
+            statut.textContent =
+                "❌ " + erreur.message;
+        }
+
+    } finally {
+
+        if (bouton) {
+            bouton.disabled = false;
+            bouton.textContent =
+                "Convertir";
+        }
+    }
+}
+
 
 
 
@@ -3406,7 +3895,7 @@ async function compresserFichiers() {
 
 
 window.onclick = function(event) {
-    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-resumer", "popup-analyser-image", "popup-correction", "popup-stl-gcode", "popup-compresseur"];
+    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-resumer", "popup-analyser-image", "popup-correction", "popup-stl-gcode", "popup-compresseur", "popup-convertisseur-fichier"];
     for (const id of popups) {
         const popup = document.getElementById(id);
         if (event.target === popup) {
