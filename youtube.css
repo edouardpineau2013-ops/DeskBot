@@ -1778,6 +1778,16 @@ input:focus-visible {
     line-height: 1.6;
 }
 
+/* =========================================================
+   CORRECTION DES ÉLÉMENTS CACHÉS
+========================================================= */
+
+.youtube-loading[hidden],
+.youtube-empty[hidden],
+.youtube-popup[hidden] {
+    display: none !important;
+}
+
 
 /* =========================================================
    ANIMATIONS DES CARTES

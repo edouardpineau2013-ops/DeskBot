@@ -23,6 +23,8 @@ let playerYoutube = null;
 
 let youtubeApiChargee = false;
 
+let chargementAccueilEnCours = false;
+
 
 /* =========================================================
    INITIALISATION
@@ -424,6 +426,15 @@ async function effectuerRecherche(recherche) {
 
 async function chargerAccueil() {
 
+    if (chargementAccueilEnCours) {
+        console.warn(
+            "⚠️ Chargement YouTube déjà en cours."
+        );
+        return;
+    }
+
+    chargementAccueilEnCours = true;
+
     const chargement =
         document.getElementById(
             "accueil-chargement"
@@ -439,7 +450,6 @@ async function chargerAccueil() {
             "accueil-vide"
         );
 
-
     if (chargement) {
         chargement.hidden = false;
     }
@@ -452,7 +462,6 @@ async function chargerAccueil() {
         grille.innerHTML = "";
     }
 
-
     try {
 
         const response =
@@ -460,38 +469,78 @@ async function chargerAccueil() {
                 `${YOUTUBE_API_BASE}/recommandations?nombre=24`
             );
 
-
         const data =
             await response.json();
 
         if (!response.ok || !data.success) {
-
             throw new Error(
                 data.error ||
                 "Impossible de charger les recommandations."
             );
-
         }
-
 
         videosAccueil =
             data.videos || [];
 
+        console.log(
+            "📥 videosAccueil :",
+            videosAccueil
+        );
+
+        console.log(
+            "📥 Nombre avant filtre :",
+            videosAccueil.length
+        );
+
+        /*
+         * Les vidéos ont bien été récupérées.
+         * On ferme immédiatement toute ancienne erreur.
+         */
         fermerPopup();
 
         appliquerFiltreAccueil();
 
+        /*
+         * Vérification après affichage.
+         * Si des cartes sont présentes, le chargement
+         * est considéré comme réussi.
+         */
+        const nombreCartes =
+            grille
+                ? grille.querySelectorAll(
+                    ".youtube-video-card"
+                ).length
+                : 0;
+
+        console.log(
+            "📺 Nombre de cartes affichées :",
+            nombreCartes
+        );
+
         if (
-            videosAccueil.length === 0 &&
-            vide
+            nombreCartes > 0
         ) {
 
-            vide.hidden = false;
+            if (vide) {
+                vide.hidden = true;
+            }
 
+            if (chargement) {
+                chargement.hidden = true;
+            }
+
+            return;
+        }
+
+        /*
+         * La requête a fonctionné mais aucune vidéo
+         * n'a réellement été affichée.
+         */
+        if (vide) {
+            vide.hidden = false;
         }
 
     }
-
     catch (erreur) {
 
         console.error(
@@ -499,13 +548,53 @@ async function chargerAccueil() {
             erreur
         );
 
-        if (vide) {
-            vide.hidden = false;
+        /*
+         * IMPORTANT :
+         * Si des vidéos sont déjà affichées, ce n'est
+         * PAS une erreur pour l'utilisateur.
+         */
+        const nombreCartes =
+            grille
+                ? grille.querySelectorAll(
+                    ".youtube-video-card"
+                ).length
+                : 0;
+
+        if (
+            nombreCartes > 0
+        ) {
+
+            console.warn(
+                "⚠️ Une requête YouTube a échoué, mais des vidéos sont déjà affichées."
+            );
+
+            if (vide) {
+                vide.hidden = true;
+            }
+
+            fermerPopup();
+
+        }
+        else {
+
+            if (vide) {
+                vide.hidden = false;
+            }
+
+            /*
+             * Afficher l'erreur uniquement si aucune vidéo
+             * n'est disponible.
+             */
+            afficherErreur(
+                erreur.message
+            );
+
         }
 
     }
-
     finally {
+
+        chargementAccueilEnCours = false;
 
         if (chargement) {
             chargement.hidden = true;
