@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DeskTube</title>
+
+    <link rel="icon" type="image/png" href="img/favicon_desktube.png">
+
+    <link rel="stylesheet" href="youtube.css">
+
+    <link rel="preconnect" href=" https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bungee+Spice&family=DM+Serif+Display:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Orbitron:wght@400..900&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         BARRE DU HAUT
+    ====================================================== -->
+
+    <header class="youtube-header">
+
+        <div class="youtube-logo">
+
+            <button id="bouton-menu" class="bouton-menu" type="button" aria-label="Ouvrir le menu">
+                ☰
+            </button>
+
+            <div class="youtube-logo-icon">
+                ▶
+            </div>
+
+            <div class="youtube-logo-text">
+                Desk<span>Tube</span>
+            </div>
+
+        </div>
+
+
+        <!-- RECHERCHE -->
+
+        <form id="formulaire-recherche-youtube" class="youtube-search">
+
+            <input id="recherche-youtube" type="text" placeholder="Rechercher une vidéo..." autocomplete="off">
+
+            <button type="submit" aria-label="Rechercher">
+                🔍
+            </button>
+
+        </form>
+
+
+        <!-- ACTIONS -->
+
+        <div class="youtube-header-actions">
+
+            <button id="bouton-accueil-header" class="youtube-header-button" type="button" title="Accueil">
+                🏠
+            </button>
+
+            <button id="bouton-abonnements-header" class="youtube-header-button" type="button" title="Abonnements">
+                📺
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         CONTENEUR PRINCIPAL
+    ====================================================== -->
+
+    <div class="youtube-layout">
+
+
+        <!-- =================================================
+             MENU LATÉRAL
+        ================================================== -->
+
+        <aside id="youtube-sidebar" class="youtube-sidebar">
+
+            <nav>
+
+                <button id="nav-accueil" class="youtube-nav-button active" type="button">
+                    <span class="nav-icon">🏠</span>
+                    <span>Accueil</span>
+                </button>
+
+
+                <button id="nav-abonnements" class="youtube-nav-button" type="button">
+                    <span class="nav-icon">📺</span>
+                    <span>Abonnements</span>
+                </button>
+
+
+                <button id="nav-recherche" class="youtube-nav-button" type="button">
+                    <span class="nav-icon">🔍</span>
+                    <span>Rechercher</span>
+                </button>
+
+            </nav>
+
+
+            <div class="youtube-sidebar-separator"></div>
+
+
+            <!-- ABONNEMENTS RAPIDES -->
+
+            <div class="youtube-sidebar-section">
+
+                <h3>
+                    ABONNEMENTS
+                </h3>
+
+                <div id="liste-abonnements-sidebar" class="liste-abonnements-sidebar">
+
+                    <div class="abonnements-loading">
+                        Chargement...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="youtube-sidebar-separator"></div>
+
+
+            <div class="youtube-sidebar-footer">
+
+                <span>
+                    DeskBot
+                </span>
+
+                <span>
+                    YouTube
+                </span>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             CONTENU
+        ================================================== -->
+
+        <main class="youtube-content">
+
+
+            <!-- =================================================
+                 PAGE ACCUEIL
+            ================================================== -->
+
+            <section id="page-accueil" class="youtube-page active">
+
+                <div class="youtube-page-header">
+
+                    <div>
+
+                        <h1>
+                            Accueil
+                        </h1>
+
+                        <p>
+                            Tes recommandations DeskTube
+                        </p>
+
+                    </div>
+
+                    <button id="bouton-actualiser" class="youtube-action-button" type="button">
+                        ↻ Actualiser
+                    </button>
+
+                </div>
+
+
+                <!-- FILTRES -->
+
+                <div class="youtube-filters">
+
+                    <button class="youtube-filter active" data-filtre="tous" type="button">
+                        Tous
+                    </button>
+
+                    <button class="youtube-filter" data-filtre="abonnement" type="button">
+                        Abonnements
+                    </button>
+
+                    <button class="youtube-filter" data-filtre="general" type="button">
+                        Pour toi
+                    </button>
+
+                </div>
+
+
+                <!-- CHARGEMENT -->
+
+                <div id="accueil-chargement" class="youtube-loading">
+
+                    <div class="youtube-spinner"></div>
+
+                    <p>
+                        Chargement des recommandations...
+                    </p>
+
+                </div>
+
+
+                <!-- VIDÉOS -->
+
+                <div id="grille-accueil" class="youtube-video-grid"></div>
+
+
+                <!-- AUCUN RÉSULTAT -->
+
+                <div id="accueil-vide" class="youtube-empty" hidden>
+
+                    <div class="youtube-empty-icon">
+                        📺
+                    </div>
+
+                    <h2>
+                        Aucune vidéo trouvée
+                    </h2>
+
+                    <p>
+                        Impossible de charger les recommandations.
+                    </p>
+
+                    <button id="bouton-reessayer" class="youtube-action-button" type="button">
+                        Réessayer
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAGE RECHERCHE
+            ================================================== -->
+
+            <section id="page-recherche" class="youtube-page" hidden>
+
+                <div class="youtube-page-header">
+
+                    <div>
+
+                        <h1>
+                            Recherche
+                        </h1>
+
+                        <p id="texte-recherche">
+                            Résultats de recherche
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="recherche-chargement" class="youtube-loading" hidden>
+
+                    <div class="youtube-spinner"></div>
+
+                    <p>
+                        Recherche en cours...
+                    </p>
+
+                </div>
+
+
+                <div id="grille-recherche" class="youtube-video-grid"></div>
+
+
+                <div id="recherche-vide" class="youtube-empty" hidden>
+
+                    <div class="youtube-empty-icon">
+                        🔍
+                    </div>
+
+                    <h2>
+                        Aucun résultat
+                    </h2>
+
+                    <p>
+                        Aucune vidéo ne correspond à ta recherche.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAGE ABONNEMENTS
+            ================================================== -->
+
+            <section id="page-abonnements" class="youtube-page" hidden>
+
+                <div class="youtube-page-header">
+
+                    <div>
+
+                        <h1>
+                            Abonnements
+                        </h1>
+
+                        <p>
+                            Les chaînes que tu suis
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RECHERCHE DE CHAÎNE -->
+
+                <div class="youtube-channel-search">
+
+                    <input id="recherche-chaine" type="text" placeholder="Rechercher une chaîne à suivre..." autocomplete="off">
+
+                    <button id="bouton-recherche-chaine" class="youtube-action-button" type="button">
+                        🔍 Rechercher
+                    </button>
+
+                </div>
+
+
+                <!-- RÉSULTATS CHAÎNES -->
+
+                <div id="resultats-chaines" class="youtube-channels-grid"></div>
+
+
+                <!-- MES ABONNEMENTS -->
+
+                <div class="youtube-subscriptions-section">
+
+                    <h2>
+                        Mes abonnements
+                    </h2>
+
+                    <div id="grille-abonnements" class="youtube-subscriptions-list"></div>
+
+                </div>
+
+
+                <div id="abonnements-vide" class="youtube-empty" hidden>
+
+                    <div class="youtube-empty-icon">
+                        📺
+                    </div>
+
+                    <h2>
+                        Aucun abonnement
+                    </h2>
+
+                    <p>
+                        Abonne-toi à des chaînes pour personnaliser
+                        tes recommandations.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAGE VIDÉO
+            ================================================== -->
+
+            <section id="page-video" class="youtube-page" hidden>
+
+                <button id="bouton-retour-video" class="youtube-back-button" type="button">
+                    ← Retour
+                </button>
+
+
+                <!-- LECTEUR -->
+
+                <div class="youtube-player-container">
+
+                    <div id="youtube-player" class="youtube-player">
+
+                        <div class="youtube-player-placeholder">
+
+                            <div class="youtube-spinner"></div>
+
+                            <p>
+                                Chargement de la vidéo...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMATIONS -->
+
+                <div class="youtube-video-information">
+
+                    <h1 id="video-titre" class="youtube-video-title">
+                        Chargement...
+                    </h1>
+
+
+                    <div class="youtube-video-meta">
+
+                        <div class="youtube-channel-information">
+
+                            <div id="video-channel-avatar" class="youtube-channel-avatar">
+                                ▶
+                            </div>
+
+                            <div>
+
+                                <strong id="video-chaine">
+                                    Chargement...
+                                </strong>
+
+                                <span id="video-vues">
+                                    Vidéo YouTube
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <button id="bouton-abonnement-video" class="youtube-subscribe-button" type="button">
+                            S'abonner
+                        </button>
+
+                    </div>
+
+
+                    <div id="video-description" class="youtube-video-description">
+                        Chargement de la description...
+                    </div>
+
+                </div>
+
+
+                <!-- VIDÉOS SIMILAIRES -->
+
+                <div class="youtube-related-section">
+
+                    <h2>
+                        À regarder ensuite
+                    </h2>
+
+                    <div id="grille-videos-similaires" class="youtube-video-grid"></div>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         POPUP ERREUR
+    ====================================================== -->
+
+    <div id="youtube-popup-erreur" class="youtube-popup" hidden>
+
+        <div class="youtube-popup-content">
+
+            <button id="youtube-popup-fermer" class="youtube-popup-close" type="button" onclick="fermerPopup()">
+                ×
+            </button>
+
+            <div class="youtube-popup-icon">
+                ⚠️
+            </div>
+
+            <h2>
+                Une erreur est survenue
+            </h2>
+
+            <p id="youtube-popup-message">
+                Impossible de charger les données YouTube.
+            </p>
+
+            <button id="youtube-popup-ok" class="youtube-action-button" type="button">
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="youtube.js"></script>
+
+</body>
+
+</html>

@@ -4173,6 +4173,10 @@ function telechargerImageGeneree() {
     lien.remove();
 }
 
+function ouvrirDeskTube() {
+    window.open("youtube.html", "_blank");
+}
+
 
 
 
