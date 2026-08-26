@@ -132,7 +132,9 @@ h2 {
 #traduction-langue-input,
 #todo-input,
 #question-ia-input,
-#repeter-input {
+#repeter-input,
+#mail-destinataire,
+#mail-objet {
     width: 90%;
     margin-bottom: 20px;
     padding: 10px;
@@ -239,7 +241,9 @@ h2 {
 #note-bouton-ajouter,
 #resumer-button,
 #corriger-button,
-#stl-convertir {
+#stl-convertir,
+#bouton-envoyer-mail,
+#bouton-confirmer-mail {
     margin-top: 25px;
     padding: 10px 20px;
 
@@ -295,7 +299,9 @@ h2 {
 #note-bouton-ajouter:hover,
 #resumer-button:hover,
 #corriger-button:hover,
-#stl-convertir:hover {
+#stl-convertir:hover,
+#bouton-envoyer-mail:hover,
+#bouton-confirmer-mail:hover {
     background-color: var(--vert-hover);
 }
 
@@ -332,7 +338,9 @@ h2 {
 #note-bouton-ajouter:active,
 #resumer-button:active,
 #corriger-button:active,
-#stl-convertir:active {
+#stl-convertir:active,
+#bouton-envoyer-mail:active,
+#bouton-confirmer-mail:active {
     background-color: var(--bleu-active);
 }
 
@@ -1213,6 +1221,24 @@ input:checked + .slider:before {
 
     border: 2px solid var(--vert);
     border-radius: var(--rayon);
+}
+
+#mail-contenu {
+    width: 90%;
+    height: 220px;
+    padding: 10px;
+
+    font-size: 1.2rem;
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+}
+
+#bouton-envoyer-mail {
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
 
 /* =========================================================

@@ -1,4 +1,3 @@
-console.log("SCRIPT CHARGÉ", Date.now());
 let API_URL = "https://deskbot-q7ce.onrender.com";
 
 function changeSlide(checkbox) {
@@ -698,6 +697,7 @@ function enregistrerSonnerie() {
 
 function ouvrirMails() {
     document.getElementById("popup-mails").style.display = "flex";
+    document.getElementById("formulaire-envoi-mail").style.display = "none";
     chargerMails();
 }
 
@@ -706,8 +706,6 @@ function fermerMails() {
 }
 
 function chargerMails() {
-    console.log("TOKEN utilisé pour /mails :", TOKEN);
-
     fetch(`${API_URL}/mails`, {
         headers: {
             "Authorization": `Bearer ${TOKEN}`
@@ -2706,8 +2704,6 @@ async function analyserImage() {
 
         const data = await resultatRequete.json();
 
-        console.log("Réponse analyse image :", data);
-
         if (!resultatRequete.ok) {
             statut.textContent =
                 data.erreur || "Impossible d'analyser l'image.";
@@ -4175,6 +4171,84 @@ function telechargerImageGeneree() {
 
 function ouvrirDeskTube() {
     window.open("youtube.html", "_blank");
+}
+
+function afficherFormulaireMail() {
+    const formulaire = document.getElementById("formulaire-envoi-mail");
+
+    if (formulaire) {
+        formulaire.style.display = "block";
+    }
+}
+
+async function envoyerMail() {
+    const destinataire = document.getElementById("mail-destinataire").value.trim();
+    const objet = document.getElementById("mail-objet").value.trim();
+    const contenu = document.getElementById("mail-contenu").value.trim();
+    const result = document.getElementById("result-mail");
+
+    if (!destinataire || !objet || !contenu) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+    }
+
+    try {
+        const token = TOKEN;
+
+        const reponse = await fetch(
+            `${API_URL}/mails/envoyer`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    destinataire: destinataire,
+                    objet: objet,
+                    contenu: contenu
+                })
+            }
+        );
+
+        const texte = await reponse.text();
+
+        let resultat;
+
+        try {
+            resultat = JSON.parse(texte);
+        } catch {
+            throw new Error(
+                `Réponse serveur invalide (${reponse.status}) : ${texte}`
+            );
+        }
+
+        if (!reponse.ok) {
+            throw new Error(
+                resultat.erreur ||
+                resultat.message ||
+                `Erreur HTTP ${reponse.status}`
+            );
+        }
+
+        result.innerHTML = "Mail envoyé avec succès !";
+
+        document.getElementById("mail-destinataire").value = "";
+        document.getElementById("mail-objet").value = "";
+        document.getElementById("mail-contenu").value = "";
+
+        document.getElementById(
+            "formulaire-envoi-mail"
+        ).style.display = "none";
+
+    } catch (erreur) {
+        console.error("❌ Erreur envoi mail :", erreur);
+
+        alert(
+            "Impossible d'envoyer le mail.\n\n" +
+            erreur.message
+        );
+    }
 }
 
 

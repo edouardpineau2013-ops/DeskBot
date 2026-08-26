@@ -160,6 +160,26 @@
             <p id="mails-non-lus">Vous avez - mails non-lus.</p>
 
             <div id="mail"></div>
+
+            <!-- ENVOYER UN MAIL -->
+            <button id="bouton-envoyer-mail" onclick="afficherFormulaireMail()">
+                Envoyer un mail
+            </button>
+
+            <div id="formulaire-envoi-mail" style="display: none;">
+
+                <input type="email" id="mail-destinataire" placeholder="Destinataire">
+
+                <input type="text" id="mail-objet" placeholder="Objet">
+
+                <textarea id="mail-contenu" placeholder="Contenu du mail"></textarea>
+
+                <button id="bouton-confirmer-mail" onclick="envoyerMail()">
+                    Envoyer le mail
+                </button>
+            </div>
+
+            <p id="result-mail" style="display: none;"></p>
         </div>
     </div>
 
