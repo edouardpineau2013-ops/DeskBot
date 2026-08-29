@@ -179,7 +179,7 @@
                 </button>
             </div>
 
-            <p id="result-mail" style="display: none;"></p>
+            <p id="result-mail"></p>
         </div>
     </div>
 
@@ -880,6 +880,39 @@
         </div>
     </div>
 
+    <div id="popup-mots-de-passes" class="popup">
+        <div class="popup-contenu" style="text-align:center;">
+            <span class="fermer" onclick="fermerMotsDePasses()">&times;</span>
+            <h2>Créer un mot de passe</h2>
+            <label for="longueur-input" id="label-mdp">Longueur:</label>
+            <input type="number" placeholder="Longueur..." min="0" value="16" id="longueur-input">
+            <br>
+            <div id="checkbox-mdp">
+                <input type="checkbox" id="majuscules-checkbox">
+                <label for="majuscules-checkbox" id="label-mdp">Majuscules</label>
+                <br>
+                <input type="checkbox" id="minuscules-checkbox">
+                <label for="minuscules-checkbox" id="label-mdp">Minuscules</label>
+                <br>
+                <input type="checkbox" id="chiffres-checkbox">
+                <label for="chiffres-checkbox" id="label-mdp">Chiffres</label>
+                <br>
+                <input type="checkbox" id="symboles-checkbox">
+                <label for="symboles-checkbox" id="label-mdp">Symboles</label>
+                <br>
+                <input type="checkbox" id="exclure-ambigus-checkbox">
+                <label for="exclure-ambigus-checkbox" id="label-mdp">Exclure ambigus</label>
+            </div>
+            <br>
+            <button onclick="creerMotDePasse()" id="mot-de-passe-button">Créer</button>
+            <br>
+            <p id="mdp-result" style="display: none;"></p>
+            <button id="copier-mdp-button" style="display: none;" onclick="copierMotDePasse()">
+                <img src="img/copié.svg" id="copier-mdp" style="display: none; height: 30px;">
+            </button>
+        </div>
+    </div>
+
     <h1>DeskBot</h1>
     <h2>crée par Edouard</h2>
 
@@ -1128,6 +1161,10 @@
 
             <div class="commande-prédéfinie" onclick="ouvrirConvertisseurFichier()">
                 <p class="commande-texte">Convertir un fichier</p>
+            </div>
+
+            <div class="commande-prédéfinie" onclick="ouvrirMotsDePasses()">
+                <p class="commande-texte">Créer un mot de passe</p>
             </div>
         </div>
 

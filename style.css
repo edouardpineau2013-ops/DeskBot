@@ -243,7 +243,9 @@ h2 {
 #corriger-button,
 #stl-convertir,
 #bouton-envoyer-mail,
-#bouton-confirmer-mail {
+#bouton-confirmer-mail,
+#mot-de-passe-button,
+#copier-mdp-button {
     margin-top: 25px;
     padding: 10px 20px;
 
@@ -301,7 +303,9 @@ h2 {
 #corriger-button:hover,
 #stl-convertir:hover,
 #bouton-envoyer-mail:hover,
-#bouton-confirmer-mail:hover {
+#bouton-confirmer-mail:hover,
+#mot-de-passe-button:hover,
+#copier-mdp-button:hover {
     background-color: var(--vert-hover);
 }
 
@@ -340,7 +344,9 @@ h2 {
 #corriger-button:active,
 #stl-convertir:active,
 #bouton-envoyer-mail:active,
-#bouton-confirmer-mail:active {
+#bouton-confirmer-mail:active,
+#mot-de-passe-button:active,
+#copier-mdp-button:active {
     background-color: var(--bleu-active);
 }
 
@@ -1239,6 +1245,21 @@ input:checked + .slider:before {
 #bouton-envoyer-mail {
     margin-top: 0px;
     margin-bottom: 20px;
+}
+
+#result-mail {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    text-align: left;
+    background-color: var(--gris-case);
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    color: var(--rouge);
+    font-size: 1.4rem;
+    text-align: center;
+    text-shadow: 2px 2px 4px var(--noir);
 }
 
 /* =========================================================
@@ -2602,6 +2623,95 @@ input:checked + .slider:before {
         width: 100%;
     }
 
+}
+
+/* CREER UN MOT DE PASSE */
+
+#label-mdp {
+    color: var(--rouge);
+    text-shadow: 4px 4px 4px var(--noir);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#longueur-input {
+    width: 40%;
+    margin-bottom: 20px;
+    margin-left: 15px;
+    padding: 10px;
+
+    font-size: 1rem;
+
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+
+    box-shadow: var(--ombre);
+}
+
+#checkbox-mdp {
+    text-align: left;
+    margin-left: 25px;
+}
+
+#majuscules-checkbox,
+#minuscules-checkbox,
+#chiffres-checkbox,
+#symboles-checkbox,
+#exclure-ambigus-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 3px solid var(--vert);
+    border-radius: 5px;
+    box-shadow: var(--ombre);
+    cursor: pointer;
+    vertical-align: middle;
+    margin-right: 10px;
+    display: inline-grid;
+    place-content: center;
+    transition: background-color 0.2s ease;
+}
+
+/* État coché : création de la coche */
+#majuscules-checkbox:checked,
+#minuscules-checkbox:checked,
+#chiffres-checkbox:checked,
+#symboles-checkbox:checked,
+#exclure-ambigus-checkbox:checked {
+    background-color: var(--vert);
+}
+
+#majuscules-checkbox:checked::before,
+#minuscules-checkbox:checked::before,
+#chiffres-checkbox:checked:before,
+#symboles-checkbox:checked:before,
+#exclure-ambigus-checkbox:checked:before {
+    content: "";
+    width: 8px;
+    height: 12px;
+    border: solid var(--noir);
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+#mdp-result {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    text-align: left;
+    background-color: var(--gris-case);
+    border: 3px solid var(--vert);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    color: var(--rouge);
+    font-size: 1.4rem;
+    text-align: center;
+    text-shadow: 2px 2px 4px var(--noir);
+}
+
+#copier-mdp-button {
+    text-align: center;
 }
 
 /* =========================================================

@@ -698,6 +698,7 @@ function enregistrerSonnerie() {
 function ouvrirMails() {
     document.getElementById("popup-mails").style.display = "flex";
     document.getElementById("formulaire-envoi-mail").style.display = "none";
+    document.getElementById("result-mail").style.display = "none";
     chargerMails();
 }
 
@@ -4231,6 +4232,7 @@ async function envoyerMail() {
             );
         }
 
+        result.style.display = "flex";
         result.innerHTML = "Mail envoyé avec succès !";
 
         document.getElementById("mail-destinataire").value = "";
@@ -4249,6 +4251,71 @@ async function envoyerMail() {
             erreur.message
         );
     }
+}
+
+function ouvrirMotsDePasses() {
+    document.getElementById("popup-mots-de-passes").style.display="flex";
+}
+
+function fermerMotsDePasses() {
+    document.getElementById("popup-mots-de-passes").style.display="none";
+}
+
+let mot_de_passe_genere = ""
+
+async function creerMotDePasse() {
+    const longueur = parseInt(document.getElementById("longueur-input").value, 10);
+    const majuscules = document.getElementById("majuscules-checkbox").checked;
+    const minuscules = document.getElementById("minuscules-checkbox").checked;
+    const chiffres = document.getElementById("chiffres-checkbox").checked;
+    const symboles = document.getElementById("symboles-checkbox").checked;
+    const exclure_ambigus = document.getElementById("exclure-ambigus-checkbox").checked;
+
+    const payload = {
+        longueur: longueur,
+        majuscules: majuscules,
+        minuscules: minuscules,
+        chiffres: chiffres,
+        symboles: symboles,
+        exclure_ambigus: exclure_ambigus
+    };
+
+    try {
+        const response = await fetch(`${API_URL}/mots-de-passes`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + TOKEN
+            },
+            body: JSON.stringify(payload)
+        });
+
+        // 1. Récupérer d'abord le texte brut de la réponse
+        const textData = await response.text();
+        
+        // 2. Tenter de parser le JSON seulement s'il y a du contenu
+        const result = textData ? JSON.parse(textData) : {};
+
+        if (response.ok) {
+            document.getElementById("mdp-result").style.display = "flex";
+            document.getElementById("copier-mdp").style.display = "flex";
+            document.getElementById("copier-mdp-button").style.display = "flex";
+            document.getElementById("mdp-result").innerHTML = `Mot de passe: ${result.mot_de_passe}`;
+            mot_de_passe_genere = result.mot_de_passe;
+        } else {
+            console.error(`Erreur HTTP ${response.status} :`, result.erreur || "Réponse vide du serveur");
+        }
+    } catch (error) {
+        console.error("Erreur réseau ou syntaxe :", error);
+    }
+}
+
+async function copierMotDePasse() {
+  try {
+    await navigator.clipboard.writeText(mot_de_passe_genere);
+  } catch (err) {
+    console.error("Échec de la copie : ", err);
+  }
 }
 
 
@@ -4291,9 +4358,8 @@ async function envoyerMail() {
 
 
 
-
 window.onclick = function(event) {
-    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-resumer", "popup-analyser-image", "popup-correction", "popup-stl-gcode", "popup-compresseur", "popup-convertisseur-fichier", "popup-generer-image"];
+    const popups = ["popup-musique", "popup-meteo", "popup-set-minuteur", "popup-set-alarme", "popup-sonnerie-alarme", "popup-mails", "popup-import-cours", "popup-revision-accueil", "popup-statistiques-revision", "popup-ouverture-boite", "popup-stats-yt", "popup-recherche", "popup-trajet", "popup-pronote", "popup-question-ia", "popup-repeter", "popup-calculatrice", "popup-convertir", "popup-traduction", "popup-notification", "popup-agenda", "popup-hasard", "popup-notes", "popup-resumer", "popup-analyser-image", "popup-correction", "popup-stl-gcode", "popup-compresseur", "popup-convertisseur-fichier", "popup-generer-image", "popup-mots-de-passes"];
     for (const id of popups) {
         const popup = document.getElementById(id);
         if (event.target === popup) {
