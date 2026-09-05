@@ -105,8 +105,9 @@ select:focus-visible {
 }
 
 .brand {
-    min-width: 0;
-    flex: 1;
+    flex: 0;
+    flex: 0 0 auto;
+    min-width: auto;
     display: flex;
     align-items: center;
     gap: 11px;
